@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 22, 2016 9:21:28 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping package="entity">
+	<class name="TrUser" table="tr_user">
+		<id name="idUser" type="string">
+			<column name="ID_USER" length="50" />
+			<generator class="assigned" />
+		</id>
+		<property name="namaUser" type="string">
+			<column name="NAMA_USER" length="50" />
+		</property>
+		<property name="email" type="string">
+			<column name="EMAIL" length="50" />
+		</property>
+		<property name="password" type="string">
+			<column name="PASSWORD" length="50" />
+		</property>
+		<property name="rememberToken" type="string">
+			<column name="REMEMBER_TOKEN" length="50" />
+		</property>
+		<property name="status" type="java.lang.Integer">
+			<column name="STATUS" />
+		</property>
+		<property name="kodeCabang" type="string">
+			<column name="KODE_CABANG" length="10" />
+		</property>
+		<property name="login" type="timestamp">
+			<column name="LOGIN" length="19" />
+		</property>
+		<property name="tglCreate" type="timestamp">
+			<column name="TGL_CREATE" length="19" />
+		</property>
+		<property name="tglUpdate" type="timestamp">
+			<column name="TGL_UPDATE" length="19" />
+		</property>
+		<property name="flag" type="java.lang.Integer">
+			<column name="FLAG" />
+		</property>
+		<property name="idRole" type="java.lang.Integer">
+			<column name="ID_ROLE" />
+		</property>
+	</class>
+</hibernate-mapping>

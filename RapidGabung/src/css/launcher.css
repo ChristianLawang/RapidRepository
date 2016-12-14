@@ -1,0 +1,251 @@
+#mainToolBar {
+    -fx-padding: 10px;
+    -fx-background-image: url("/css/images/top-bar.png");
+    -fx-background-size: cover;
+    -fx-background-position: left top;
+    -fx-background-repeat: no-repeat;
+}
+
+#page-toolbar {
+    -fx-border-image-source: url("/css/images/mid-bar-right.png");
+    -fx-border-image-slice: 1 0 1 0 fill;
+    -fx-border-image-width: 1 0 1 0;
+    -fx-border-image-repeat: stretch;
+    -fx-padding: -1px 0px 0px 0px;
+    -fx-spacing: 0;
+}
+
+.background {
+    -fx-background-image: url("/css/images/texture.png");
+    -fx-background-repeat: repeat;
+    -fx-background-color:
+        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
+        linear-gradient(#20262b, #191d22),
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+}
+
+.combo-box-base:disabled .list-cell:disabled {
+    -fx-opacity: 0.8;
+}
+
+/*=======================BUTTON MASTER==================================================*/
+#btnUser {
+    -fx-background-image: url("/css/images/UserManagement.png");
+}
+#btnSync {
+    -fx-background-image: url("/css/images/TransferData.png");
+}
+#btnMasterPickup {
+    -fx-background-image: url("/css/images/BarangKembali.png");
+}
+#btnCabang {
+    -fx-background-image: url("/css/images/KantorBeaCukai.png");
+}
+
+#btnPelanggan {
+    -fx-background-image: url("/css/images/Perusahaan.png");
+}
+#btnGabungPaket {
+	 -fx-background-image: url("/css/images/Pemasok.png");
+}
+#btnHarga {
+    -fx-background-image: url("/css/images/Harga.png");
+}
+
+#btnKurir {
+    -fx-background-image: url("/css/images/Pemasok.png");
+}
+
+#btnZona {
+    -fx-background-image: url("/css/images/ResponSemua.png");
+}
+#button-userManagement {
+    -fx-background-image: url("/css/images/UserManagement.png");
+}
+#btnGabungPaketHO {
+	 -fx-background-image: url("/css/images/Pemasok.png");
+}
+#btnNewsLetter {
+	 -fx-background-image: url("/css/images/news_letter.png");
+}
+
+/*=======================BUTTON TOOLBAR==================================================*/
+#button-backToolbar {
+    -fx-background-image: url("/css/images/back.png");
+}
+/*=======================BUTTON TRANSAKSI================================================*/
+#btnFotoTimbang {
+    -fx-background-image: url("/css/images/FotoTimbang.png");
+}
+
+#btnDataEntry {
+    -fx-background-image: url("/css/images/BrowseData.png");
+}
+
+#btnBrowseDataEntry {
+    -fx-background-image: url("/css/images/BrowseData.png");
+}
+#btnScanKurirIn {
+    -fx-background-image: url("/css/images/ScanPaket.png");
+}
+#btnScanKurirOut {
+    -fx-background-image: url("/css/images/ScanPaket.png");
+}
+#btnMappingResi {
+	 -fx-background-image: url("/css/images/MappingResi.png");
+}
+#btnBrowseSemuaData {
+    -fx-background-image: url("/css/images/BrowseData.png");
+}
+
+#btnPenandaLunas {
+    -fx-background-image: url("/css/images/DaftarBarang.png");
+}
+
+#btnBrowseDelete {
+    -fx-background-image: url("/css/images/DeleteData.png");
+}
+
+#btnTerimaDiPerwakilan {
+	 -fx-background-image: url("/css/images/Pemasok.png");
+}
+#btnJadwalPickup {
+	 -fx-background-image: url("/css/images/jadwal_pickup.png");
+}
+
+
+/*=======================BUTTON CALL CENTER================================================*/
+#btnBarangKembali {
+    -fx-background-image: url("/css/images/BarangKembali.png");
+}
+#btnKomplainPelanggan {
+    -fx-background-image: url("/css/images/KomplainPelanggan.png");
+}
+#btnHistoryAwb {
+    -fx-background-image: url("/css/images/ValidasiPaket.png");
+}
+#btnLayananPelanggan {
+    -fx-background-image: url("/css/images/KomplainPelanggan.png");
+}
+/*=======================BUTTON LAPORAN================================================*/
+#btnKpiCabangKurir{
+    -fx-background-image: url("/css/images/KPI.png");
+}
+#btnLapPelanggan{
+    -fx-background-image: url("/css/images/Pelanggan.png");
+}
+#btnLapSales{
+    -fx-background-image: url("/css/images/Sales.png");
+}
+
+#btnLapPerperwakilan{
+    -fx-background-image: url("/css/images/Sales.png");
+}
+
+#btnLapResi{
+    -fx-background-image: url("/css/images/Sales.png");
+}
+#btnLaporanPod{
+    -fx-background-image: url("/css/images/KPI.png");
+}
+#btnLaporanPenerima{
+    -fx-background-image: url("/css/images/Sales.png");
+}
+#btnLaporanPerKecamatan{
+    -fx-background-image: url("/css/images/KPI.png");
+}
+
+/*==================*/
+
+
+.button-menu {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:center;
+    -fx-background-color: transparent;
+}
+
+.button-menu:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.6), 10, 0.5, 0, 0);
+}
+
+.button-menu:focused {
+    -fx-effect: dropshadow(three-pass-box, -fx-focus-color, 5, 0.3, 0, 0);
+}
+
+.menu-label {
+    -fx-padding: 8px 0 10px 8px;
+    -fx-background-color: rgba(0, 0, 0, 0.12);
+    -fx-background-insets: 4 -8 4 -8;
+    -fx-border-color: rgba(255, 255, 255, 0.2) transparent rgba(255, 255, 255, 0.2) transparent;
+    -fx-border-insets: 3 -8 3 -8;
+
+    -fx-padding: 8px 0 10px 8px;
+    -fx-font-size: 1.2em;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(black, #acacac);
+}
+
+.group-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+}
+/*=================================================== CONTROLLER FXML ===================================================*/
+.text-field{
+    /*-fx-background-color: #e0e0e0;*/
+    -fx-background-color: white;
+    -fx-border-color:#cccccc;
+    -fx-background-insets: 1;
+    -fx-background-radius: 0;
+    -fx-font-size: 9pt;
+    -fx-prompt-text-fill: grey;
+}
+.text-field:disabled {
+   /*-fx-background-color: #e0e0e0;*/
+    -fx-background-color: white;
+    -fx-border-color:#cccccc;
+    -fx-background-insets: 1;
+    -fx-background-radius: 0;
+    -fx-font-size: 9pt;
+    -fx-text-inner-color: blue;
+}
+.text-field2:disabled {
+-fx-background-insets: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 0.333333em 0.583em 0.333333em 0.583em; /* 4 7 4 7 */
+    -fx-font-size: 30pt;
+    -fx-text-inner-color: blue;
+}
+
+.text:disabled{
+    /*-fx-background-color: #e0e0e0;*/
+    -fx-background-color: white;
+    -fx-border-color:#cccccc;
+    -fx-background-insets: 1;
+    -fx-background-radius: 0;
+    -fx-font-size: 9pt;
+    -fx-prompt-text-fill: blue;
+}
+.text-field:focused{
+    -fx-focus-color: #3498DB;
+    -fx-background-color: -fx-focus-color, white;
+    -fx-background-insets: -1.4, 1;
+}
+
+.text-field:disabled{  
+   /*-fx-background-color: #e0e0e0;*/
+    -fx-background-color: white;
+    -fx-border-color:#cccccc;
+    -fx-background-insets: 1;
+    -fx-background-radius: 0;
+    -fx-font-size: 9pt;
+    -fx-text-inner-color: blue;
+}
+.text-field2:disabled{  
+   /*-fx-background-color: #e0e0e0;*/
+    -fx-background-color: white;
+    -fx-border-color:#cccccc;
+    -fx-background-insets: 1;
+    -fx-background-radius: 0;
+    -fx-font-size: 30pt;
+    -fx-text-inner-color: blue;
+}

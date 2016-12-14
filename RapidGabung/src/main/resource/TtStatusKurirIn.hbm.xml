@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 22, 2016 9:21:28 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping package="entity">
+    <class name="TtStatusKurirIn" table="tt_status_kurir_in">
+        <id name="id" type="string">
+            <column name="id"/>
+        </id>
+            <property name="noStrukKurirIn" type="string">
+                <column name="NO_STRUK_KURIR_IN" length="20" />
+            </property>
+            <property name="idKurir" type="string">
+                <column name="ID_KURIR" length="10" />
+            </property>
+            <property name="status" type="string">
+                <column name="STATUS" />
+            </property>
+            <property name="penerima" type="string">
+                <column name="PENERIMA" length="50" />
+            </property>
+            <property name="masalah" type="string">
+                <column name="MASALAH" />
+            </property>
+            <property name="waktuJam" type="string">
+                <column name="WAKTU_JAM" length="6" />
+            </property>
+            <property name="waktuMenit" type="string">
+                <column name="WAKTU_MENIT" />
+            </property>
+            <property name="idBarang" type="string">
+                <column name="ID_BARANG" length="20" />
+            </property>
+            <property name="tanggal" type="timestamp">
+                <column name="TANGGAL" length="19" />
+            </property>
+            <property name="tglCreate" type="timestamp">
+                <column name="TGL_CREATE" length="19" />
+            </property>
+            <property name="tglUpdate" type="timestamp">
+                <column name="TGL_UPDATE" length="19" />
+            </property>
+            <property name="flag" type="java.lang.Integer">
+                <column name="FLAG" />
+            </property>
+        
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<?import utilfx.DateTimePicker?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="622.0" prefWidth="1372.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TerimaPerwakilanController">
+	<content>
+		<AnchorPane prefHeight="684.0" prefWidth="798.0">
+			<children>
+            <Pane disable="true" layoutX="210.0" layoutY="87.0" prefHeight="114.0" prefWidth="988.0" styleClass="combo-box-base" />
+				<Label contentDisplay="CENTER" layoutX="565.0" layoutY="14.0" text="TERIMA DATA DI PERWAKILAN" textAlignment="CENTER" underline="true">
+					<font>
+						<Font name="System Bold" size="18.0" />
+					</font>
+				</Label>
+				<DateTimePicker fx:id="dtpTglTerima" layoutX="505.0" layoutY="93.0" />
+				<TextField fx:id="txtIdKardus" layoutX="505.0" layoutY="127.0" prefHeight="27.0" prefWidth="346.0" />
+				<Label layoutX="375.0" layoutY="132.0" text="ID Kardus" />
+            <TextField fx:id="txtAwb" layoutX="505.0" layoutY="160.0" prefHeight="27.0" prefWidth="346.0" />
+            <Label layoutX="375.0" layoutY="164.0" text="No AWB " />
+            <Label layoutX="375.0" layoutY="98.0" text="Tanggal Terima " />
+            <Button fx:id="btnSave" layoutX="640.0" layoutY="546.0" mnemonicParsing="false" onAction="#onClickSave" prefHeight="42.0" prefWidth="118.0" text="Terima" />
+            <TabPane layoutX="210.0" layoutY="218.0" prefHeight="314.0" prefWidth="989.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Tableview">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                  				<TableView fx:id="tvAllAwb" editable="true" layoutX="-141.0" prefHeight="285.0" prefWidth="729.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  					<columns>
+                  						<TableColumn fx:id="colNo" prefWidth="38.0" text="No" />
+                  						<TableColumn fx:id="colKdKardusSub" prefWidth="131.0" text="Sub Id Kardus" />
+                  						<TableColumn fx:id="colKdPerwakilan" prefWidth="131.0" text="Perwakilan" />
+                  						<TableColumn fx:id="colAwb" prefWidth="206.0" text="Awb" />
+                  						<TableColumn fx:id="colTujuan" prefWidth="273.0" text="Tujuan" />
+                  						<TableColumn fx:id="colAction" prefWidth="84.0" text="Check All" />
+                  					</columns>
+                  				</TableView>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Treeview">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TreeView fx:id="treeView" layoutX="-17.0" prefHeight="285.0" prefWidth="729.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+			</children>
+			<stylesheets>
+				<URL value="@../css/launcher.css" />
+			</stylesheets>
+		</AnchorPane>
+	</content>
+
+</ScrollPane>

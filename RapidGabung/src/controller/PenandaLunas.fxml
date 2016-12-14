@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane prefWidth="1372.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PenandaLunasController">
+	<content>
+		<AnchorPane fx:id="btnCari" prefHeight="600.0" prefWidth="1200.0">
+			<children>
+            <Pane layoutX="56.0" layoutY="71.0" prefHeight="60.0" prefWidth="1273.0" styleClass="combo-box-base" />
+				<Label layoutX="575.0" layoutY="24.0" text="LAPORAN PENANDA LUNAS" textAlignment="CENTER">
+					<font>
+						<Font name="System Bold" size="18.0" />
+					</font>
+				</Label>
+				<DatePicker fx:id="dpAwal" layoutX="130.0" layoutY="89.0" prefHeight="25.0" prefWidth="133.0" />
+				<DatePicker fx:id="dpAkhir" layoutX="300.0" layoutY="89.0" prefHeight="25.0" prefWidth="133.0" />
+				<Label layoutX="81.0" layoutY="92.0" text="Periode" />
+				<Label layoutX="274.0" layoutY="93.0" text="s/d" />
+				<TableView fx:id="tvPenandaLunas" editable="true" layoutX="56.0" layoutY="145.0" prefHeight="375.0" prefWidth="1269.0">
+					<columns>
+						<TableColumn fx:id="colNo" prefWidth="55.0" text="NO" />
+						<TableColumn fx:id="colTgl" prefWidth="130.0" text="TANGGAL" />
+						<TableColumn fx:id="colKdPickup" prefWidth="160.0" text="KODE PICKUP" />
+						<TableColumn fx:id="colKdpelanggan" prefWidth="300.0" text="PELANGGAN" />
+						<TableColumn fx:id="colJmlBarang" minWidth="5.0" prefWidth="160.0" text="JUMLAH BARANG" />
+						<TableColumn fx:id="colTotalBerat" prefWidth="160.0" text="TOTAL BERAT" />
+                 		<TableColumn fx:id="colTotalTagihan" prefWidth="119.0" text="TOTAL TAGIHAN" />
+                  		<TableColumn fx:id="colCheklist" prefWidth="211.0" text="Checklist All" />
+					</columns>
+				</TableView>
+            <TextField fx:id="txtCari" layoutX="1155.0" layoutY="93.0" />
+            <Label layoutX="1111.0" layoutY="97.0" text="Cari :" />
+            <Button layoutX="444.0" layoutY="89.0" mnemonicParsing="false" onAction="#onClikCari" text="Cari" />
+            <Button fx:id="btnSendPiutang" layoutX="975.0" layoutY="92.0" mnemonicParsing="false" text="Send Piutang" />
+            <Button fx:id="btnLunas" layoutX="897.0" layoutY="92.0" mnemonicParsing="false" onAction="#onClikLunas" text="Pelunasan" />
+            <Pane layoutX="54.0" layoutY="533.0" prefHeight="51.0" prefWidth="1273.0" styleClass="combo-box-base" />
+			</children>
+		</AnchorPane>
+	</content>
+</ScrollPane>

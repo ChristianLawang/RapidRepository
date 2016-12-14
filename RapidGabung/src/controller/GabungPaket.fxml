@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane hbarPolicy="NEVER" minHeight="581.0" prefHeight="581.0" prefWidth="1372.0" styleClass="background" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GabungPaketController">
+	<content>
+		<AnchorPane prefHeight="576.0" prefWidth="1372.0">
+			<children>
+				<Label layoutX="602.0" layoutY="6.0" text="GABUNG PAKET" textAlignment="CENTER">
+					<font>
+						<Font name="System Bold" size="18.0" />
+					</font>
+				</Label>
+				<Separator layoutY="34.0" prefHeight="0.0" prefWidth="1372.0" />
+				<Label layoutX="425.0" layoutY="47.0" text="Insert Code :">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+				<TextField fx:id="txt_berat_all" alignment="CENTER" disable="true" layoutX="1165.0" layoutY="84.0" prefHeight="88.0" prefWidth="116.0" styleClass="text-field2" text="0" />
+				<Separator layoutY="79.0" prefHeight="3.0" prefWidth="1372.0" />
+				<Label layoutX="37.0" layoutY="94.0" text="Kode Keranjang :" />
+				<TextField fx:id="txt_kd_keranjang" disable="true" layoutX="136.0" layoutY="90.0" prefHeight="25.0" prefWidth="193.0" />
+				<TableView fx:id="listTableA" layoutX="38.0" layoutY="132.0" prefHeight="408.0" prefWidth="584.0">
+					<columns>
+
+					</columns>
+				</TableView>
+				<TableView fx:id="listTableB" layoutX="680.0" layoutY="218.0" prefHeight="322.0" prefWidth="603.0">
+					<columns>
+					</columns>
+				</TableView>
+				<Separator layoutX="646.0" layoutY="80.0" orientation="VERTICAL" prefHeight="483.0" prefWidth="6.0" />
+				<Label layoutX="686.0" layoutY="90.0" text="Resi Kardus :" />
+				<Label layoutX="686.0" layoutY="118.0" text="Resi Barang :" />
+				<Label layoutX="686.0" layoutY="150.0" text="Total Berat :" />
+				<TextField fx:id="txt_resi_kardus" disable="true" layoutX="779.0" layoutY="85.0" prefHeight="25.0" prefWidth="157.0" />
+				<TextField fx:id="txt_resi_barang" disable="true" layoutX="779.0" layoutY="117.0" prefHeight="25.0" prefWidth="157.0" />
+				<TextField fx:id="txt_total_berat" disable="true" layoutX="779.0" layoutY="147.0" prefHeight="25.0" prefWidth="157.0" text="0" />
+				<Button fx:id="btn_print" layoutX="1050.0" layoutY="181.0" mnemonicParsing="false" onAction="#onClickPrint" prefHeight="33.0" prefWidth="233.0" text="Finalize dan Print Resi Kardus&#10;">
+               <font>
+                  <Font size="15.0" />
+               </font></Button>
+            <TextField fx:id="txt_insert_code" layoutX="517.0" layoutY="42.0" prefHeight="27.0" prefWidth="280.0" />
+            <Button fx:id="btn_print_ulang" layoutX="903.0" layoutY="181.0" mnemonicParsing="false" onAction="#onClickPrintUlang" prefHeight="32.0" prefWidth="99.0" text="Cetak Ulang">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <TextField fx:id="txtIdResiPrintUlang" layoutX="681.0" layoutY="185.0" prefHeight="27.0" prefWidth="210.0" />
+            <Separator layoutY="563.0" prefHeight="3.0" prefWidth="1372.0" />
+            <Button fx:id="btnClearSession" layoutX="805.0" layoutY="43.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="99.0" text="Clear Session" />
+			</children>
+			  <stylesheets>
+        <URL value="@../css/launcher.css" />
+    </stylesheets>
+		</AnchorPane>
+	</content>
+</ScrollPane>

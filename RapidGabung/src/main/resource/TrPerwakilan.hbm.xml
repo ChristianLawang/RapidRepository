@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 22, 2016 9:21:28 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping package="entity">
+    <class name="TrPerwakilan" table="tr_perwakilan">
+        <id name="kodeZona" type="string">
+            <column name="KODE_ZONA" length="10" />
+            <generator class="assigned" />
+        </id>
+        <property name="propinsi" type="string">
+            <column name="PROPINSI" />
+        </property>
+        <property name="kabupaten" type="string">
+            <column name="KABUPATEN" />
+        </property>
+        <property name="kecamatan" type="string">
+            <column name="KECAMATAN" />
+        </property>
+        <property name="kodePerwakilan" type="string">
+            <column name="KODE_PERWAKILAN" length="10" />
+        </property>
+        <property name="zona" type="string">
+            <column name="ZONA" length="10" />
+        </property>
+        <property name="regperwakilan" type="string">
+            <column name="REGPERWAKILAN" length="10" />
+        </property>
+        <property name="oneperwakilan" type="string">
+            <column name="ONEPERWAKILAN" length="10" />
+        </property>
+        <property name="tglCreate" type="timestamp">
+            <column name="TGL_CREATE" length="19" />
+        </property>
+        <property name="tglUpdate" type="timestamp">
+            <column name="TGL_UPDATE" length="19" />
+        </property>
+        <property name="flag" type="java.lang.Integer">
+            <column name="FLAG" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 22, 2016 9:21:28 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping package="entity">
+    <class name="TtMappingResiJne" table="tt_mapping_resi_jne">
+        <id name="resiJne" type="string">
+            <column name="RESI_JNE" length="50" />
+            <generator class="assigned" />
+        </id>
+        <property name="penerima" type="string">
+            <column name="PENERIMA" length="50" />
+        </property>
+        <property name="pengirim" type="string">
+            <column name="PENGIRIM" length="50" />
+        </property>
+        <property name="tujuan" type="string">
+            <column name="TUJUAN" length="100" />
+        </property>
+        <property name="service" type="string">
+            <column name="SERVICE" length="10" />
+        </property>
+        <property name="harga" type="java.lang.Integer">
+            <column name="HARGA" />
+        </property>
+        <property name="uploadFlag" type="java.lang.Integer">
+            <column name="UPLOAD_FLAG" />
+        </property>
+        <property name="importAt" type="timestamp">
+            <column name="IMPORT_AT" length="19" />
+        </property>
+        <property name="tglCreate" type="timestamp">
+            <column name="TGL_CREATE" length="19" />
+        </property>
+        <property name="tglUpdate" type="timestamp">
+            <column name="TGL_UPDATE" length="19" />
+        </property>
+        <property name="flag" type="java.lang.Integer">
+            <column name="FLAG" />
+        </property>
+    </class>
+</hibernate-mapping>

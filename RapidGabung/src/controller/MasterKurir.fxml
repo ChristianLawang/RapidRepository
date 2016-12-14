@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import utilfx.Tanggalan?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MasterKurirController">
+	<content>
+		<AnchorPane prefHeight="1132.0" prefWidth="1617.0">
+			<children>
+				<Label ellipsisString="" layoutX="565.0" layoutY="5.0" prefHeight="27.0" prefWidth="423.0" text="MASTER KURIR" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" underline="true" AnchorPane.bottomAnchor="1110.0" AnchorPane.leftAnchor="565.0" AnchorPane.rightAnchor="616.0" AnchorPane.topAnchor="5.0">
+					<font>
+						<Font name="System Bold" size="18.0" />
+					</font>
+				</Label>
+            <Label layoutX="1029.0" layoutY="50.0" text="NIK :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtNIK" layoutX="1066.0" layoutY="45.0" prefHeight="25.0" prefWidth="273.0" />
+            <Label layoutX="964.0" layoutY="81.0" text="Nama Lengkap :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="1013.0" layoutY="115.0" text="No HP :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtNama" layoutX="1067.0" layoutY="78.0" prefHeight="25.0" prefWidth="272.0" />
+            <TextField fx:id="txtNoHP" layoutX="1067.0" layoutY="111.0" prefHeight="25.0" prefWidth="272.0" />
+            <ComboBox  fx:id="cbJabatan" layoutX="1067.0" layoutY="144.0" prefHeight="25.0" prefWidth="273.0" />
+            
+            <Label layoutX="1004.0" layoutY="147.0" text="Jabatan  :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtNoKendaraan" layoutX="1067.0" layoutY="178.0" prefHeight="25.0" prefWidth="273.0" />
+            <TextField fx:id="txtKdPerwakilan" layoutX="1067.0" layoutY="211.0" prefHeight="25.0" prefWidth="273.0" />
+            <Label layoutX="965.0" layoutY="180.0" text="No Kendaraan  :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="cbWilayah" layoutX="1067.0" layoutY="245.0" prefHeight="25.0" prefWidth="274.0" />
+            <Tanggalan fx:id="txtTglMasuk" layoutX="1067.0" layoutY="279.0" />
+            <TextField fx:id="txtKeterangan" layoutX="1068.0" layoutY="316.0" prefHeight="102.0" prefWidth="272.0" />
+            <Button fx:id="btnSimpan" layoutX="1068.0" layoutY="443.0" mnemonicParsing="false" onAction="#onSave" text="SIMPAN" />
+            <Button fx:id="btnReset" layoutX="1138.0" layoutY="443.0" mnemonicParsing="false" onAction="#onCancel" text="RESET" />
+            
+            
+            <Label layoutX="952.0" layoutY="214.0" text="Kode Perwakilan  :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="1002.0" layoutY="248.0" text="Wilayah  :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            
+            <Label layoutX="960.0" layoutY="282.0" text="Tanggal masuk  :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="981.0" layoutY="325.0" text="Keterangan  :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            
+            
+            <TitledPane animated="false" layoutX="20.0" layoutY="39.0" prefHeight="515.0" prefWidth="915.0" text="DAFTAR KURIR">
+               <content>
+                  <TableView fx:id="listBoxMasterKurir" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="[]" />
+                      <TableColumn prefWidth="75.0" text="NIK" />
+                        <TableColumn prefWidth="201.99998474121094" text="NAMA LENGKAP" />
+                        <TableColumn prefWidth="125.0" text="JABATAN" />
+                        <TableColumn prefWidth="133.0" text="WILAYAH" />
+                        <TableColumn prefWidth="124.0" text="INSERT" />
+                        <TableColumn prefWidth="125.0" text="UPDATE" />
+                        <TableColumn prefWidth="54.0" text="ACTION" />
+                    </columns>
+                  </TableView>
+               </content>
+               </TitledPane>
+			</children>
+		</AnchorPane>
+	</content>
+</ScrollPane>

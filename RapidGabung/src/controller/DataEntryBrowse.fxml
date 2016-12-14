@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import utilfx.Uangteks?>
+
+<?import utilfx.Tanggalan?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxWidth="1400.0" prefHeight="721.0" prefWidth="1077.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DataEntryBrowseController">
+	<children>
+		<Label layoutX="481.0" layoutY="14.0" text="DATA ENTRY" textAlignment="CENTER">
+			<font>
+				<Font name="System Bold" size="18.0" />
+			</font>
+		</Label>
+		<AnchorPane layoutX="31.0" layoutY="429.0" prefHeight="292.0" prefWidth="900.0">
+			<children>
+				<Label layoutX="10.0" layoutY="13.0" prefHeight="17.0" prefWidth="73.0" text="AWB :" />
+				<Label layoutX="9.0" layoutY="44.0" text="Kode Pickup :" />
+				<Label layoutX="9.0" layoutY="76.0" text="Pengirim :" />
+				<Label layoutX="366.0" layoutY="45.0" text="Penerima :" />
+				<Label layoutX="366.0" layoutY="106.0" text="Tujuan :" />
+				<Label layoutX="366.0" layoutY="76.0" text="Telp Penerima :" />
+				<Label layoutX="366.0" layoutY="176.0" text="Kode Perwakilan :" />
+				<Label layoutX="367.0" layoutY="214.0" prefHeight="17.0" prefWidth="76.0" text="Keterangan :" />
+				<TextField fx:id="txt_reseller" layoutX="468.0" layoutY="11.0" />
+				<TextField fx:id="txt_awb" disable="true" layoutX="121.0" layoutY="9.0" />
+				<TextField fx:id="txt_kode_pickup" disable="true" layoutX="121.0" layoutY="40.0" />
+				<TextField fx:id="txt_pengirim" disable="true" layoutX="121.0" layoutY="71.0" />
+				<TextField fx:id="txt_penerima" layoutX="469.0" layoutY="40.0" />
+				<TextField fx:id="txt_no_hp" layoutX="469.0" layoutY="71.0" />
+				<TextField fx:id="txt_kode_tujuan" layoutX="468.0" layoutY="102.0" />
+				<TextField fx:id="txt_kode_perwakilan" disable="true" layoutX="470.0" layoutY="172.0" />
+				<TextField fx:id="txt_Ket" layoutX="469.0" layoutY="205.0" prefWidth="247.0" />
+				<Label layoutX="9.0" layoutY="107.0" prefHeight="17.0" prefWidth="54.0" text="Berat :" />
+				<Label layoutX="9.0" layoutY="138.0" text="Berat Pembulatan :" />
+				<Label layoutX="723.0" layoutY="45.0" prefHeight="17.0" prefWidth="112.0" text="Harga per Kg :     Rp" />
+				<Label layoutX="723.0" layoutY="75.0" prefHeight="17.0" prefWidth="112.0" text="Harga Barang :    Rp" />
+				<Label layoutX="725.0" layoutY="134.0" prefHeight="17.0" prefWidth="112.0" text="Total Biaya :        Rp" />
+				<Label layoutX="723.0" layoutY="106.0" text="Biaya Asuransi :   Rp" />
+				<Label layoutX="10.0" layoutY="196.0" prefHeight="17.0" prefWidth="84.0" text="Tgl Transaksi :" />
+				<Label layoutX="724.0" layoutY="17.0" text="Asal :" />
+				<Label layoutX="11.0" layoutY="167.0" text="Admin Input :" />
+				<TextField fx:id="txt_berat" disable="true" layoutX="121.0" layoutY="102.0" prefHeight="25.0" prefWidth="75.0" />
+				<TextField fx:id="txt_berat_bulat" disable="true" layoutX="121.0" layoutY="132.0" prefHeight="25.0" prefWidth="76.0" />
+				<Label layoutX="199.0" layoutY="107.0" text="Kg" />
+				<Label layoutX="199.0" layoutY="136.0" text="Kg" />
+				<TextField fx:id="txt_asal_paket" disable="true" layoutX="841.0" layoutY="11.0" prefHeight="25.0" prefWidth="152.0" />
+				<TextField fx:id="txt_admin_input" disable="true" layoutX="121.0" layoutY="163.0" prefHeight="25.0" prefWidth="152.0" />
+				<Button fx:id="btn_simpan" layoutX="747.0" layoutY="201.0" mnemonicParsing="false" onAction="#onClickSimpan" onDragDetected="#backDtoListener" prefHeight="35.0" prefWidth="84.0" text="Simpan" />
+				<Label layoutX="366.0" layoutY="15.0" text="Reseller :" />
+				<Label layoutX="611.0" layoutY="270.0" text="5(Center) 2(Bawah) 8(Atas) 4(Kiri) 6(Kanan) +(Zoom) -(ZoomOut) 3(Rooted 90D))" />
+				<Button fx:id="btn_batal" layoutX="840.0" layoutY="201.0" mnemonicParsing="false" onAction="#onClickCancel" prefHeight="35.0" prefWidth="84.0" text="Batal" />
+				<Uangteks fx:id="txt_harga" layoutX="841.0" layoutY="71.0" prefHeight="25.0" prefWidth="152.0" />
+				<Uangteks fx:id="txt_harga_per_kg" disable="true" layoutX="841.0" layoutY="41.0" prefHeight="25.0" prefWidth="152.0" />
+				<Uangteks fx:id="txt_asuransi" disable="true" layoutX="840.0" layoutY="102.0" prefHeight="25.0" prefWidth="152.0" />
+				<Uangteks fx:id="txt_total_biaya" disable="true" layoutX="840.0" layoutY="132.0" prefHeight="25.0" prefWidth="152.0" />
+				<Tanggalan fx:id="dp_tanggal_transaksi" disable="true" layoutX="121.0" layoutY="194.0" prefHeight="25.0" prefWidth="152.0" />
+				<Label fx:id="lbl_kettujuan" layoutX="470.0" layoutY="129.0" prefHeight="35.0" prefWidth="247.0" wrapText="true" />
+
+				<ImageView fx:id="imgOne" fitHeight="35.0" fitWidth="53.0" layoutX="99.0" layoutY="232.0" pickOnBounds="true" preserveRatio="true" visible="false">
+					<image>
+						<Image url="@../css/images/1dayservice.png" />
+					</image>
+				</ImageView>
+				<ImageView fx:id="imgJne" fitHeight="27.0" fitWidth="62.0" layoutX="154.0" layoutY="236.0" pickOnBounds="true" preserveRatio="true" visible="false">
+					<image>
+						<Image url="@../css/images/jne.png" />
+					</image>
+				</ImageView>
+				<ImageView fx:id="imgPending" fitHeight="35.0" fitWidth="35.0" layoutX="238.0" layoutY="231.0" pickOnBounds="true" preserveRatio="true" visible="false">
+					<image>
+						<Image url="@../css/images/Pending.png" />
+					</image>
+				</ImageView>
+				<ImageView fx:id="imgFree" fitHeight="45.0" fitWidth="62.0" layoutX="300.0" layoutY="231.0" pickOnBounds="true" preserveRatio="true" visible="false">
+					<image>
+						<Image url="@../css/images/Free.png" />
+					</image>
+				</ImageView>
+			</children>
+		</AnchorPane>
+		<AnchorPane layoutX="39.0" layoutY="54.0" prefHeight="327.0" prefWidth="1001.0">
+         <children>
+            <Pane fx:id="pane" layoutX="220.0" prefHeight="378.0" prefWidth="640.0">
+               <children>
+                  <ImageView fx:id="imgViewMainView" fitHeight="378.0" fitWidth="640.0" layoutX="-6.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </Pane>
+         </children>
+		</AnchorPane>
+		<Separator layoutX="-1.0" layoutY="48.0" prefHeight="1.0" prefWidth="1077.0" />
+	</children>
+	<stylesheets>
+		<URL value="@../css/launcher.css" />
+	</stylesheets>
+</AnchorPane>

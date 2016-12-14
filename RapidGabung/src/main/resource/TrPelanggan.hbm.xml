@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 22, 2016 9:21:28 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping package="entity">
+	<class name="TrPelanggan" table="tr_pelanggan">
+		<id name="kodePelanggan" type="string">
+			<column name="KODE_PELANGGAN" length="100" />
+			<generator class="assigned" />
+		</id>
+		<property name="namaAkun" type="string">
+			<column name="NAMA_AKUN" length="100" />
+		</property>
+		<property name="namaPemilik" type="string">
+			<column name="NAMA_PEMILIK" length="100" />
+		</property>
+		<property name="email" type="string">
+			<column name="EMAIL" length="400" />
+		</property>
+		<property name="telp" type="string">
+			<column name="TELP" length="50" />
+		</property>
+		<property name="alamat" type="string">
+			<column name="ALAMAT" length="400" />
+		</property>
+		<property name="line" type="string">
+			<column name="LINE" length="50" />
+		</property>
+		<property name="instagram" type="string">
+			<column name="INSTAGRAM" length="50" />
+		</property>
+		<property name="keterangan" type="string">
+			<column name="KETERANGAN" length="400" />
+		</property>
+		<property name="diskonRapid" type="java.lang.Integer">
+			<column name="DISKON_RAPID" />
+		</property>
+		<property name="diskonJne" type="java.lang.Integer">
+			<column name="DISKON_JNE" />
+		</property>
+		<property name="tglMulaiDiskon" type="timestamp">
+			<column name="TGL_MULAI_DISKON" length="19" />
+		</property>
+		<property name="sms" type="string">
+			<column name="SMS" length="10" />
+		</property>
+		<property name="namaSales" type="string">
+			<column name="NAMA_SALES" length="50" />
+		</property>
+		<property name="referensi" type="string">
+			<column name="REFERENSI" />
+		</property>
+		<property name="tglGabung" type="timestamp">
+			<column name="TGL_GABUNG" length="19" />
+		</property>
+		<property name="tglCreate" type="timestamp">
+			<column name="TGL_CREATE" length="19" />
+		</property>
+		<property name="tglUpdate" type="timestamp">
+			<column name="TGL_UPDATE" length="19" />
+		</property>
+		<property name="flag" type="java.lang.Integer">
+			<column name="FLAG" />
+		</property>
+		<property name="jabatan1" type="string">
+			<column name="JABATAN1" />
+		</property>
+		<property name="jabatan2" type="string">
+			<column name="JABATAN2" />
+		</property>
+	</class>
+</hibernate-mapping>

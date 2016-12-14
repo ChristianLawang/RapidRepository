@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="BorderPane" prefHeight="119.0" prefWidth="1372.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TopController">
+    <children>
+        <ImageView id="app-login-logo" fitHeight="76.0" fitWidth="1372.0" layoutY="2.0">
+            <image>
+                <Image url="@../css/images/logo_app.png" />
+            </image>
+        </ImageView>
+      <ToolBar fx:id="toolbarTop" layoutX="-1.0" layoutY="79.0" maxWidth="1372.0" prefHeight="40.0" prefWidth="1372.0">
+        <items>
+            <Button id="button-backToolbar" fx:id="backTop" mnemonicParsing="false" onAction="#onBack" prefHeight="30.0" prefWidth="30.0" styleClass="button-menu">                
+                <tooltip>                    
+                    <Tooltip text="kembali" />                
+                </tooltip>            
+            </Button>
+        </items>
+      </ToolBar>
+      <Label layoutX="1187.0" layoutY="90.0" text="Login User ID :" />
+      <Label fx:id="lblUserId" layoutX="1273.0" layoutY="90.0" prefHeight="17.0" prefWidth="89.0" text="Label" />
+    </children>
+    
+    <stylesheets>
+        <URL value="@../css/launcher.css" />
+    </stylesheets>
+    
+</AnchorPane>

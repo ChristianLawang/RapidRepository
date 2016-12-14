@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane maxWidth="814.0" prefHeight="576.0" prefWidth="814.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FotoTimbangController">
+      <SplitPane fx:id="splitPaneFotoTimbang" dividerPositions="0.5" orientation="VERTICAL" prefHeight="576.0" prefWidth="799.0">
+         <items>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+            <children>
+               <ImageView fx:id="imgViewMainView" fitHeight="282.0" fitWidth="502.0" layoutX="148.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
+            </children>
+            </AnchorPane>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <SplitPane dividerPositions="0.8438661710037175" layoutY="6.0" orientation="VERTICAL" prefHeight="271.0" prefWidth="408.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <GridPane prefHeight="224.0" prefWidth="406.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="224.0" minWidth="10.0" prefWidth="107.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="417.0" minWidth="10.0" prefWidth="297.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="328.0" minWidth="10.0" prefWidth="328.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Label text="AWB" />
+                                    <Label text="NO. PICKUP" GridPane.rowIndex="1" />
+                                    <Label text="KODE CUSTOMER" GridPane.rowIndex="2" />
+                                    <Label text="JUMLAH BARANG" GridPane.rowIndex="3" />
+                                    <TextField fx:id="txtNoPickup" editable="false" style="-fx-background-color: lightgrey;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets right="100.0" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <TextField fx:id="txtKodeCustomer" editable="false" style="-fx-background-color: lightgrey;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets right="100.0" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                       <children>
+                                          <TextField fx:id="txtJumlahBarang" editable="false" prefHeight="25.0" prefWidth="75.0" style="-fx-background-color: lightgrey;">
+                                             <HBox.margin>
+                                                <Insets top="10.0" />
+                                             </HBox.margin>
+                                          </TextField>
+                                          <Label text="PHOTO PAKET">
+                                             <HBox.margin>
+                                                <Insets left="2.0" top="14.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <TextField fx:id="txtPhotoPaket" editable="false" prefHeight="25.0" prefWidth="87.0" style="-fx-background-color: lightgrey;">
+                                             <HBox.margin>
+                                                <Insets left="2.0" top="10.0" />
+                                             </HBox.margin>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                       <children>
+                                          <Label text="BERAT">
+                                             <HBox.margin>
+                                                <Insets top="14.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <TextField fx:id="txtBerat" editable="false" style="-fx-background-color: lightgrey;">
+                                             <HBox.margin>
+                                                <Insets left="2.0" top="10.0" />
+                                             </HBox.margin>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                 <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                    <children>
+                                       <TextField fx:id="txtAWB" editable="true" prefHeight="25.0" prefWidth="256.0" style="-fx-background-color: lightgrey;">
+                                          <HBox.margin>
+                                             <Insets top="10.0" />
+                                          </HBox.margin>
+                                       </TextField>
+                                       <Button fx:id="btnBreak" mnemonicParsing="false" text="Break">
+                                          <HBox.margin>
+                                             <Insets left="10.0" top="10.0" />
+                                          </HBox.margin>
+                                       </Button>
+                                    </children>
+                                 </HBox>
+                                 <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                    <children>
+                                       <Label text="PANJANG">
+                                          <opaqueInsets>
+                                             <Insets />
+                                          </opaqueInsets>
+                                          <HBox.margin>
+                                             <Insets top="15.0" />
+                                          </HBox.margin>
+                                       </Label>
+                                       <TextField fx:id="txtPanjang" prefHeight="25.0" prefWidth="47.0">
+                                          <HBox.margin>
+                                             <Insets left="5.0" top="12.0" />
+                                          </HBox.margin>
+                                       </TextField>
+                                       <Label text="LEBAR">
+                                          <HBox.margin>
+                                             <Insets left="5.0" top="15.0" />
+                                          </HBox.margin>
+                                       </Label>
+                                       <TextField fx:id="txtLebar" prefHeight="25.0" prefWidth="47.0">
+                                          <HBox.margin>
+                                             <Insets left="5.0" top="13.0" />
+                                          </HBox.margin>
+                                       </TextField>
+                                       <Label text="TINGGI">
+                                          <HBox.margin>
+                                             <Insets left="5.0" top="15.0" />
+                                          </HBox.margin>
+                                       </Label>
+                                       <TextField fx:id="txtTinggi" prefHeight="25.0" prefWidth="47.0">
+                                          <HBox.margin>
+                                             <Insets left="5.0" top="13.0" />
+                                          </HBox.margin>
+                                       </TextField>
+                                    </children>
+                                 </HBox>
+                                 <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                    <children>
+                                       <Label text="HITUNG VOLUME : ">
+                                          <HBox.margin>
+                                             <Insets left="5.0" top="15.0" />
+                                          </HBox.margin>
+                                       </Label>
+                                       <TextField fx:id="txtVolume" editable="false" prefHeight="25.0" prefWidth="83.0" style="-fx-background-color: lightgrey;">
+                                          <HBox.margin>
+                                             <Insets left="5.0" top="12.0" />
+                                          </HBox.margin>
+                                       </TextField>
+                                       <Button fx:id="btnInputVolume" mnemonicParsing="false" text="Foto Timbang Volume">
+                                          <HBox.margin>
+                                             <Insets left="5.0" top="12.0" />
+                                          </HBox.margin>
+                                       </Button>
+                                    </children>
+                                 </HBox>
+                                 <Label text="JENIS LAYANAN" GridPane.rowIndex="4" />
+                                 <Label text="F1 : One Days Service" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                    <font>
+                                       <Font name="System Bold" size="9.0" />
+                                    </font>
+                                 </Label>
+                                 <ImageView fx:id="imgLayanan" fitHeight="50.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                 <Label fx:id="lblLayanan" text="REGULAR" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                                    <GridPane.margin>
+                                       <Insets left="100.0" />
+                                    </GridPane.margin>
+                                    <font>
+                                       <Font name="System Bold" size="20.0" />
+                                    </font>
+                                 </Label>
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <ButtonBar layoutX="60.0" prefHeight="39.0" prefWidth="711.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <buttons>
+                                    <Button fx:id="btnPhotoTerakhir" mnemonicParsing="false" text="PHOTO TERAKHIR" />
+                                    <Button fx:id="btnResiTerakhir" mnemonicParsing="false" text="RESI TERAKHIR" />
+                                    <Button fx:id="btnEditTerakhir" mnemonicParsing="false" text="EDIT TERAKHIR" />
+                                    <Button fx:id="btnEditData" mnemonicParsing="false" text="EDIT DATA" />
+                                    <Button fx:id="btnPrintResiTerakhir" mnemonicParsing="false" text="PRINT RESI TERAKHIR" />
+                                 </buttons>
+                              </ButtonBar>
+                           </children>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+
+</ScrollPane>

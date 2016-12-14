@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 22, 2016 9:21:28 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping package="entity">
+    <class name="TtJadwalPickup" table="tt_jadwal_pickup">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID"/>
+            <generator class="assigned" />
+        </id>
+        <property name="kodePelanggan" type="string">
+            <column name="KODE_PELANGGAN" length="50" />
+        </property>
+        <property name="kodeHari" type="string">
+            <column name="KODE_HARI" length="1" />
+        </property>
+        <property name="jamPickup" type="string">
+            <column name="JAM_PICKUP" length="5" />
+        </property>
+		<property name="nikKurir" type="string">
+            <column name="NIK_KURIR" length="10" />
+        </property>
+        <property name="assignBy" type="string">
+            <column name="ASSIGN_BY" length="50" />
+        </property>
+		<property name="sentMail" type="java.lang.Integer">
+            <column name="SENT_MAIL"/>
+        </property>
+        <property name="tglCreate" type="timestamp">
+            <column name="TGL_CREATE" length="19" />
+        </property>
+        <property name="tglUpdate" type="timestamp">
+            <column name="TGL_UPDATE" length="19" />
+        </property>
+        <property name="flag" type="string">
+            <column name="FLAG" length="1"/>
+        </property>
+        <property name="posisi" type="java.lang.Integer">
+            <column name="POSISI" />
+        </property>
+        <property name="idPickup" type="string">
+            <column name="ID_PICKUP" length="11"/>
+        </property>
+        <property name="flagJalan" type="java.lang.Integer">
+            <column name="FLAG_JALAN" />
+        </property>
+        <property name="sourcePickup" type="string">
+            <column name="SOURCE_PICKUP" length="1"/>
+        </property>
+    </class>
+</hibernate-mapping>

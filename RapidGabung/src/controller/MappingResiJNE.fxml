@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" maxWidth="1.7976931348623157E308" prefHeight="746.0" prefWidth="1372.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MappingResiController">
+	<content>
+		<AnchorPane maxWidth="1372.0" prefHeight="744.0" prefWidth="1349.0">
+			<children>
+            <Pane layoutX="660.0" layoutY="57.0" prefHeight="84.0" prefWidth="680.0" styleClass="combo-box-base">
+               <children>
+                  
+                  <TextField fx:id="txtSearchTable2" layoutX="458.0" layoutY="49.0" prefHeight="25.0" prefWidth="188.0" />
+                  <Label layoutX="420.0" layoutY="53.0" text="Cari" />
+               </children>
+            </Pane>
+            <Pane layoutX="8.0" layoutY="56.0" prefHeight="84.0" prefWidth="625.0" styleClass="combo-box-base">
+               <children>
+                  <Button layoutX="322.0" layoutY="8.0" mnemonicParsing="false" onAction="#onCLickUpload" prefHeight="25.0" prefWidth="87.0" text="UPLOAD" />
+               </children>
+            </Pane>
+				<Label contentDisplay="CENTER" layoutX="592.0" layoutY="14.0" text="MAPPING RESI RAPID JNE" textAlignment="CENTER" underline="true">
+					<font>
+						<Font name="System Bold" size="18.0" />
+					</font>
+				</Label>
+				<TableView fx:id="tableResiJne" layoutX="6.0" layoutY="163.0" prefHeight="392.0" prefWidth="625.0">
+					<columns>
+						<TableColumn fx:id="colResiJne" minWidth="0.0" prefWidth="90" text="RESI JNE" />
+						<TableColumn fx:id="colPenerima" prefWidth="100.0" text="PENERIMA" />
+						<TableColumn fx:id="colPengirim" prefWidth="133.0" text="PENGIRIM" />
+						<TableColumn fx:id="colTujuan" prefWidth="94.0" text="TUJUAN" />
+						<TableColumn fx:id="colService" prefWidth="65.0" text="SERVICE" />
+						<TableColumn fx:id="colHarga" prefWidth="60.0" text="HARGA" />
+						<TableColumn fx:id="colAction" prefWidth="50.0" text="ACTION" />
+					</columns>
+				</TableView>
+				<TableView fx:id="tableResiJneRapid" layoutX="659.0" layoutY="163.0" prefHeight="395.0" prefWidth="682.0">
+					<columns>
+						<TableColumn fx:id="colResiJne2" minWidth="0.0" prefWidth="106.0" text="NO RESI" />
+						<TableColumn fx:id="colCreated2" prefWidth="60.0" text="TANGGAL" />
+						<TableColumn fx:id="colPengirim2" prefWidth="98.0" text="PENGIRIM" />
+						<TableColumn fx:id="colPenerima2" prefWidth="120.0" text="PENERIMA" />
+						<TableColumn fx:id="colTujuan2" prefWidth="180.0" text="PROV. TUJUAN" />
+						<TableColumn fx:id="colHarga2" prefWidth="70.0" text="HARGA" />
+						<TableColumn fx:id="colAction2" prefWidth="60.0" text="ACTION" />
+					</columns>
+				</TableView>
+            <TextField fx:id="txtSearchTable1" layoutX="397.0" layoutY="105.0" prefHeight="25.0" prefWidth="222.0" />
+            <Label layoutX="355.0" layoutY="109.0" text="Cari :" />
+            <Separator layoutX="644.0" layoutY="46.0" orientation="VERTICAL" prefHeight="527.0" prefWidth="0.0" />
+           <Hyperlink fx:id="hyperLink" layoutX="153.0" layoutY="63.0" text="Hyperlink" />
+            <Text layoutX="27.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="UPLOAD RESI JNE :">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Text>
+            <DatePicker fx:id="dpAkhirJne" layoutX="204.0" layoutY="105.0" prefHeight="25.0" prefWidth="99.0" />
+            <DatePicker fx:id="dpAwalJne" layoutX="74.0" layoutY="105.0" prefHeight="25.0" prefWidth="99.0" />
+            <Label layoutX="25.0" layoutY="108.0" text="Periode " />
+            <Label layoutX="179.0" layoutY="109.0" text="s/d" />
+            <Label layoutX="688.0" layoutY="107.0" prefHeight="17.0" prefWidth="56.0" text="Periode" />
+            <Label layoutX="842.0" layoutY="108.0" text="s/d" />
+            <DatePicker fx:id="dpAwalRapid" layoutX="737.0" layoutY="103.0" prefHeight="25.0" prefWidth="99.0" />
+            <DatePicker fx:id="dpAkhirRapid" layoutX="867.0" layoutY="103.0" prefHeight="25.0" prefWidth="99.0" />
+            <Separator layoutX="1.0" layoutY="570.0" prefHeight="6.0" prefWidth="1363.0" />
+            <Separator layoutX="2.0" layoutY="42.0" prefHeight="7.0" prefWidth="1363.0" />
+			</children>
+		</AnchorPane>
+	</content>
+</ScrollPane>

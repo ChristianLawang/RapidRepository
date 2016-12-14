@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308" prefHeight="746.0" prefWidth="1617.0" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MasterPickupController">
+	<content>
+		<AnchorPane prefHeight="1142.0" prefWidth="1349.0">
+			<children>
+				<Label alignment="BASELINE_CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="389.0" layoutY="24.0" prefHeight="27.0" prefWidth="790.0" text="MASTER PICKUP" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" underline="true" AnchorPane.bottomAnchor="1091.0" AnchorPane.leftAnchor="389.0" AnchorPane.rightAnchor="436.0" AnchorPane.topAnchor="24.0">
+					<font>
+						<Font name="System Bold" size="18.0" />
+					</font>
+				</Label>
+            
+            <Label layoutX="646.0" layoutY="120.0" text="Hari">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="917.0" layoutY="120.0" text="Jam">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <TableView fx:id="listboxMasterPickup" layoutX="141.0" layoutY="154.0" prefHeight="388.0" prefWidth="419.0">
+              <columns>
+                <TableColumn fx:id="noCol" prefWidth="75.0" text="No" />
+                <TableColumn fx:id="pelangganCol" prefWidth="159.0" text="Nama Pelanggan" />
+              </columns>
+            </TableView>
+            
+            <ComboBox fx:id="cmbHari" layoutX="759.0" layoutY="117.0" prefHeight="25.0" prefWidth="143.0" />
+            <TextField fx:id="txtJam" layoutX="969.0" layoutY="117.0" prefHeight="25.0" prefWidth="34.0" text="00" />
+            <TextField fx:id="txtMenit" layoutX="1010.0" layoutY="117.0" prefHeight="25.0" prefWidth="34.0" text="00" />
+            <TableView fx:id="listboxMasterPickupJadwal" layoutX="759.0" layoutY="152.0" prefHeight="391.0" prefWidth="361.0">
+              <columns>
+                <TableColumn prefWidth="93.0" text="Hari" />
+                <TableColumn prefWidth="93.0" text="Jam" /> 
+                <TableColumn prefWidth="93.0" text="Hapus" />                
+              </columns>
+            </TableView>
+            <Button fx:id="btnSimpan" layoutX="1057.0" layoutY="117.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="63.0" text="Tambah" />
+            <Label layoutX="141.0" layoutY="121.0" text="Cari" />
+            <TextField fx:id="txtCari" layoutX="185.0" layoutY="117.0" prefHeight="25.0" prefWidth="205.0" />
+            <ComboBox fx:id="cmbPerwakilan" layoutX="468.0" layoutY="117.0" prefHeight="25.0" prefWidth="92.0" />
+            <Label layoutX="401.0" layoutY="121.0" text="Perwakilan" />
+			</children>
+		</AnchorPane>
+	</content>
+</ScrollPane>

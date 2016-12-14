@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="BorderPane" prefHeight="551.0" prefWidth="701.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="popup.PopUpMasterZonaController">
+    <children>
+        <Label layoutX="238.0" layoutY="26.0" text="LIST DATA MASTER PERWAKILAN">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></Label>
+        <Label layoutX="37.0" layoutY="74.0" text="Find" />
+      <TextField fx:id="txtCari" layoutX="76.0" layoutY="70.0" prefHeight="25.0" prefWidth="311.0" />
+        <TableView fx:id="lb_header" editable="true" layoutX="14.0" layoutY="110.0" prefHeight="432.0" prefWidth="673.0">
+                     <columns>
+						<TableColumn editable="true" fx:id="colKdZona" minWidth="0.0" prefWidth="107.99996948242188" text="KODE ZONA" />
+						<TableColumn fx:id="colPropinsi" prefWidth="100.0" text="PROPINSI" />
+						<TableColumn fx:id="colKabupaten" prefWidth="143.0" text="KABUPATEN" />
+						<TableColumn fx:id="colKecamatan" prefWidth="94.0" text="KECAMATAN" />
+						<TableColumn fx:id="colPerwakilan" prefWidth="65.0" text="PERWAKILAN" />
+						<TableColumn fx:id="colZona" prefWidth="60.0" text="ZONA" />
+						<TableColumn fx:id="colReg" prefWidth="50.0" text="REG" />
+						<TableColumn fx:id="colOne" prefWidth="50.0" text="ONE" />
+					</columns>
+		</TableView>
+    </children>
+</AnchorPane>

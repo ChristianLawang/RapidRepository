@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 22, 2016 9:21:28 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping package="entity">
+    <class name="TtDataEntry" table="tt_data_entry">
+        <id name="awbDataEntry" type="string">
+            <column name="AWB_DATA_ENTRY" length="20" />
+            <generator class="assigned" />
+        </id>
+        <property name="asalPaket" type="string">
+            <column name="ASAL_PAKET" length="10" />
+        </property>
+        <property name="pengirim" type="string">
+            <column name="PENGIRIM" length="50" />
+        </property>
+        <property name="penerima" type="string">
+            <column name="PENERIMA" />
+        </property>
+        <property name="tujuan" type="string">
+            <column name="TUJUAN" length="10" />
+        </property>
+        <property name="telpPenerima" type="string">
+            <column name="TELP_PENERIMA" length="50" />
+        </property>
+        <property name="reseller" type="string">
+            <column name="RESELLER" length="50" />
+        </property>
+        <property name="keterangan" type="string">
+            <column name="KETERANGAN" length="400" />
+        </property>
+        <property name="bclose" type="string">
+            <column name="BCLOSE" length="10" />
+        </property>
+        <property name="pbclose" type="string">
+            <column name="PBCLOSE" length="10" />
+        </property>
+        <property name="harga" type="java.lang.Integer">
+            <column name="HARGA" />
+        </property>
+        <property name="biaya" type="java.lang.Integer">
+            <column name="BIAYA" />
+        </property>
+        <property name="kodePerwakilan" type="string">
+            <column name="KODE_PERWAKILAN" length="10" />
+        </property>
+        <property name="jneFlag" type="java.lang.Integer">
+            <column name="JNE_FLAG" />
+        </property>
+        <property name="asuransi" type="java.lang.Integer">
+            <column name="ASURANSI">
+                <comment>nilai asuransi 0,2% dari harga barang</comment>
+            </column>
+        </property>
+        <property name="totalDiskon" type="java.lang.Integer">
+            <column name="TOTAL_DISKON" />
+        </property>
+        <property name="totalBiaya" type="java.lang.Integer">
+            <column name="TOTAL_BIAYA" />
+        </property>
+        <property name="user" type="string">
+            <column name="USER" length="20" />
+        </property>
+        <property name="flagEntry" type="java.lang.Integer">
+            <column name="FLAG_ENTRY" />
+        </property>
+        <property name="tglCreate" type="timestamp">
+            <column name="TGL_CREATE" length="19" />
+        </property>
+        <property name="tglUpdate" type="timestamp">
+            <column name="TGL_UPDATE" length="19" />
+        </property>
+        <property name="flag" type="java.lang.Integer">
+            <column name="FLAG" />
+        </property>
+    </class>
+</hibernate-mapping>

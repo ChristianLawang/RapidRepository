@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 22, 2016 9:21:28 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping package="entity">
+    <class name="TtHeader" table="tt_header">
+        <id name="awbHeader" type="string">
+            <column name="AWB_HEADER" length="20" />
+            <generator class="assigned" />
+        </id>
+        <property name="idKeranjang" type="string">
+            <column name="ID_KERANJANG" length="10" />
+        </property>
+        <property name="idUpload" type="java.lang.Integer">
+            <column name="ID_UPLOAD" />
+        </property>
+        <property name="wkSortir" type="timestamp">
+            <column name="WK_SORTIR" length="19" />
+        </property>
+        <property name="sortirFlag" type="java.lang.Integer">
+            <column name="SORTIR_FLAG" />
+        </property>
+        <property name="gabungPaketFlag" type="java.lang.Integer">
+            <column name="GABUNG_PAKET_FLAG" />
+        </property>
+        <property name="wkGabungPaket" type="timestamp">
+            <column name="WK_GABUNG_PAKET" length="19" />
+        </property>
+        <property name="idKardus" type="string">
+            <column name="ID_KARDUS" length="20" />
+        </property>
+        <property name="inboundFlag" type="java.lang.Integer">
+            <column name="INBOUND_FLAG" />
+        </property>
+        <property name="wkInbound" type="timestamp">
+            <column name="WK_INBOUND" length="19" />
+        </property>
+        <property name="barangTerkirimFlag" type="java.lang.Integer">
+            <column name="BARANG_TERKIRIM_FLAG" />
+        </property>
+        <property name="idKurir" type="string">
+            <column name="ID_KURIR" length="10" />
+        </property>
+        <property name="submitFlag" type="java.lang.Integer">
+            <column name="SUBMIT_FLAG" />
+        </property>
+        <property name="waitingPendingFlag" type="java.lang.Integer">
+            <column name="WAITING_PENDING_FLAG" />
+        </property>
+        <property name="userCreate" type="string">
+            <column name="USER_CREATE" length="20" />
+        </property>
+        <property name="userUpdate" type="string">
+            <column name="USER_UPDATE" length="20" />
+        </property>
+        <property name="resiJne" type="string">
+            <column name="RESI_JNE" length="50" />
+        </property>
+        <property name="tglCreate" type="timestamp">
+            <column name="TGL_CREATE" length="19" />
+        </property>
+        <property name="tglUpdate" type="timestamp">
+            <column name="TGL_UPDATE" length="19" />
+        </property>
+        <property name="flag" type="java.lang.Integer">
+            <column name="FLAG" />
+        </property>
+        <property name="userInbound" type="string">
+            <column name="USER_INBOUND" length="50"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 22, 2016 9:21:28 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping package="entity">
+    <class name="TtPotoTimbang" table="tt_poto_timbang">
+        <id name="awbPotoTimbang" type="string">
+            <column name="AWB_POTO_TIMBANG" length="20" />
+            <generator class="assigned" />
+        </id>
+        <property name="asalPaket" type="string">
+            <column name="ASAL_PAKET" length="10" />
+        </property>
+        <property name="kodePickup" type="string">
+            <column name="KODE_PICKUP" />
+        </property>
+        <property name="kodePelanggan" type="string">
+            <column name="KODE_PELANGGAN" length="50" />
+        </property>
+        <property name="awbData" type="string">
+            <column name="AWB_DATA" length="20" />
+        </property>
+        <property name="vol" type="string">
+            <column name="VOL" length="10" />
+        </property>
+        <property name="bvol" type="string">
+            <column name="BVOL" length="10" />
+        </property>
+        <property name="bpvol" type="string">
+            <column name="BPVOL" length="10" />
+        </property>
+        <property name="timb" type="string">
+            <column name="TIMB" length="10" />
+        </property>
+        <property name="berattimb" type="string">
+            <column name="BERATTIMB" length="10" />
+        </property>
+        <property name="bclose" type="string">
+            <column name="BCLOSE" length="10" />
+        </property>
+        <property name="bpclose" type="string">
+            <column name="BPCLOSE" length="10" />
+        </property>
+        <property name="layanan" type="string">
+            <column name="LAYANAN" length="10" />
+        </property>
+        <property name="kodePerwakilan" type="string">
+            <column name="KODE_PERWAKILAN" length="10" />
+        </property>
+        <property name="jneFlag" type="java.lang.Integer">
+            <column name="JNE_FLAG" />
+        </property>
+        <property name="gambar" type="string">
+            <column name="GAMBAR" length="65535" />
+        </property>
+        <property name="tglGambar" type="timestamp">
+            <column name="TGL_GAMBAR" length="19" />
+        </property>
+        <property name="koli" type="java.lang.Integer">
+            <column name="KOLI" />
+        </property>
+        <property name="user" type="string">
+            <column name="USER" />
+        </property>
+        <property name="tglCreate" type="timestamp">
+            <column name="TGL_CREATE" length="19" />
+        </property>
+        <property name="tglUpdate" type="timestamp">
+            <column name="TGL_UPDATE" length="19" />
+        </property>
+        <property name="flag" type="java.lang.Integer">
+            <column name="FLAG" />
+        </property>
+        <property name="flagLunas" type="java.lang.Integer">
+            <column name="FLAG_LUNAS" />
+        </property>
+    </class>
+</hibernate-mapping>

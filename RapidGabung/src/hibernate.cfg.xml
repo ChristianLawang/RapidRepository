@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <mapping resource="main/resource/TtDataEntry.hbm.xml" />
+        <mapping resource="main/resource/TtHeader.hbm.xml" />
+        <mapping resource="main/resource/TtMappingResiJne.hbm.xml" />
+
+        <mapping resource="main/resource/TrPerwakilan.hbm.xml" />
+        <mapping resource="main/resource/TrDiskon.hbm.xml" />
+        
+        <mapping resource="main/resource/TrUser.hbm.xml" />
+        <mapping resource="main/resource/TrHarga.hbm.xml" />
+        <mapping resource="main/resource/TrJabatan.hbm.xml" />
+        <mapping resource="main/resource/TrPegawai.hbm.xml" />
+        <mapping resource="main/resource/TrPelanggan.hbm.xml" />
+        <mapping resource="main/resource/TtPotoTimbang.hbm.xml" />
+        
+        <mapping resource="main/resource/TrMasalah.hbm.xml" />
+        
+        <mapping resource="main/resource/TrCabang.hbm.xml" />
+        <mapping resource="main/resource/TrKurir.hbm.xml" />
+        <mapping resource="main/resource/TrSales.hbm.xml" />
+        
+        <!-- ditambahkan 19 september 2016 -->
+        <mapping resource="main/resource/TrPickup.hbm.xml" />
+        <mapping resource="main/resource/TtJadwalPickup.hbm.xml" />
+        <mapping resource="main/resource/TtPickup.hbm.xml" />
+    
+    	<!-- pake id boongan -->
+	    <mapping resource="main/resource/TtGabungPaket.hbm.xml" />
+	    <mapping resource="main/resource/TtGabungSementara.hbm.xml" />
+	    <mapping resource="main/resource/TtStatusResiBermasalah.hbm.xml" />
+	    <mapping resource="main/resource/TtStatusKurirOut.hbm.xml" />
+	    <mapping resource="main/resource/TtStatusKurirIn.hbm.xml" />
+    </session-factory>
+</hibernate-configuration>

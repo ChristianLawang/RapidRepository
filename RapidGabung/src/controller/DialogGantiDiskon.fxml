@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane prefHeight="554.0" prefWidth="851.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <SplitPane dividerPositions="0.07789855072463768, 0.8985507246376812" orientation="VERTICAL" prefHeight="554.0" prefWidth="851.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <GridPane layoutX="71.0" layoutY="28.0" prefHeight="118.0" prefWidth="740.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Pane prefHeight="200.0" prefWidth="200.0" />
+                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
+                        <Pane prefHeight="40.0" prefWidth="275.0" GridPane.columnIndex="2" />
+                     </children>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <SplitPane dividerPositions="0.3873056994818653" layoutX="6.0" prefHeight="447.0" prefWidth="740.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <TableView fx:id="tblPelanggan" layoutX="6.0" prefHeight="445.0" prefWidth="360.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <columns>
+                                    <TableColumn prefWidth="293.0" text="Pelanggan" />
+                                 </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <SplitPane dividerPositions="0.25733634311512416" orientation="VERTICAL" prefHeight="445.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="110.0" prefWidth="387.0">
+                                       <children>
+                                          <Label layoutX="-1.0" layoutY="6.0" text="Tanggal Mulai Efektif" />
+                                          <DatePicker fx:id="dtAwal" layoutX="144.0" layoutY="2.0" prefHeight="25.0" prefWidth="133.0" />
+                                          <Label layoutY="32.0" text="Diskon Rapid" />
+                                          <Label layoutX="-1.0" layoutY="57.0" text="Diskon JNE" />                                          
+                                          <TextField fx:id="txtRapidPercentage" layoutX="144.0" layoutY="28.0" prefHeight="25.0" prefWidth="59.0" text="0" />
+                                          <TextField fx:id="txtJNEPercentage" layoutX="144.0" layoutY="53.0" prefHeight="25.0" prefWidth="59.0" text="0" />
+                                          <Button fx:id="btnTambahkan" layoutX="199.0" layoutY="74.0" mnemonicParsing="false" text="Tambahkan" />
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="298.0" prefWidth="387.0">
+                                       <children>
+                                          <TableView fx:id="tblDiskon" prefHeight="326.0" prefWidth="387.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columns>
+                                                <TableColumn prefWidth="38.0" text="No." />
+                                             	<TableColumn prefWidth="139.0" text="Tanggal Efektif" />
+                                                <TableColumn prefWidth="83.0" text="Diskon Rapid" />
+                                                <TableColumn prefWidth="94.0" text="Diskon JNE" />
+                                                <TableColumn prefWidth="144.0" text="Action" />
+                                            </columns>
+                                          </TableView>
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <Label fx:id="lblEmailProgress" layoutX="14.0" layoutY="18.0" text="" />
+                  <Button layoutX="776.0" layoutY="14.0" mnemonicParsing="false" text="Selesai" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
