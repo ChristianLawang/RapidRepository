@@ -28,6 +28,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -48,8 +49,10 @@ import utilfx.DateTimePicker;
 public class TerimaPerwakilanController implements Initializable {
 
 	@FXML
-	private TextField txtIdKardus, txtAwb;
-
+	private ComboBox txtIdKardus;
+	
+	@FXML
+	private TextField txtAwb;
 	@FXML
 	private Button btnSave;
 
@@ -93,9 +96,19 @@ public class TerimaPerwakilanController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		ManagedFormHelper.instanceController = this;
-		btnSave.setDisable(true);
 		dtpTglTerima.setDateTimeValue(LocalDateTime.now());
+		List<String> lstIdKardus = TerimaPerwakilanService.getIdKardusForCombo(dtpTglTerima.getValue());
+		for (String string : lstIdKardus) {
+			txtIdKardus.getItems().add(string);
+		}
+		btnSave.setDisable(true);
 		dtpTglTerima.setOnAction(event -> {
+			txtIdKardus.getItems().clear();
+			List<String> lstIdKardusChange = TerimaPerwakilanService.getIdKardusForCombo(dtpTglTerima.getValue());
+			for (String string : lstIdKardusChange) {
+				txtIdKardus.getItems().add(string);
+			}
+			
 			treeView.setRoot(null);
 			TreeItem<String> root = new TreeItem<>(DateUtil.getStdDateDisplay(DateUtil.convertToDatabaseColumn(dtpTglTerima.getValue())));
 		    List<String> lstTreeOnDemand = TerimaPerwakilanService.getTreeViewParent(dtpTglTerima.getDateTimeValue());
@@ -136,7 +149,7 @@ public class TerimaPerwakilanController implements Initializable {
 					}
 				}
 				if (data) {
-					MessageBox.alert("Awb tidak terdaftar kardus " + txtIdKardus.getText() + " tidak ada");
+					MessageBox.alert("Awb tidak terdaftar kardus " + txtIdKardus.getValue() + " tidak ada");
 					txtAwb.clear();
 				} else {
 					for (TerimaPerwakilanVO p : tvAllAwb.getItems()) {
@@ -171,7 +184,7 @@ public class TerimaPerwakilanController implements Initializable {
 
 	public void setTable() {
 		listPaket.clear();
-		listPaket = TerimaPerwakilanService.getListDatPaket(txtIdKardus.getText());
+		listPaket = TerimaPerwakilanService.getListDatPaket((String)txtIdKardus.getValue());
 		Integer no = 1;
 		Boolean Checked = true;
 		for (EntryDataShowVO t : listPaket) {

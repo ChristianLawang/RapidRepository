@@ -1,6 +1,7 @@
 package util;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
 
@@ -75,8 +76,8 @@ public class EmailUtil {
 		}
 	}
 
-	public static void kirimManifestWithEmail(String username, String password, String toUser, String file,
-			String path) {
+	public static void kirimManifestWithEmail(String body, String username, String password, String toUser, String file,
+			String path, Date dtSubject) {
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.socketFactory.port", "465");
@@ -103,12 +104,14 @@ public class EmailUtil {
 			// attachment1.setHeader("Content-Transfer-Encoding", "base64");
 
 			MimeBodyPart bodypart = new MimeBodyPart();
-			bodypart.setText("Berikut adalah data transaksi manifest cabang", "utf-8");
+			bodypart.setText(
+					body					
+					, "utf-8");
 
 			multipart.addBodyPart(bodypart);
 			multipart.addBodyPart(attachment1);
 
-			message.setSubject("Manifest Cabang tanggal " + DateUtil.dateToStdDateLiteral(DateUtil.getNow()));
+			message.setSubject("Manifest Cabang tanggal " + DateUtil.dateToStdDateLiteral(dtSubject));
 			message.setContent(multipart);
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toUser));
 

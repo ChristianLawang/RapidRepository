@@ -23,8 +23,8 @@ public class MasterCabangService {
 	public static List<TrCabang> getAllPerwakilanCabangDistinct() {
 		Session session=HibernateUtil.openSession();
 		String nativeSql = 
-				" select distinct a.kode_perwakilan"
-			  + " from tr_cabang a;";
+				" select distinct a.kode_cabang"
+			  + " from tr_cabang a where a.flag=0;";
 		SQLQuery  query = session.createSQLQuery(nativeSql);
 		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 		List result = query.list();
@@ -35,7 +35,7 @@ public class MasterCabangService {
 			Map row = (Map) obj;
 			TrCabang everyRow = new TrCabang();
 			
-			everyRow.setKodePerwakilan((String) row.get("KODE_PERWAKILAN"));
+			everyRow.setKodeCabang((String) row.get("KODE_CABANG"));
 			
 			returnList.add(everyRow);
 		}
@@ -174,9 +174,11 @@ public class MasterCabangService {
 	
 	public static List<EntryDataShowVO> getDataCabangExportExcell(Date dtAwal, Date dtAkhir, String strKdPerw) {
 		Session s = HibernateUtil.openSession();
-		String sql = "select c.awb_data, a.tgl_create, b.penerima, b.telp_penerima "
-				+ "from tt_header a, tt_data_entry b, tt_poto_timbang c "
+		String sql = "select c.awb_data, a.tgl_create, b.penerima, b.telp_penerima, c.layanan, d.kecamatan "
+				+ "from tt_header a, tt_data_entry b, tt_poto_timbang c, tr_harga d "
 				+ "where a.awb_header = b.awb_data_entry "
+				+ "and d.kode_zona = b.tujuan "
+				+ "and left(a.awb_header,3) = d.kode_asal "
 				+ "and a.awb_header = c.awb_poto_timbang "
 				+ "and a.flag=0 and a.resi_jne is null and b.kode_perwakilan=:pKdPerw and "
 				+ "date(a.tgl_create) between :pTglMulai and :pTglAkhir ";
@@ -194,6 +196,9 @@ public class MasterCabangService {
 			en.setCreated((Date) objects[1]);
 			en.setPenerima(objects[2] != null ? (String) objects[2] : "");
 			en.setNoTlpn(objects[3] != null ? (String) objects[3] : "");
+			en.setService(objects[4] != null ? (String) objects[4] : "");
+			en.setKecamatan(objects[5] != null ? (String) objects[5] : "");
+			
 			returnList.add(en);
 		}
 		s.getTransaction().commit();
@@ -205,7 +210,7 @@ public class MasterCabangService {
 		Session session=HibernateUtil.openSession();
 		String nativeSql = 
 				" select a.kode_cabang, a.nama_cabang"
-			  + " from tr_cabang a;";
+			  + " from tr_cabang a where a.flag = 0;";
 		SQLQuery  query = session.createSQLQuery(nativeSql);
 		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 		List result = query.list();

@@ -16,6 +16,7 @@ public class TrJabatan implements java.io.Serializable {
 	private Date tglCreate;
 	private Date tglUpdate;
 	private Integer flag;
+	private Integer user;
 
 	public TrJabatan() {
 	}
@@ -25,13 +26,14 @@ public class TrJabatan implements java.io.Serializable {
 	}
 
 	public TrJabatan(String idJabatan, String jabatan, String kodeCabang, Date tglCreate, Date tglUpdate,
-			Integer flag) {
+			Integer flag, Integer user) {
 		this.idJabatan = idJabatan;
 		this.jabatan = jabatan;
 		this.kodeCabang = kodeCabang;
 		this.tglCreate = tglCreate;
 		this.tglUpdate = tglUpdate;
 		this.flag = flag;
+		this.user = user;
 	}
 
 	public String getIdJabatan() {
@@ -80,6 +82,14 @@ public class TrJabatan implements java.io.Serializable {
 
 	public void setFlag(Integer flag) {
 		this.flag = flag;
+	}
+	
+	public Integer getUser() {
+		return this.user;
+	}
+
+	public void setUser(Integer user) {
+		this.user = user;
 	}
 
 }

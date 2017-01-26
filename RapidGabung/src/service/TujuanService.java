@@ -84,7 +84,7 @@ public class TujuanService {
 		sql ="select a.kode_zona, a.kabupaten, a.kecamatan, a.propinsi, a.reg, a.one, "
 				+ "b.regPerwakilan, b.onePerwakilan "
 				+ "from tr_harga a, tr_perwakilan b "
-				+ "where a.kode_asal = '"+kodeAsal+"' and a.kode_zona = b.kode_zona and a.flag=0 and a.kode_zona like '%"+kdTujuan+"%'";
+				+ "where a.kode_asal = '"+kodeAsal+"' and b.kode_asal = '"+kodeAsal+"' and a.kode_zona = b.kode_zona and a.flag=0 and a.kode_zona like '%"+kdTujuan+"%'";
 		System.out.println("--> sql : " + sql);
 		query = s.createSQLQuery(sql);
 		List<Object[]> list = query.list();

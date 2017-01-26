@@ -21,26 +21,79 @@ import util.HibernateUtil;
 public class LaporanPODService {
 	public static List<EntryDataShowVO> getListPrintKurIn(String kdPerwakilan, Date tglAwl, Date tglAkhir) {
 		Session s = HibernateUtil.openSession();
-		String sql = "select distinct b.kode_perwakilan, "
-		+ "count(a.awb_header) jmlhPaket, "
-		+ "(select count(z.inbound_flag) from tt_header z, tt_data_entry y "
-		+ "where z.awb_header=y.awb_data_entry and z.inbound_flag=1 and y.kode_perwakilan=b.kode_perwakilan) sudahReport, "
-		+ "(select count(d.inbound_flag) from tt_header d, tt_data_entry e "
-		+ "where d.awb_header=e.awb_data_entry and d.inbound_flag is null and e.kode_perwakilan=b.kode_perwakilan) blmReport, "
-		+ "(select count(f.inbound_flag) from tt_header f, tt_data_entry g "
-		+ "where f.awb_header=g.awb_data_entry and f.inbound_flag=0 and g.kode_perwakilan=b.kode_perwakilan) masalah "
-		+ "from tt_header a, tt_data_entry b "
-		+ "where a.awb_header = b.awb_data_entry "
-		+ "and b.kode_perwakilan is not null ";
+//		String sql = "select distinct b.kode_perwakilan, "
+//		+ "count(a.awb_header) jmlhPaket, "
+//		+ "(select count(z.inbound_flag) from tt_header z, tt_data_entry y "
+//		+ "where z.awb_header=y.awb_data_entry and z.inbound_flag=1 and y.kode_perwakilan=b.kode_perwakilan) sudahReport, "
+//		+ "(select count(d.inbound_flag) from tt_header d, tt_data_entry e "
+//		+ "where d.awb_header=e.awb_data_entry and d.inbound_flag is null and e.kode_perwakilan=b.kode_perwakilan) blmReport, "
+//		+ "(select count(f.inbound_flag) from tt_header f, tt_data_entry g "
+//		+ "where f.awb_header=g.awb_data_entry and f.inbound_flag=0 and g.kode_perwakilan=b.kode_perwakilan) masalah "
+//		+ "from tt_header a, tt_data_entry b "
+//		+ "where a.awb_header = b.awb_data_entry "
+//		+ "and b.kode_perwakilan is not null ";
+		
+		String sql = 
+			"select " +
+			"       distinct b.kode_perwakilan, " +
+			" 		case when t.jumlah_awb is null then 0 else t.jumlah_awb end as jmlhPaket, " +
+			"       case when x.sudah_report is null then 0 else x.sudah_report end as sudahReport, " +
+			"       case when y.belum_report is null then 0 else y.belum_report end as blmReport, " +
+			"       case when z.masalah is null then 0 else z.masalah end as masalah       " +
+			       
+			"from tt_header as a  " +
+			"inner join tt_data_entry as b on a.awb_header = b.awb_data_entry " +
+			"left join ( " +
+			"    select  " +
+			"           b.kode_perwakilan,  " +
+			"           count(a.awb_header) as jumlah_awb " +
+			"    from  " +
+			"         tt_header as a  " +
+			"         inner join tt_data_entry as b on a.awb_header = b.awb_data_entry " +
+			"    where " +
+			"         date(a.tgl_create) between '"+ tglAwl +"' and '" +tglAkhir +"'  " +
+			"    group by b.kode_perwakilan " +
+			") as t on b.kode_perwakilan = t.kode_perwakilan " +
+			"left join ( " +
+			"    select  " +
+			"           b.kode_perwakilan,  " +
+			"           count(a.awb_header) as masalah " +
+			"    from  " +
+			"         tt_header as a  " +
+			"         inner join tt_data_entry as b on a.awb_header = b.awb_data_entry  " +
+			"    where a.inbound_flag = 0  " +
+			"          and date(a.tgl_create) between '"+ tglAwl +"' and '" +tglAkhir +"'  " +
+			"    group by b.kode_perwakilan " +
+			") as z on b.kode_perwakilan = z.kode_perwakilan " +
+			"left join ( " +
+			"    select  " +
+			"           b.kode_perwakilan,  " +
+			"           count(a.awb_header) belum_report " +
+			"    from  " +
+			"         tt_header as a  " +
+			"         inner join tt_data_entry as b on a.awb_header = b.awb_data_entry  " +
+			"    where a.inbound_flag is null " +
+			"          and date(a.tgl_create) between '"+ tglAwl +"' and '" +tglAkhir +"'  " +
+			"    group by b.kode_perwakilan " +
+			") as y on b.kode_perwakilan = y.kode_perwakilan " +
+			"left join ( " +
+			"    select  " +
+			"           b.kode_perwakilan,  " +
+			"           count(a.awb_header) as sudah_report " +
+			"    from  " +
+			"         tt_header as a  " +
+			"         inner join tt_data_entry as b on a.awb_header = b.awb_data_entry  " +
+			"    where a.inbound_flag=1 " +
+			"          and date(a.tgl_create) between '"+ tglAwl +"' and '" +tglAkhir +"'  " +
+			"    group by b.kode_perwakilan " +
+			") as x on b.kode_perwakilan = x.kode_perwakilan";
 		
 		if(kdPerwakilan == null || kdPerwakilan.equals("")){
 		}else{
-			sql += "and b.kode_perwakilan =  '" +kdPerwakilan +"' " ;
+			sql += " where b.kode_perwakilan =  '" +kdPerwakilan +"' " ;
 		}
-		if(tglAwl != null && tglAkhir != null){
-			sql += "and a.tgl_create between '"+ tglAwl +"' and '" +tglAkhir +"' ";
-		}
-		sql += "group by b.kode_perwakilan";
+		sql += " order by b.kode_perwakilan";
+		System.out.println("--> sql : " + sql);
 		Query query = s.createSQLQuery(sql);
 		List<EntryDataShowVO> returnList = new ArrayList<EntryDataShowVO>();
 		List<Object[]> list = query.list();

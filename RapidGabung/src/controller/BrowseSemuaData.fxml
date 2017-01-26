@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -20,12 +21,41 @@
 	<content>
 		<AnchorPane prefWidth="1372.0">
 			<children>
-            <Pane layoutX="27.0" layoutY="59.0" prefHeight="80.0" prefWidth="1303.0" styleClass="combo-box-base">
+            <Pane layoutX="27.0" layoutY="59.0" prefHeight="87.0" prefWidth="1303.0" styleClass="combo-box-base">
                <children>
-                  <TextField fx:id="txtCari" layoutX="1070.0" layoutY="9.0" prefHeight="25.0" prefWidth="179.0" />
-                  <Label layoutX="1026.0" layoutY="13.0" prefHeight="17.0" prefWidth="34.0" text="Cari :" />
-                  <Button fx:id="btnMultiple" layoutX="376.0" layoutY="9.0" mnemonicParsing="false" text="Ganti Pengirim" />
-                  <Button fx:id="btnResetGP" layoutX="479.0" layoutY="9.0" mnemonicParsing="false" text="Reset Gabung Paket" />
+                  <TextField fx:id="txtCari" layoutX="1110.0" layoutY="11.0" prefHeight="25.0" prefWidth="179.0" />
+                  <Label layoutX="1077.0" layoutY="15.0" prefHeight="17.0" prefWidth="24.0" text="Cari" />
+                  <Button fx:id="btnMultiple" layoutX="1063.0" layoutY="45.0" mnemonicParsing="false" text="Ganti Pengirim" />
+                  <Button fx:id="btnResetGP" layoutX="1166.0" layoutY="45.0" mnemonicParsing="false" text="Reset Gabung Paket" />
+                  <Label layoutX="9.0" layoutY="29.0" text="AWB" />
+                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="392.0" layoutY="29.0" prefHeight="19.0" prefWidth="24.0" text="s/d" textAlignment="RIGHT" />
+                  <TextField fx:id="txtAWB" layoutX="69.0" layoutY="26.0" />
+                  <Button fx:id="btnCari" layoutX="859.0" layoutY="12.0" mnemonicParsing="false" onAction="#onClikCari" prefHeight="25.0" prefWidth="52.0" text="Cari" />
+                  <DatePicker fx:id="txtTglAkhir" editable="false" layoutX="430.0" layoutY="26.0" prefHeight="25.0" prefWidth="99.0" />
+                  <DatePicker fx:id="txtTglMulai" editable="false" layoutX="284.0" layoutY="26.0" prefHeight="25.0" prefWidth="99.0" />
+                  <Text layoutX="233.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Periode" />
+                  <RadioButton fx:id="radioAWB" layoutX="9.0" layoutY="7.0" mnemonicParsing="false" text="Pencarian nomor resi" />
+                  <RadioButton fx:id="radioSpec" layoutX="233.0" layoutY="7.0" mnemonicParsing="false" selected="true" text="Pencarian berdasarkan periode" />
+                  <Separator layoutX="220.0" layoutY="4.0" orientation="VERTICAL" prefHeight="81.0" prefWidth="6.0" />
+                  <Label layoutX="233.0" layoutY="58.0" text="Asal" />
+                  <Label layoutX="387.0" layoutY="58.0" text="Perwakilan" />
+                  <ComboBox fx:id="cmbAsal" layoutX="284.0" layoutY="55.0" prefHeight="25.0" prefWidth="99.0" />
+                  <ComboBox fx:id="cmbPelanggan" layoutX="622.0" layoutY="25.0" prefHeight="25.0" prefWidth="202.0" />
+                  <Label layoutX="563.0" layoutY="28.0" text="Pelanggan" />
+                  <Separator layoutX="845.0" layoutY="5.0" orientation="VERTICAL" prefHeight="77.0" prefWidth="4.0" />
+                  <Label layoutX="1049.0" layoutY="70.0" text="* pilih sekaligus sebelum ganti pengirim/reset gabung paket" textFill="RED">
+                     <font>
+                        <Font size="9.0" />
+                     </font></Label>
+                  <ComboBox fx:id="cmbPerwakilan" layoutX="450.0" layoutY="54.0" prefHeight="25.0" prefWidth="99.0" />
+                  <Label layoutX="562.0" layoutY="56.0" text="Penerima" />
+                  <TextField fx:id="txtPenerima" layoutX="622.0" layoutY="54.0" prefHeight="25.0" prefWidth="127.0" />
+                  <Button fx:id="btnClear" layoutX="921.0" layoutY="12.0" mnemonicParsing="false" text="Clear" />
+                  <Label layoutX="754.0" layoutY="60.0" text="* Penerima min 3 char" textFill="RED">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Label>
                </children>
             </Pane>
 				<Label contentDisplay="CENTER" layoutX="599.0" layoutY="14.0" text="BROWSE SEMUA DATA" textAlignment="CENTER" underline="true">
@@ -33,38 +63,47 @@
 						<Font name="System Bold" size="18.0" />
 					</font>
 				</Label>
-            <TableView fx:id="listBrowse" editable="true" layoutX="27.0" layoutY="142.0" prefHeight="404.0" prefWidth="1304.0">
+            <TableView fx:id="listBrowse" editable="true" layoutX="27.0" layoutY="150.0" prefHeight="404.0" prefWidth="1304.0">
                <columns>
                   <TableColumn fx:id="colCreated" prefWidth="70.0" text="Tgl Transaksi" />
                   <TableColumn fx:id="colAwbData" prefWidth="126.0" text="Resi" />
-                  <TableColumn fx:id="colLayanan" prefWidth="54.0" text="Layanan" />
+                  <TableColumn fx:id="colLayanan" prefWidth="44.0" text="Layanan" />
+                  <TableColumn fx:id="colKecamatan" prefWidth="100.0" text="Kecamatan" />
                   <TableColumn fx:id="colPengirim" prefWidth="70.0" text="Pengirim" />
                   <TableColumn fx:id="colTelp" prefWidth="70.0" text="Telp" />
                   <TableColumn fx:id="colAsalPaket" prefWidth="70.0" text="Asal Paket" />
                   <TableColumn fx:id="colKdPerwakilan" prefWidth="44.0" text="Perw." />
                   <TableColumn fx:id="colTujuan" prefWidth="70.0" text="Tujuan" />
-                  <TableColumn fx:id="colZona" prefWidth="42.0" text="Zona" />
+                  <TableColumn fx:id="colZona" prefWidth="32.0" text="Zona" />
                   <TableColumn fx:id="colPenerima" prefWidth="70.0" text="Penerima" />
                   <TableColumn fx:id="colBFinal" prefWidth="43.0" text="Berat" />
                   <TableColumn fx:id="colBpFinal" prefWidth="34.0" text="Ber." />
-                  <TableColumn fx:id="colBVolume" prefWidth="56.0" text="BVolume" />
-                  <TableColumn fx:id="colHarga" prefWidth="70.0" text="Harga" />
-                  <TableColumn fx:id="colTotalBiaya" prefWidth="70.0" text="Total" />
+                  <TableColumn fx:id="colBVolume" prefWidth="36.0" text="BVolume" />
+                  <TableColumn fx:id="colHarga" prefWidth="60.0" text="Harga" />
+                  <TableColumn fx:id="colTotalBiaya" prefWidth="60.0" text="Total" />
                   <TableColumn fx:id="colResiJNE" prefWidth="70.0" text="Resi JNE" />
                   <TableColumn fx:id="colReseller" prefWidth="70.0" text="Reseller" />
                   <TableColumn fx:id="colIdKardus" prefWidth="70.0" text="Id Kardus" />
                   <TableColumn fx:id="colActionUpdate" prefWidth="200.0" text="Action" />
                </columns></TableView>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="208.0" layoutY="72.0" prefHeight="19.0" prefWidth="24.0" text="s/d" textAlignment="RIGHT">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Label>
-            <DatePicker fx:id="txtTglMulai" editable="false" layoutX="108.0" layoutY="69.0" prefHeight="25.0" prefWidth="99.0" />
-            <DatePicker fx:id="txtTglAkhir" editable="false" layoutX="236.0" layoutY="69.0" prefHeight="25.0" prefWidth="99.0" />
-            <Button fx:id="btnCari" layoutX="343.0" layoutY="69.0" mnemonicParsing="false" onAction="#onClikCari" prefHeight="25.0" prefWidth="52.0" text="Cari" />
-            <Text layoutX="43.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Periode" />
-            <Pane layoutX="28.0" layoutY="552.0" prefHeight="34.0" prefWidth="1303.0" styleClass="combo-box-base" />
+            <Pane layoutX="28.0" layoutY="560.0" prefHeight="27.0" prefWidth="1303.0" styleClass="combo-box-base">
+               <children>
+                  <Label layoutX="14.0" layoutY="5.0" text="Total Data" />
+                  <TextField fx:id="txtTotRow" alignment="CENTER_RIGHT" editable="false" layoutX="77.0" layoutY="1.0" prefHeight="25.0" prefWidth="94.0" text="0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></TextField>
+                  <TextField fx:id="txtTotBerat" alignment="CENTER_RIGHT" editable="false" layoutX="248.0" prefHeight="25.0" prefWidth="94.0" text="0.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></TextField>
+                  <Label layoutX="185.0" layoutY="4.0" text="Total Berat" />
+                  <TextField fx:id="txtTotBiaya" alignment="CENTER_RIGHT" editable="false" layoutX="420.0" layoutY="-1.0" prefHeight="25.0" prefWidth="94.0" text="0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></TextField>
+                  <Label layoutX="357.0" layoutY="3.0" text="Total Biaya" />
+               </children></Pane>
 			</children>
 		</AnchorPane>
 	</content>

@@ -25,7 +25,9 @@
                   <ComboBox fx:id="cbPelanggan" layoutX="182.0" layoutY="33.0" prefHeight="25.0" prefWidth="170.0" />
                   <Label layoutX="70.0" layoutY="35.0" text="Nama Pelanggan :" />
       				<Label layoutX="368.0" layoutY="35.0" text="Date :" />
-                  <CheckBox fx:id="chkAllPelanggan" layoutX="182.0" layoutY="67.0" mnemonicParsing="false" text="All Pelanggan" />
+                  <CheckBox fx:id="chkAllPelanggan" layoutX="182.0" layoutY="66.0" mnemonicParsing="false" text="All Pelanggan" />
+                  <ComboBox fx:id="cmbStatus" layoutX="408.0" layoutY="62.0" prefHeight="25.0" prefWidth="170.0" />
+                  <Label layoutX="367.0" layoutY="65.0" text="Status" />
                </children>
             </Pane>
 				<Label layoutX="574.0" layoutY="14.0" text="PENANDA LUNAS" textAlignment="CENTER" underline="true">
@@ -61,6 +63,7 @@
                   </AnchorPane>
               </items>
             </SplitPane>
+            <Label text="Label" />
 			</children>
 		</AnchorPane>
 	</content>

@@ -152,5 +152,20 @@ public class TtGabungSementara implements java.io.Serializable {
 		result = 37 * result + (getFlag() == null ? 0 : this.getFlag().hashCode());
 		return result;
 	}
+		
+		public void print(){
+			System.out.println("-------------------------");
+			System.out.println(this.id);
+			System.out.println(this.idKardus);
+			System.out.println(this.idKardusSub);
+			System.out.println(this.awb);
+			System.out.println(this.bclose);
+			System.out.println(this.bpclose);
+			System.out.println(this.tujuan);
+			System.out.println(this.session);
+			System.out.println(this.tglCreate);
+			System.out.println(this.tglUpdate);
+			System.out.println(this.flag);
+		}
 
 }

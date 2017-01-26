@@ -21,7 +21,7 @@ public class TrUser implements java.io.Serializable {
 	private Date tglCreate;
 	private Date tglUpdate;
 	private Integer flag;
-	private Integer idRole;
+	private String idRole;
 
 	public TrUser() {
 	}
@@ -31,7 +31,7 @@ public class TrUser implements java.io.Serializable {
 	}
 
 	public TrUser(String idUser, String namaUser, String email, String password, String rememberToken, Integer status,
-			String kodeCabang, Date login, Date tglCreate, Date tglUpdate, Integer flag, Integer idRole) {
+			String kodeCabang, Date login, Date tglCreate, Date tglUpdate, Integer flag, String idRole) {
 		this.idUser = idUser;
 		this.namaUser = namaUser;
 		this.email = email;
@@ -134,11 +134,11 @@ public class TrUser implements java.io.Serializable {
 		this.flag = flag;
 	}
 
-	public Integer getIdRole() {
+	public String getIdRole() {
 		return idRole;
 	}
 
-	public void setIdRole(Integer idRole) {
+	public void setIdRole(String idRole) {
 		this.idRole = idRole;
 	}
 	

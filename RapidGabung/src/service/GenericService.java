@@ -10,6 +10,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -22,6 +23,14 @@ public class GenericService{
 		s.saveOrUpdate(data);
 		
 		s.getTransaction().commit();
+	}
+	
+	public static <T> void saveOrUpdate(Session s, Class<T> cls, T data){
+//		Session s=HibernateUtil.openSession();
+		
+		s.saveOrUpdate(data);
+		
+//		s.getTransaction().commit();
 	}
 	
 	public static <T> T  load(Class<T> cls, Serializable key){
@@ -176,5 +185,21 @@ public class GenericService{
 			    .setProjection(Projections.max(field));
 		String result = (String)criteria.uniqueResult();
 		return result;
+	}
+	
+	public static String getLastVarcharID(String tabelNative, String fieldNative){
+		Session session=HibernateUtil.openSession();
+		String sql =
+				"select "+fieldNative+" from "+tabelNative+" order by 1 desc limit 1";
+		SQLQuery  query = session.createSQLQuery(sql);
+		query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+		Map result = (Map) query.uniqueResult();
+		System.out.println(result);
+		session.getTransaction().commit();
+		if(result==null){
+			return null;
+		}else{
+			return (String) result.get(fieldNative);
+		}
 	}
 }

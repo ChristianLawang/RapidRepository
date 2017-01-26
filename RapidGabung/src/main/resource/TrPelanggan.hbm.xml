@@ -8,6 +8,9 @@
 			<column name="KODE_PELANGGAN" length="100" />
 			<generator class="assigned" />
 		</id>
+		<property name="asalPelanggan" type="string">
+			<column name="ASAL_PELANGGAN" length="10" />
+		</property>
 		<property name="namaAkun" type="string">
 			<column name="NAMA_AKUN" length="100" />
 		</property>
@@ -40,6 +43,9 @@
 		</property>
 		<property name="tglMulaiDiskon" type="timestamp">
 			<column name="TGL_MULAI_DISKON" length="19" />
+		</property>
+		<property name="tglAkhirDiskon" type="timestamp">
+			<column name="TGL_AKHIR_DISKON" length="19" />
 		</property>
 		<property name="sms" type="string">
 			<column name="SMS" length="10" />

@@ -2,7 +2,9 @@ package service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -25,5 +27,17 @@ public class BarangKembaliService {
 		s.getTransaction().commit();
 		
 		return list;
+	}
+
+	public static String getFotoImageByAWB(String resi) {
+		Session session = HibernateUtil.openSession();
+		String nativeSql = 
+				"select gambar from tt_poto_timbang where awb_poto_timbang = '"+resi+"'";
+		System.out.println("--> " + nativeSql);
+		Query query = session.createSQLQuery(nativeSql);
+		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+		Map result = (Map) query.uniqueResult();
+		session.getTransaction().commit();
+		return (String) result.get("GAMBAR");
 	}	
 }

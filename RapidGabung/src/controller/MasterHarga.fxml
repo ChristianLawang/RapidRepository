@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -75,7 +76,7 @@
             <Button fx:id="btnSimpan" layoutX="979.0" layoutY="436.0" mnemonicParsing="false" onAction="#onSave" onMouseClicked="#onMouseClicked" text="SIMPAN" />
             <Button fx:id="btnBatal" layoutX="1053.0" layoutY="436.0" mnemonicParsing="false" onAction="#onCancel" onMouseClicked="#onMouseClicked" text="BATAL" />
             <TextField fx:id="txtCari" layoutX="133.0" layoutY="61.0" prefHeight="25.0" prefWidth="182.0" />
-            <Button layoutX="79.0" layoutY="475.0" mnemonicParsing="false" text="Export to CSV" />
+            <Button fx:id="btnExport" layoutX="79.0" layoutY="475.0" mnemonicParsing="false" text="Export to CSV" />
             <TableView fx:id="listBoxMasterHarga" layoutX="79.0" layoutY="99.0" onMouseClicked="#onMouseClicked" prefHeight="368.0" prefWidth="776.0">
               <columns>
                   <TableColumn fx:id="colKodeZona" text="Kode Zona" />
@@ -107,6 +108,7 @@
             </Label>
             <Button fx:id="btnUbahSekaligus" layoutX="760.0" layoutY="61.0" mnemonicParsing="false" text="Ubah Perwakilan" />
             <Button fx:id="btnImport" layoutX="179.0" layoutY="475.0" mnemonicParsing="false" prefWidth="123.0" text="Import From CSV" />
+            <Label layoutX="315.0" layoutY="479.0" text="* Pastikan yang di import file format XLSX" textFill="#ff2600" />
             
 			</children>
 		</AnchorPane>

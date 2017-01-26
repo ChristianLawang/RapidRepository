@@ -44,85 +44,6 @@ public class LaporanPenerimaService {
 	public static List<EntryDataShowVO> getListTableLapPenerima(String pengirim, Date tglAwl, Date tglAkhir,
 			String kdPerwakilan, CheckBox chkAll, CheckBox chkDetail) {
 		Session s = HibernateUtil.openSession();
-//		String sql = "";
-//		if (!chkDetail.isSelected()) {	
-//			System.out.println("DISTINCT");
-//			sql = 
-//				"select x.* from ( " +
-//				"select " +
-//				"	date(a.TGL_CREATE) as TANGGAL_CREATE, " +
-//				"	a.awb_data_entry, " +
-//				"	a.pengirim, " +
-//				"	a.penerima as PENERIMA, " +
-//				"	a.telp_penerima, " +
-//				"	a.tujuan, " +
-//				"	c.zona, " +
-//				"   a.bclose, " +
-//				"	c.etd, " +
-//				"	a.keterangan, " +
-//				"	b.tgl_create as TANGGAL_TERIMA, " +
-//				"	concat(b.waktu_jam, ':', b.waktu_menit) as WAKTU_TERIMA, " +
-//				"	CASE  " +
-//				"	     WHEN b.status is null THEN 'ONPROCESS' " +
-//				"	     WHEN b.status = 'SEND' THEN 'DITERIMA' " +
-//				"	     WHEN b.status = '-1- Diterima' THEN 'DITERIMA' " +
-//				"	     ELSE b.status END as STATUS, " +
-//				"	b.penerima as DITERIMA_OLEH " +
-//				"	from tt_data_entry a " +
-//				"	left join tt_status_kurir_in b on a.awb_data_entry = b.id_barang " +
-//				"	inner join tr_harga c on a.tujuan = c.kode_zona   " +
-//				"	where  " +
-//				"	c.kode_asal = left(a.awb_data_entry,3) " + 
-//				"	and date(a.tgl_create) between :pTglAwl and :pTglAkhr "; 
-//				if (pengirim == null || pengirim.equals("")) {
-//				} else {
-//					sql += "and a.pengirim =  '" + pengirim + "' ";
-//				}
-//			    if (kdPerwakilan == null || kdPerwakilan.equals("")) {
-//				} else {
-//					sql += "and a.kode_perwakilan =  '" + kdPerwakilan + "' ";
-//				}
-//				sql +="	group by awb_data_entry ) x";
-//		} else {
-//			System.out.println("DETAIL");
-//			sql = 
-//				"select x.* from ( " +
-//				"select " +
-//				"	date(a.TGL_CREATE), " +
-//				"	a.AWB_DATA_ENTRY, " +
-//				"	a.PENGIRIM, " +
-//				"	a.PENERIMA as PENERIMA, " +
-//				"	a.TELP_PENERIMA, " +
-//				"	a.TUJUAN, " +
-//				"	c.ZONA, " +
-//				"	a.BCLOSE, " +
-//				"	c.ETD, " +
-//				"	a.KETERANGAN, " +
-//				"	b.tgl_create as TANGGAL_TERIMA, " +
-//				"	concat(b.waktu_jam, ':', b.waktu_menit) as WAKTU_TERIMA, " +
-//				"	CASE  " +
-//				"	     WHEN b.STATUS = '-1 - Diterima' THEN 'DITERIMA' " + 
-//				"	     WHEN b.PENERIMA is null THEN 'ONPROCESS' " +
-//				"	     WHEN b.MASALAH = '-1 - Diterima' THEN 'DITERIMA' " +
-//				"" +
-//				"	     ELSE b.MASALAH END as STATUS, " +
-//				"	b.PENERIMA as DITERIMA_OLEH " +
-//				"	from tt_data_entry a " +
-//				"	left join tt_status_kurir_in b on a.awb_data_entry = b.id_barang " +
-//				"	inner join tr_harga c on a.tujuan = c.kode_zona   " +
-//				"	where  " +
-//				"	c.kode_asal = left(a.awb_data_entry,3) " + 
-//				"	and date(a.tgl_create) between :pTglAwl and :pTglAkhr "; 
-//				if (pengirim == null || pengirim.equals("")) {
-//				} else {
-//					sql += "and a.pengirim =  '" + pengirim + "' ";
-//				}
-//			    if (kdPerwakilan == null || kdPerwakilan.equals("")) {
-//				} else {
-//					sql += "and a.kode_perwakilan =  '" + kdPerwakilan + "' ";
-//				}
-//			    sql += "	order by A.AWB_DATA_ENTRY, B.TGL_CREATE ) x";
-//		}
 		String sql =
 				"select * from (" +
 				"select " +
@@ -139,23 +60,32 @@ public class LaporanPenerimaService {
 			    "   b.tgl_create as tanggal_terima, " +
 			    "   concat(b.waktu_jam,':',waktu_menit), " +
 			    "   CASE " +
-			    "	WHEN b.masalah is null and b.penerima is null then 'ONPROCESS' else b.masalah " +
+			    "	WHEN e.resi_jne is not null then 'JNE PROCESS' WHEN b.masalah is null and b.penerima is null then 'ONPROCESS' else b.masalah " +
 			    "	END as masalah, " +
 			    "   CASE " +
 			    "	WHEN b.masalah != '-1 - Diterima' then '' else b.penerima end as diterima_oleh " +
 			"from tt_data_entry a " +
 			"left join tt_status_kurir_in b on a.awb_data_entry = b.id_barang  " +
-			"inner join tr_harga c on a.tujuan = c.kode_zona " +
+			"inner join tr_harga c on c.kode_asal = ( " +
+                "select CASE  " +
+                "  WHEN left(a.awb_data_entry,3) = 'TGR'   " +
+                "  or left(a.awb_data_entry,3) = 'BKI'   " +
+                "  or left(a.awb_data_entry,3) = 'DPK'   " +
+                "  or left(a.awb_data_entry,3) = 'BOO'    " +               
+                "  then 'CGK'   " +
+                "  else left(a.awb_data_entry,3)    " +
+                "  END as asalpaket from dual  " +
+                "  )  " +
+			"inner join tt_header e on a.awb_data_entry = e.awb_header " +
 			"where  " +
-			"      c.kode_asal = left(a.awb_data_entry,3) and " +
-			"      date(a.tgl_create) between :pTglAwl and :pTglAkhr  ";
+			"      c.kode_zona = a.tujuan and " +
+			"      date(a.tgl_create) between :pTglAwl and :pTglAkhr and e.flag=0 ";
 			if (pengirim == null || pengirim.equals("")) {
 			} else {
-					sql += "and a.pengirim =  '" + pengirim + "' ";
+					sql += " and a.pengirim =  '" + pengirim + "' ";
 			}
-		    if (kdPerwakilan == null || kdPerwakilan.equals("")) {
-			} else {
-					sql += "and a.kode_perwakilan =  '" + kdPerwakilan + "' ";			}
+		    if (!kdPerwakilan.equals("All Cabang")) {
+						sql += " and a.kode_perwakilan =  '" + kdPerwakilan + "' ";			}
 		    sql += ") x ORDER BY 2";
 		
 		System.out.println("--> sql : " + sql);
@@ -216,5 +146,65 @@ public class LaporanPenerimaService {
 		}else{
 			return returnList;
 		}
+	}
+
+	public static void updateTglTerima(
+			String awb, 
+			String oldValue, 
+			String jam, 
+			String menit, 
+			Date newDate) {
+		
+		Session sess = HibernateUtil.openSession();
+		String sql = "UPDATE tt_status_kurir_in SET tgl_create=:newDate WHERE id_barang=:awb and waktu_jam=:jam and waktu_menit=:menit and date(tgl_create) = :oldValue";
+			Query query = sess.createSQLQuery(sql)
+					.setParameter("newDate", newDate)
+					.setParameter("awb", awb)
+					.setParameter("jam", jam)
+					.setParameter("menit", menit)
+					.setParameter("oldValue", oldValue);
+		int result = query.executeUpdate();
+
+		sess.getTransaction().commit();
+	}
+
+	public static void updateStatusPaket(
+			String awb, 
+			String oldValue, 
+			String jam, 
+			String menit, 
+			String newStatus) {
+		
+		Session sess = HibernateUtil.openSession();
+		String sql = "UPDATE tt_status_kurir_in SET masalah=:newStatus WHERE id_barang=:awb and waktu_jam=:jam and waktu_menit=:menit and date(tgl_create) = :oldValue";
+			Query query = sess.createSQLQuery(sql)
+					.setParameter("newStatus", newStatus)
+					.setParameter("awb", awb)
+					.setParameter("jam", jam)
+					.setParameter("menit", menit)
+					.setParameter("oldValue", oldValue);
+		int result = query.executeUpdate();
+
+		sess.getTransaction().commit();
+	}
+	
+	public static void updateNamaPenerimaBelakang(
+			String awb, 
+			String oldValue, 
+			String jam, 
+			String menit, 
+			String penerima) {
+		
+		Session sess = HibernateUtil.openSession();
+		String sql = "UPDATE tt_status_kurir_in SET penerima=:penerima WHERE id_barang=:awb and waktu_jam=:jam and waktu_menit=:menit and date(tgl_create) = :oldValue";
+			Query query = sess.createSQLQuery(sql)
+					.setParameter("penerima", penerima)
+					.setParameter("awb", awb)
+					.setParameter("jam", jam)
+					.setParameter("menit", menit)
+					.setParameter("oldValue", oldValue);
+		int result = query.executeUpdate();
+
+		sess.getTransaction().commit();
 	}
 }

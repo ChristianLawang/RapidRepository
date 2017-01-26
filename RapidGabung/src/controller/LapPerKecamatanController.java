@@ -23,9 +23,11 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import service.LaporanPerKecamatanService;
 import service.MasterPerwakilanService;
@@ -74,6 +76,8 @@ public class LapPerKecamatanController implements Initializable {
 		hargaCol;
 	
 	private ObservableList<LapPerKecamatanTV> masterData = FXCollections.observableArrayList();
+	
+	SortedList<LapPerKecamatanTV> sortedData;
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		ManagedFormHelper.instanceController = this;
@@ -83,6 +87,7 @@ public class LapPerKecamatanController implements Initializable {
 //		txtCari.textProperty().addListener((observable, oldValue, newValue) -> {
 //			
 //		});
+		tvLapPerKecamatan.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 	}
 	
 	private void populateComboPerwakilan() {
@@ -93,6 +98,25 @@ public class LapPerKecamatanController implements Initializable {
 			cmbKodePerwakilan.getItems().add(trPerwakilan.getKodePerwakilan());
 		}
 		cmbKodePerwakilan.setValue("All Cabang");
+	}
+	
+	@FXML
+	public void onMouseClicked(MouseEvent evt) {
+		int totalPaket = 0;
+		long totalHarga = 0;
+		double totalBerat = 0.00;
+		
+		tvLapPerKecamatan.getItems().size();
+		for (int i = 0; i < tvLapPerKecamatan.getSelectionModel().getSelectedCells().size(); i++) {
+			totalPaket++;
+			totalHarga += Long.parseLong(((LapPerKecamatanTV) sortedData.get(i)).getHarga());
+			totalBerat += Double.valueOf(((LapPerKecamatanTV) sortedData.get(i)).getBerat());
+		}
+
+		lblPaket.setText(String.valueOf(totalPaket));
+		lblHarga.setText(formatRupiah.formatIndonesia(Integer.valueOf(String.valueOf(totalHarga))));
+		lblBerat.setText(String.valueOf(totalBerat));
+		
 	}
 	
 	//FA
@@ -109,6 +133,7 @@ public class LapPerKecamatanController implements Initializable {
 		private StringProperty propinsi;
 		private StringProperty layanan;
 		private StringProperty harga;
+		private StringProperty berat;
 		
 		public LapPerKecamatanTV(
 				String no, 
@@ -122,7 +147,8 @@ public class LapPerKecamatanController implements Initializable {
 				String kabupaten,
 				String propinsi,
 				String layanan,
-				String harga
+				String harga,
+				String berat
 			){
 			this.no = new SimpleStringProperty(no);
 			this.awb = new SimpleStringProperty(awb);
@@ -135,7 +161,8 @@ public class LapPerKecamatanController implements Initializable {
 			this.kabupaten = new SimpleStringProperty(kabupaten);
 			this.propinsi = new SimpleStringProperty(propinsi);
 			this.layanan = new SimpleStringProperty(layanan);
-			this.harga = new SimpleStringProperty(harga);			
+			this.harga = new SimpleStringProperty(harga);
+			this.berat = new SimpleStringProperty(berat);
 		}
 
 		public String getNo() {
@@ -236,6 +263,14 @@ public class LapPerKecamatanController implements Initializable {
 			this.harga.set(harga);
 		}
 		
+		public String getBerat() {
+			return berat.get();
+		}
+
+		public void setBerat(String berat) {
+			this.berat.set(berat);
+		}
+		
 		public StringProperty getNoProperty(){
 			return no;
 		}
@@ -284,6 +319,10 @@ public class LapPerKecamatanController implements Initializable {
 		public StringProperty getHargaProperty(){
 			return harga;
 		}
+		
+		public StringProperty getBeratProperty(){
+			return berat;
+		}
 	}
 	
 	//FA
@@ -306,7 +345,8 @@ public class LapPerKecamatanController implements Initializable {
 					new String((String) obj.get("KABUPATEN")).toUpperCase(),
 					(String) obj.get("PROPINSI"),
 					(String) obj.get("LAYANAN"),
-					new Integer((Integer) obj.get("HARGA")).toString());
+					new Integer((Integer) obj.get("HARGA")).toString(),
+					Double.valueOf((String) obj.get("PBCLOSE")).toString());
 //			harga += new Integer((Integer) obj.get("HARGA"));
 			harga += Long.parseLong(obj.get("HARGA").toString());
 //			berat += Integer.valueOf((String) obj.get("PBCLOSE"));
@@ -315,7 +355,7 @@ public class LapPerKecamatanController implements Initializable {
 		}
 		
 		lblPaket.setText(no.toString());
-		lblHarga.setText(String.valueOf(harga));
+		lblHarga.setText(formatRupiah.formatIndonesiaTanpaKoma(String.valueOf(harga)));
 		lblBerat.setText(String.valueOf(berat));
 		
 		noCol.setCellValueFactory(cellData -> cellData.getValue().getNoProperty());
@@ -358,8 +398,8 @@ public class LapPerKecamatanController implements Initializable {
 					return true;
 				}else if(data.getPropinsi().toLowerCase().indexOf(lowerCaseFilter) != -1){
 					return true;
-				}else if(data.getLayanan().toLowerCase().indexOf(lowerCaseFilter) != -1){
-					return true;
+//				}else if(data.getLayanan().toLowerCase().indexOf(lowerCaseFilter) != -1){
+//					return true;
 				}else if(data.getHarga().toLowerCase().indexOf(lowerCaseFilter) != -1){
 					return true;
 				}
@@ -367,9 +407,29 @@ public class LapPerKecamatanController implements Initializable {
 			});
 		});
 		
-		SortedList<LapPerKecamatanTV> sortedData = new SortedList<>(filteredData);
+		sortedData = new SortedList<>(filteredData);
 		sortedData.comparatorProperty().bind(tvLapPerKecamatan.comparatorProperty());
 		tvLapPerKecamatan.setItems(sortedData);
+	}
+	
+	private void setLabelValue(SortedList sortedData) {
+		int totalPaket = 0;
+		long totalHarga = 0;
+		double totalBerat = 0.00;
+		for (int i = 0; i < sortedData.size(); i++) {
+			totalPaket++;
+			totalHarga += Long.parseLong(((LapPerKecamatanTV) sortedData.get(i)).getHarga());
+			totalBerat += Double.valueOf(((LapPerKecamatanTV) sortedData.get(i)).getBerat());
+		}
+		
+		lblPaket.setText(String.valueOf(totalPaket));
+		lblHarga.setText(String.valueOf(totalHarga));
+		lblBerat.setText(String.valueOf(totalBerat));
+	}
+	
+	@FXML
+	public void onHitung() {
+		setLabelValue(sortedData);
 	}
 	
 	@FXML

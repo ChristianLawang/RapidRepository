@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableView?>
-<?import utilfx.Comboboks?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<?import utilfx.Tanggalan?>
 
 <ScrollPane prefHeight="500.0" prefWidth="1617.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MasterUserController">
 	<content>
@@ -24,21 +26,33 @@
             <Separator prefHeight="102.0" prefWidth="1617.0" />
             <TextField fx:id="txtIdUser" layoutX="993.0" layoutY="103.0" prefHeight="25.0" prefWidth="159.0" />
             <Label layoutX="893.0" layoutY="107.0" prefHeight="17.0" prefWidth="90.0" text="Id User :" />
-            <Label layoutX="893.0" layoutY="139.0" prefHeight="17.0" prefWidth="90.0" text="Nama User :" />
-            <TextField fx:id="txtNamaUser" layoutX="993.0" layoutY="136.0" prefHeight="25.0" prefWidth="218.0" />
-            <TextField fx:id="txtEmail" layoutX="993.0" layoutY="168.0" prefHeight="25.0" prefWidth="220.0" />
-            <Label layoutX="893.0" layoutY="172.0" prefHeight="17.0" prefWidth="90.0" text="Email :" />
-            <Label layoutX="893.0" layoutY="205.0" prefHeight="17.0" prefWidth="90.0" text="Cabang  :" />
-            <Label layoutX="893.0" layoutY="243.0" prefHeight="17.0" prefWidth="90.0" text="Status :" />
-            <Label layoutX="893.0" layoutY="279.0" prefHeight="17.0" prefWidth="90.0" text="Token :" />
-            <ComboBox fx:id="cbCabang" layoutX="993.0" layoutY="200.0" prefHeight="25.0" prefWidth="222.0" />
-            <Comboboks fx:id="cbStatus" layoutX="993.0" layoutY="238.0" prefHeight="25.0" prefWidth="271.0" />
-            <TextField fx:id="txtToken" layoutX="993.0" layoutY="275.0" prefHeight="25.0" prefWidth="256.0" />
-            <TableView fx:id="lb_header" layoutX="77.0" layoutY="105.0" onMouseClicked="#onMouseClicked" prefHeight="432.0" prefWidth="772.0" />
+            <Label layoutX="893.0" layoutY="196.0" prefHeight="17.0" prefWidth="90.0" text="Nama User :" />
+            <TextField fx:id="txtNamaUser" layoutX="993.0" layoutY="193.0" prefHeight="25.0" prefWidth="218.0" />
+            <TextField fx:id="txtEmail" layoutX="993.0" layoutY="225.0" prefHeight="25.0" prefWidth="220.0" />
+            <Label layoutX="893.0" layoutY="229.0" prefHeight="17.0" prefWidth="90.0" text="Email :" />
+            <Label layoutX="893.0" layoutY="262.0" prefHeight="17.0" prefWidth="90.0" text="Cabang  :" />
+            <Label layoutX="893.0" layoutY="297.0" prefHeight="17.0" prefWidth="90.0" text="Status :" />
+            <Label layoutX="893.0" layoutY="139.0" prefHeight="17.0" prefWidth="90.0" text="Password : " />
+            <ComboBox fx:id="cbCabang" layoutX="993.0" layoutY="257.0" prefHeight="25.0" prefWidth="222.0" />
+            <ComboBox fx:id="cbStatus" layoutX="993.0" layoutY="293.0" prefHeight="25.0" prefWidth="271.0" />
+            <TextField fx:id="txtToken" layoutX="993.0" layoutY="135.0" prefHeight="25.0" prefWidth="159.0" />
+            <TableView fx:id="lb_header" layoutX="77.0" layoutY="105.0" prefHeight="432.0" prefWidth="772.0">
+            	<columns>
+	            	<TableColumn fx:id="idUserCol" prefWidth="75.0" text="ID USER" />
+	                <TableColumn fx:id="namaUserCol" prefWidth="159.0" text="Nama User" />
+					<TableColumn fx:id="emailCol" prefWidth="159.0" text="Email" />
+					<TableColumn fx:id="jabatanCol" prefWidth="159.0" text="Jabatan" />
+					<TableColumn fx:id="cabangCol" prefWidth="100.0" text="Cabang" />
+					<TableColumn fx:id="statusCol" prefWidth="120.0" text="Status" />
+            	</columns>
+            </TableView>
             <TextField fx:id="textCari" layoutX="112.0" layoutY="66.0" prefHeight="25.0" prefWidth="167.0" />
             <Label layoutX="77.0" layoutY="66.0" prefHeight="17.0" prefWidth="28.0" text="Cari" />
-            <Button fx:id="btnSimpan" layoutX="993.0" layoutY="318.0" mnemonicParsing="false" onAction="#onSave" onMouseClicked="#onMouseClicked" text="SIMPAN" />
-            <Button fx:id="btnBatal" layoutX="1065.0" layoutY="318.0" mnemonicParsing="false" onAction="#onCancel" onMouseClicked="#onMouseClicked" text="BATAL" />
+            <Button fx:id="btnSimpan" layoutX="993.0" layoutY="375.0" mnemonicParsing="false" onAction="#onSave" text="SIMPAN" />
+            <Button fx:id="btnBatal" layoutX="1065.0" layoutY="375.0" mnemonicParsing="false" onAction="#onCancel" text="BATAL" />
+            <Label layoutX="893.0" layoutY="334.0" prefHeight="17.0" prefWidth="90.0" text="Jabatan : " />
+            <ComboBox fx:id="cbJabatan" layoutX="993.0" layoutY="330.0" prefHeight="25.0" prefWidth="239.0" />
+            <Label layoutX="996.0" layoutY="160.0" text="* abaikan apabila tidak ingin ganti password, ketika update" textFill="#ff4400" />
 			</children>
 		</AnchorPane>
 	</content>

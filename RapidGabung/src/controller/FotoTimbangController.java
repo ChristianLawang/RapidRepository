@@ -19,13 +19,17 @@ import entity.TtHeader;
 import entity.TtPotoTimbang;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -37,8 +41,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -96,8 +104,103 @@ public class FotoTimbangController implements Initializable {
 
 	Map<String, Object> mapFormInfo = TempUtil.loadFotoTimbangLocal();
 	private TrUser usr = LoginController.getUserLogin();
+	final int MIN_PIXELS = 10;
+	double width;
+	double height;
 
+	// --------------------------------------------------------------------------Image
+		private Point2D imageViewToImage(ImageView imageView, Point2D imageViewCoordinates) {
+			double xProportion = imageViewCoordinates.getX() / imageView.getBoundsInLocal().getWidth();
+			double yProportion = imageViewCoordinates.getY() / imageView.getBoundsInLocal().getHeight();
+
+			Rectangle2D viewport = imageView.getViewport();
+			return new Point2D(viewport.getMinX() + xProportion * viewport.getWidth(),
+					viewport.getMinY() + yProportion * viewport.getHeight());
+		}
+
+		private void shift(ImageView imageView, Point2D delta) {
+			Rectangle2D viewport = imageView.getViewport();
+
+			double width = imageView.getImage().getWidth();
+			double height = imageView.getImage().getHeight();
+
+			double maxX = width - viewport.getWidth();
+			double maxY = height - viewport.getHeight();
+
+			double minX = clamp(viewport.getMinX() - delta.getX(), 0, maxX);
+			double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
+
+			imageView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
+		}
+
+		private double clamp(double value, double min, double max) {
+
+			if (value < min)
+				return min;
+			if (value > max)
+				return max;
+			return value;
+		}
+
+		private void reset(ImageView imageView, double width, double height) {
+			imageView.setViewport(new Rectangle2D(0, 0, width, height));
+		}
+		
+	private void setZoomHandler(ImageView imgVw) {
+		imgVw.setPreserveRatio(true);
+		// reset(imageTest, width / 2, height / 2);
+		ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
+
+		imgVw.setOnMousePressed(e -> {
+
+			Point2D mousePress = imageViewToImage(imgVw, new Point2D(e.getX(), e.getY()));
+			mouseDown.set(mousePress);
+		});
+
+		imgVw.setOnMouseDragged(e -> {
+			Point2D dragPoint = imageViewToImage(imgVw, new Point2D(e.getX(), e.getY()));
+			shift(imgVw, dragPoint.subtract(mouseDown.get()));
+			mouseDown.set(imageViewToImage(imgVw, new Point2D(e.getX(), e.getY())));
+		});
+
+		imgVw.setOnScroll(e -> {
+			double delta = e.getDeltaY();
+			Rectangle2D viewport = imgVw.getViewport();
+
+			double scale = clamp(Math.pow(1.01, delta),
+
+			Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
+
+			// don't scale so that we're bigger than image dimensions:
+					Math.max(imgViewMainView.getImage().getWidth() / viewport.getWidth(), imgViewMainView.getImage().getHeight() / viewport.getHeight())
+
+			);
+
+			Point2D mouse = imageViewToImage(imgVw, new Point2D(e.getX(), e.getY()));
+
+			double newWidth = viewport.getWidth() * scale;
+			double newHeight = viewport.getHeight() * scale;
+
+			double newMinX = clamp(mouse.getX() - (mouse.getX() - viewport.getMinX()) * scale, 0, imgViewMainView.getImage().getWidth() - newWidth);
+			double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale, 0, imgViewMainView.getImage().getHeight() - newHeight);
+
+			imgVw.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+		});
+
+		imgVw.setOnMouseClicked(e -> {
+			if (e.getClickCount() == 2) {
+				reset(imgVw, imgViewMainView.getImage().getWidth(), imgViewMainView.getImage().getHeight());
+			}
+		});
+		
+	}
+	
 	public void initialize(URL url, ResourceBundle rb) {
+//		File file = new File("D:/compile rapid/CGK0011600058053.jpg");
+//		Image image = new Image(file.toURI().toString());
+//		imgViewMainView.setImage(image);
+//		imgViewMainView.setRotate(180);
+		
 		// Set Objek kelas ini
 		ManagedFormHelper.instanceController = this;
 		
@@ -107,6 +210,42 @@ public class FotoTimbangController implements Initializable {
 	        	txtAWB.requestFocus();
 	        }
 	    });
+		
+		imgViewMainView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+		     @Override
+		     public void handle(MouseEvent event) {
+		    	ImageView imgPop = new ImageView();
+		    	
+		    	Image img = imgViewMainView.getImage();
+
+				imgPop.setImage(img);
+				imgPop.setRotate(180);
+				
+				Stage popupwindow=new Stage();
+						         
+				imgPop.setOnMouseClicked(null);
+				
+				popupwindow.initModality(Modality.APPLICATION_MODAL);
+				popupwindow.setTitle("View Picture");
+				popupwindow.initOwner(WindowsHelper.primaryStage);
+				
+				imgPop.setPreserveRatio(true); 
+				imgPop.fitWidthProperty().bind(popupwindow.widthProperty()); 
+				imgPop.fitHeightProperty().bind(popupwindow.heightProperty());
+				
+				imgPop.setRotate(180);
+				
+				setZoomHandler(imgPop);
+				
+				BorderPane layout= new BorderPane();  
+				layout.getChildren().addAll(imgPop);
+//				layout.setCenter(imgPop);
+				Scene scene1= new Scene(layout);
+				popupwindow.setScene(scene1);
+				popupwindow.showAndWait();
+		     }
+		});
 		
 		sessionCamera();
 
@@ -488,19 +627,20 @@ public class FotoTimbangController implements Initializable {
 
 				@Override
 				public void handle(ActionEvent event) {
-					
 					// untuk di lempar ke session kamera
-					String strFolder = generateOrReplaceFolder();
-					String strAWB = txtAWBPT.getText();
-					String strFileName = strAWB + ".png";
-					TempUtil.saveFotoTimbangCamera(strAWB, strFolder, strFileName);
+					
+					TtPotoTimbang pt = PotoTimbangService.getPotoPaketByAWB(txtAWBPT.getText());
+					String[] splitPath = pt.getGambar().split("/");
+					
+					String fullFolderLocation = splitPath[0]+"/"+splitPath[1]+"/"+splitPath[2]+"/"+splitPath[3]+"/"+splitPath[4];
+					
+					TempUtil.saveFotoTimbangCamera(pt.getAwbPotoTimbang(), fullFolderLocation, pt.getAwbPotoTimbang()+".png");
+					System.out.println("--> fullFolderLocation : " + fullFolderLocation);
+					System.out.println("--> pt.getGambar() : " + pt.getGambar());
 					slr.shoot();
 					
-					String path = strFolder+"/"+strFileName;
-					
-					System.out.println("-> path : " + path);
-					
-					File file = new File(path);
+		
+					File file = new File(pt.getGambar());
 					Image image = new Image(file.toURI().toString());
 					imgReview.setImage(image);
 					imgReview.setRotate(180);
@@ -829,6 +969,7 @@ public class FotoTimbangController implements Initializable {
 		dataPaket.setPbclose(String.valueOf(timbang.getGrossRoundUp().toString()));
 //		dataPaket.setKodePerwakilan(strPerwakilan);		
 		dataPaket.setAsalPaket(strAsalPaket);
+		dataPaket.setUser(usr.getIdUser());
 
 //		PotoPaketService.save(dataPaket);
 
@@ -845,7 +986,6 @@ public class FotoTimbangController implements Initializable {
 		potoPaket.setAwbData(idAWB.toUpperCase());
 		String pathImage = (String) mapCam.get("folder") + "/" + (String) mapCam.get("filename");
 		potoPaket.setGambar(pathImage);
-//		potoPaket.setAwbPotoTimbang((String) mapPelanggan.get("poto paket"));
 		potoPaket.setAsalPaket(strAsalPaket);
 		potoPaket.setKodePickup((String) mapPelanggan.get("no pickup"));
 		potoPaket.setKodePelanggan(trPelanggan.getNamaAkun());
@@ -858,14 +998,12 @@ public class FotoTimbangController implements Initializable {
 		potoPaket.setBerattimb(timbang.getGrossRoundUp().toString());
 		potoPaket.setBclose(timbang.getGross().toString());
 		potoPaket.setBpclose(timbang.getGrossRoundUp().toString());
-//		potoPaket.setLayanan("REG");
-//		potoPaket.setKodePerwakilan(usr.getKodeCabang().substring(0, 3));
 		potoPaket.setJneFlag(0);
 		potoPaket.setTglGambar(new Date());
 		potoPaket.setKoli(0);
 		potoPaket.setTglCreate(DateUtil.fotoTimbangDateGenerateRule(new Date()));
 		potoPaket.setFlag(0);
-//		DataPaketService.save(potoPaket);
+		potoPaket.setUser(usr.getIdUser());
 
 		return potoPaket;
 	}
@@ -873,8 +1011,6 @@ public class FotoTimbangController implements Initializable {
 	private TtHeader insertDataPoto(String awb) {
 		TtHeader dPoto = new TtHeader();
 		dPoto.setAwbHeader(awb);
-//		dPoto.setIdDataPaket(SequenceUtil.getNewDataPaketID(strPerwakilan, strKodePerwakilan));
-//		dPoto.setIdPotoPaket(SequenceUtil.getNewDataPaketID(strPerwakilan, strKodePerwakilan));
 		dPoto.setTglCreate(DateUtil.fotoTimbangDateGenerateRule(new Date()));
 		dPoto.setWaitingPendingFlag(0);
 		dPoto.setUserCreate(usr.getIdUser());

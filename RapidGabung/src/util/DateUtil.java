@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 
 public class DateUtil 
@@ -52,6 +53,7 @@ public class DateUtil
 			d=fmtDate.parse(dsTrim);
 		} catch (ParseException e) {
 			System.out.println("Warning: StdDate: Invalid Date Format: ["+ds+"]");
+			return null;
 		}	
 		
 		return d;
@@ -700,6 +702,7 @@ public class DateUtil
 	public static Date fotoTimbangDateGenerateRule(Date dt) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(dt);
+		
 		Integer hour = calendar.get(Calendar.HOUR_OF_DAY);
 		Integer day = calendar.get(Calendar.DAY_OF_MONTH);
 		if(hour>=0&&hour<11){
@@ -727,5 +730,18 @@ public class DateUtil
 		Integer month = cal.get(Calendar.MONTH) + 1;
 		Integer year = cal.get(Calendar.YEAR);
 		return year.toString() + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
+	}
+	// FA
+	public static String getStdDateDisplayDash(Date d){
+		String result="-";
+		
+		if(d!=null){
+			Format f = new SimpleDateFormat("dd-MM-yyyy");
+			//result = f.format(d)+" WIB";
+			result = f.format(d);
+		}
+		
+	
+		return result;
 	}
 }

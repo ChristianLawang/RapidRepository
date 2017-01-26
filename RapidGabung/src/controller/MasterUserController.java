@@ -3,17 +3,23 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import controller.MasterPickupController.PickupTV;
 import entity.TrCabang;
 import entity.TrHarga;
+import entity.TrJabatan;
 import entity.TrUser;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -38,12 +44,15 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import util.DtoBroadcaster;
 import util.DtoListener;
+import util.HashPassword;
 import util.ManagedFormHelper;
+import util.MessageBox;
 import util.WindowsHelper;
 import utilfx.Comboboks;
 import service.GenericService;
 import service.MasterCabangService;
 import service.MasterHargaService;
+import service.PelangganService;
 import service.UserService;
 
 @SuppressWarnings("unused")
@@ -53,19 +62,27 @@ public class MasterUserController implements Initializable {
 	private TextField txtIdUser, txtNamaUser, txtEmail, txtToken;
 	
 	@FXML
-	private Comboboks cbStatus;
+	private TableView<UserTV> lb_header;
 	
 	@FXML
-	private TableView lb_header;
-	
-	@FXML
-	private ComboBox cbCabang;
+	private ComboBox cbCabang, cbStatus, cbJabatan;
 	
 	@FXML
 	private TextField textCari;
 	
 	@FXML
 	private Button btnCari, btnSimpan, btnBatal;
+	
+	ObservableList<UserTV> masterData = FXCollections.observableArrayList();
+	
+	@FXML
+	private TableColumn<UserTV, String> 
+		idUserCol,
+		namaUserCol,
+		emailCol,
+		jabatanCol,
+		cabangCol,
+		statusCol;
 	
 	@Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -75,11 +92,16 @@ public class MasterUserController implements Initializable {
         setListenerEnterTampil();
         cbCabang.setValue("-");
 		cbStatus.setValue("-");	
+		cbJabatan.setValue("-");
 
         // memanggil combobox cabang
         ObservableList<TrCabang> listCabang = FXCollections.observableArrayList(MasterCabangService.getDataCabang());
 		for (TrCabang i : listCabang) {
 			cbCabang.getItems().add(i.getKodeCabang());
+		}
+		ObservableList<TrJabatan> listJabatan = FXCollections.observableArrayList(UserService.getDataJabatanUser());
+		for (TrJabatan i : listJabatan) {
+			cbJabatan.getItems().add(i.getIdJabatan());
 		}
 		//add Combo Status
 		ObservableList<String> options = 
@@ -94,84 +116,159 @@ public class MasterUserController implements Initializable {
 		         txtIdUser.requestFocus();
 		     }
 		});
+		
+		lb_header.setOnMousePressed(new EventHandler<MouseEvent>() {
+		    @Override 
+		    public void handle(MouseEvent event) {
+		    	UserTV selection = lb_header.getSelectionModel().getSelectedItem();
+		    	System.out.println("--> selection : " + selection.getIdUser());
+				TrUser trUser = UserService.getDataUserById(selection.getIdUser());                 
+				txtIdUser.setText(trUser.getIdUser());
+				txtNamaUser.setText(trUser.getNamaUser());
+				txtEmail.setText(trUser.getEmail());
+				txtToken.setText(trUser.getRememberToken());
+				cbCabang.setValue(trUser.getKodeCabang());
+				cbStatus.setValue(trUser.getStatus()==0?"Aktif":"Non Aktif");
+				cbJabatan.setValue(trUser.getIdRole());
+		    }
+		});
 	}
 	
-	  public void load()
-	    {
-		  UserService serviceUser = new UserService();
-	        ObservableList<TrUser> olHeader = FXCollections.observableArrayList(UserService.getDataUser(textCari.getText()));
-	        
-	        TableColumn col = new TableColumn("Id User");
-	        col.setPrefWidth(195.0);
-	        col.setCellValueFactory(
-	            new Callback<TableColumn.CellDataFeatures<TrUser,String>,ObservableValue<String>>()
-	            {                   
-	                @Override
-	                public ObservableValue<String> call(TableColumn.CellDataFeatures<TrUser, String> param) 
-	                {                                                                                             
-	                    return new SimpleStringProperty(param.getValue().getIdUser());                   
-	                }          
-	            }
-	        );
-	        lb_header.getColumns().addAll(col);
-	        
-	        col = new TableColumn("Nama User");
-	        col.setPrefWidth(300.0);
-	        col.setCellValueFactory(
-	            new Callback<TableColumn.CellDataFeatures<TrUser,String>,ObservableValue<String>>()
-	            {                   
-	                @Override
-	                public ObservableValue<String> call(TableColumn.CellDataFeatures<TrUser, String> param) 
-	                {                                                                                             
-	                    return new SimpleStringProperty(param.getValue().getNamaUser());                   
-	                }          
-	            }
-	        );
-	        lb_header.getColumns().addAll(col);
-	        
-	        col = new TableColumn("Email");
-	        col.setPrefWidth(257.0);
-	        col.setCellValueFactory(
-	            new Callback<TableColumn.CellDataFeatures<TrUser,String>,ObservableValue<String>>()
-	            {                   
-	                @Override
-	                public ObservableValue<String> call(TableColumn.CellDataFeatures<TrUser, String> param) 
-	                {                                                                                             
-	                    return new SimpleStringProperty(param.getValue().getEmail());                   
-	                }          
-	            }
-	        );
-	        lb_header.getColumns().addAll(col);	        
-	        lb_header.setItems(olHeader);
-	    }
-	  
-	  
-	  @FXML
-	    public void onMouseClicked(MouseEvent evt)
-	    {
-	        if (evt.getClickCount() > 1) 
-	        {
-	            TrUser dataHeader = (TrUser) lb_header.getSelectionModel().getSelectedItem();
-	            System.out.println("---------------Data Header : "+dataHeader.getIdUser());
-	            if(dataHeader!=null)
-	            {
-	                DtoBroadcaster.broadcast(ManagedFormHelper.instanceController, "loadHeader", dataHeader);
-	                Stage stage = (Stage) lb_header.getScene().getWindow();
-//	                stage.close();
-	            }
-	        }
-	    }
+	public static class UserTV{
+		private StringProperty idUser;
+		private StringProperty namaUser;
+		private StringProperty email;
+		private StringProperty jabatan;
+		private StringProperty cabang;
+		private StringProperty status;
+		
+		public UserTV(String idUser, String namaUser, String email, String jabatan, String cabang, String status){
+			this.idUser = new SimpleStringProperty(idUser);
+			this.namaUser = new SimpleStringProperty(namaUser);
+			this.email = new SimpleStringProperty(email);
+			this.jabatan = new SimpleStringProperty(jabatan);
+			this.cabang = new SimpleStringProperty(cabang);
+			this.status = new SimpleStringProperty(status);
+		}
+		// get value
+		public String getIdUser(){
+			return idUser.get();
+		}
+		public String getNamaUser(){
+			return namaUser.get();
+		}
+		public String getEmail(){
+			return email.get();
+		}
+		public String getJabatan(){
+			return jabatan.get();
+		}
+		public String getCabang(){
+			return cabang.get();
+		}
+		public String getStatus(){
+			return status.get();
+		}
+		// get property
+		public StringProperty getIdUserProperty(){
+			return idUser;
+		}
+		public StringProperty getNamaUserProperty(){
+			return namaUser;
+		}
+		public StringProperty getEmailProperty(){
+			return email;
+		}
+		public StringProperty getJabatanProperty(){
+			return jabatan;
+		}
+		public StringProperty getCabangProperty(){
+			return cabang;
+		}
+		public StringProperty getStatusProperty(){
+			return status;
+		}
+		// set value
+		public void setIdUser(String idUser){
+			this.idUser.set(idUser);
+		}
+		public void setNamaUser(String namaUser){
+			this.namaUser.set(namaUser);
+		}
+		public void setEmail(String email){
+			this.email.set(email);
+		}
+		public void setJabatan(String jabatan){
+			this.jabatan.set(jabatan);
+		}
+		public void setCabang(String cabang){
+			this.cabang.set(cabang);
+		}
+		public void setStatus(String status){
+			this.status.set(status);
+		}
+	}
 	
-	 @DtoListener(idDtoListener = "loadHeader")  //Dari search
-	    public void loadDtoListener(TrUser userHeader){
-		 txtIdUser.setText(userHeader.getIdUser());
-		 txtNamaUser.setText(userHeader.getNamaUser());
-		 txtEmail.setText(userHeader.getEmail());
-		 txtToken.setText(userHeader.getRememberToken());
-		 cbCabang.setValue(userHeader.getKodeCabang());
-//		 cbStatus.selectKode(userHeader.getStatus());
-
-	    }
+	public void load(){
+		UserService serviceUser = new UserService();
+	    ObservableList<TrUser> olHeader = FXCollections.observableArrayList(UserService.getDataUser(textCari.getText()));
+	       
+	    masterData.clear();
+		for(Integer ind = 0;ind<olHeader.size();ind++){
+			UserTV row = new UserTV(
+					olHeader.get(ind).getIdUser(),
+					olHeader.get(ind).getNamaUser(),
+					olHeader.get(ind).getEmail(),
+					olHeader.get(ind).getIdRole(),
+					olHeader.get(ind).getKodeCabang(),
+					olHeader.get(ind).getStatus()==0?"Aktif":"Non Aktif"
+					);
+			masterData.add(row);
+		}
+		
+		idUserCol.setCellValueFactory(cellData -> cellData.getValue().getIdUserProperty());
+		namaUserCol.setCellValueFactory(cellData -> cellData.getValue().getNamaUserProperty());
+		emailCol.setCellValueFactory(cellData -> cellData.getValue().getEmailProperty());
+		jabatanCol.setCellValueFactory(cellData -> cellData.getValue().getJabatanProperty());
+		cabangCol.setCellValueFactory(cellData -> cellData.getValue().getCabangProperty());
+		statusCol.setCellValueFactory(cellData -> cellData.getValue().getStatusProperty());
+		
+		
+		
+		FilteredList<UserTV> filteredData = new FilteredList<>(masterData, p -> true);
+		textCari.textProperty().addListener((observable, oldValue, newValue) -> {			
+			filteredData.setPredicate(data -> {
+				if (newValue == null || newValue.isEmpty()) {
+					return true;
+				}
+		
+				String lowerCaseFilter = newValue.toLowerCase();
+		
+				if (data.getIdUser().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+					return true;
+				}
+				if (data.getNamaUser().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+					return true;
+				}
+				return false;
+			});
+		});
+		
+		SortedList<UserTV> sortedData = new SortedList<>(filteredData);
+		sortedData.comparatorProperty().bind(lb_header.comparatorProperty());
+		lb_header.setItems(sortedData);
+	}
+	
+//	 @DtoListener(idDtoListener = "loadHeader")  //Dari search
+//	    public void loadDtoListener(TrUser userHeader){
+//		 txtIdUser.setText(userHeader.getIdUser());
+//		 txtNamaUser.setText(userHeader.getNamaUser());
+//		 txtEmail.setText(userHeader.getEmail());
+//		 txtToken.setText(userHeader.getRememberToken());
+//		 cbCabang.setValue(userHeader.getKodeCabang());
+////		 cbStatus.selectKode(userHeader.getStatus());
+//
+//	    }
 	
 	@DtoListener(idDtoListener = "backTop")
     public void backDtoListener()
@@ -241,37 +338,46 @@ public class MasterUserController implements Initializable {
 	@FXML
     public void onSave(Event evt){
 		List<TrUser> test = UserService.getDataUser(txtIdUser.getText());
-		if(test.size()>0){
-			// UPDATE TABLE
-//			UserService.updateDataHarga(txtKdZona.getText(), txtKdAsal.getText()
-//					, txtKdPropinsi.getText(), txtKdKabupaten.getText(), txtKdkecamatan.getText()
-//					, txtKdPerwakilan.getText(), txtZona.getText() 
-//					, Integer.parseInt(txtCGKReg.getText()), txtCGKRegEtd.getText(), Integer.parseInt(txtCGKBest.getText()));
-		}else{
-			
-			//SAVE
-			TrUser trusr = new TrUser();
+
+		System.out.println("--> test : " + test.size());
+		TrUser trusr = new TrUser();
 		
-			trusr.setIdUser(txtIdUser.getText());
-			trusr.setNamaUser(txtNamaUser.getText());
-			trusr.setEmail(txtEmail.getText());
-			trusr.setKodeCabang(cbCabang.getValue().toString());
-//			trusr.setStatus(cbStatus.getValue().toString());
-//			trusr.setRememberToken(txtToken.getText());
+		trusr.setIdUser(txtIdUser.getText());
+		trusr.setNamaUser(txtNamaUser.getText());
+		String passToken = txtToken.getText()==null?"":txtToken.getText();
+		System.out.println("--> passToken : " + passToken);
+		trusr.setEmail(txtEmail.getText());
+		trusr.setKodeCabang(cbCabang.getValue().toString());
+		trusr.setIdRole(cbJabatan.getValue().toString());
+		trusr.setStatus(cbStatus.getValue().toString().equals("Aktif")?0:1);	
+		Calendar cal = Calendar.getInstance();
+		trusr.setTglCreate(cal.getTime());
+		trusr.setTglUpdate(cal.getTime());
+		trusr.setFlag(0);
+		if(test.size()>0){
+			if(!passToken.equals("")){
+				trusr.setPassword(HashPassword.hashPassword(passToken));
+			}else{
+				trusr.setPassword(test.get(0).getPassword());
+			}
+			GenericService.saveOrUpdate(TrUser.class, trusr); 
 			
-			
-			Calendar cal = Calendar.getInstance();
-			trusr.setTglCreate(cal.getTime());
-			trusr.setTglUpdate(cal.getTime());
-			trusr.setFlag(0);
-			if (txtIdUser.getText() == null) {
-				GenericService.save(TrUser.class, trusr, true); 
-		}
 			load();
-		clearForm();
-		btnSimpan.setText("SIMPAN");
+			clearForm();
+		}else{
+			if(passToken.equals("")){
+				MessageBox.alert("Password harus di isi pada saat buat user baru");
+			}else{
+				trusr.setPassword(HashPassword.hashPassword(passToken));
+				GenericService.saveOrUpdate(TrUser.class, trusr); 
+				
+				load();
+				clearForm();
+			}
 		}
-}
+		
+		btnSimpan.setText("SIMPAN");
+	}
     
     @FXML
     public void onCancel(Event evt)
@@ -288,6 +394,7 @@ public class MasterUserController implements Initializable {
 		txtEmail.clear();
 		cbCabang.setValue("-");
 		cbStatus.setValue("-");	
+		cbJabatan.setValue("-");
 		txtToken.clear();
 		btnSimpan.setText("SIMPAN");
 

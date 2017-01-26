@@ -23,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
@@ -86,9 +87,20 @@ public class LapPODController implements Initializable {
 
 	@FXML
 	RadioButton rbJmlhPaket, rbSudahReport, rbBelumReport, rbMasalah;
+	
+	@FXML
+	CheckBox chkAllPewakilan;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		chkAllPewakilan.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				cbPerwakilan.setValue("");
+				cbPerwakilan.setDisable(chkAllPewakilan.isSelected());
+			}
+		});
+		
 		ManagedFormHelper.instanceController = this;
 		dpAwal.setValue(LocalDate.now());
 		dpAkhir.setValue(LocalDate.now());

@@ -11,7 +11,9 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import VO.EntryDataShowVO;
+import entity.TrJabatan;
 import entity.TrUser;
+import javafx.util.Callback;
 import util.HibernateUtil;
 
 public class UserService {
@@ -21,7 +23,7 @@ public class UserService {
 		Criteria c = s.createCriteria(TrUser.class);
 		if (namaUser == "" || namaUser.equals("") || namaUser == null) {
 		} else {
-			c.add(Restrictions.eq("namaUser", namaUser));
+			c.add(Restrictions.eq("idUser", namaUser));
 		}
 		List<TrUser> data = c.list();
 		s.getTransaction().commit();
@@ -29,7 +31,7 @@ public class UserService {
 	}
 	
 
-	public static TrUser getDataUserById(Integer id) {
+	public static TrUser getDataUserById(String id) {
 		Session s = HibernateUtil.openSession();
 		Criteria c = s.createCriteria(TrUser.class);
 		c.add(Restrictions.eq("idUser", id));
@@ -37,5 +39,22 @@ public class UserService {
 		s.getTransaction().commit();
 		return data;
 	}
+
+	public static List<TrJabatan> getDataJabatan() {
+		Session s = HibernateUtil.openSession();
+		Criteria c = s.createCriteria(TrJabatan.class);
+		List<TrJabatan> data = c.list();
+		s.getTransaction().commit();
+		return data;
+	}	
+	
+	public static List<TrJabatan> getDataJabatanUser() {
+		Session s = HibernateUtil.openSession();
+		Criteria c = s.createCriteria(TrJabatan.class);
+		c.add(Restrictions.eq("user", 1));
+		List<TrJabatan> data = c.list();
+		s.getTransaction().commit();
+		return data;
+	}	
 	
 }

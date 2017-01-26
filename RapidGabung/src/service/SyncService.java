@@ -15,6 +15,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 import entity.TrCabang;
+import entity.TrHarga;
 import entity.TtDataEntry;
 import entity.TtHeader;
 import entity.TtPotoTimbang;
@@ -194,7 +195,8 @@ public class SyncService {
 				"inner join tt_data_entry c on a.awb_header = c.awb_data_entry " +
 				"where " +
 				"     a.flag = 0 " +
-				"and  a.gabung_paket_flag = 1 " +
+				/*"and  a.gabung_paket_flag = 1 " +*/
+				"and c.flag_entry = 2 " +
 				"and date(a.tgl_create) between '"+dtStart+" 00:00:00' and '"+dtEnd+" 23:59:59'";
 		
 
@@ -290,5 +292,54 @@ public class SyncService {
 		mapResult.put("DATAENTRY", dataEntry);
 		mapResult.put("POTOTIMBANG", potoTimbang);
 		return mapResult;
+	}
+
+	public static <T> void addToCabangSaveOrUpdate(T data, Class<T> cls) {
+		Session s=HibernateUtil.openSession();
+		s.saveOrUpdate(data);
+		s.getTransaction().commit();
+	}
+
+	public static void clearPelangganCabang() {
+		Session s=HibernateUtil.openSession();
+		String stringQuery = "DELETE FROM tr_pelanggan";
+		SQLQuery query = s.createSQLQuery(stringQuery);
+		query.executeUpdate();
+		s.getTransaction().commit();
+	}
+	public static void clearUserCabang() {
+		Session s=HibernateUtil.openSession();
+		String stringQuery = "DELETE FROM tr_user";
+		SQLQuery query = s.createSQLQuery(stringQuery);
+		query.executeUpdate();
+		s.getTransaction().commit();
+	}
+	public static void clearKurirCabang() {
+		Session s=HibernateUtil.openSession();
+		String stringQuery = "DELETE FROM tr_kurir";
+		SQLQuery query = s.createSQLQuery(stringQuery);
+		query.executeUpdate();
+		s.getTransaction().commit();
+	}
+	public static void clearHargaCabang() {
+		Session s=HibernateUtil.openSession();
+		String stringQuery = "DELETE FROM tr_harga";
+		SQLQuery query = s.createSQLQuery(stringQuery);
+		query.executeUpdate();
+		s.getTransaction().commit();
+	}
+	public static void clearPerwakilanCabang() {
+		Session s=HibernateUtil.openSession();
+		String stringQuery = "DELETE FROM tr_perwakilan";
+		SQLQuery query = s.createSQLQuery(stringQuery);
+		query.executeUpdate();
+		s.getTransaction().commit();
+	}
+	public static void clearCabangCabang() {
+		Session s=HibernateUtil.openSession();
+		String stringQuery = "DELETE FROM tr_cabang";
+		SQLQuery query = s.createSQLQuery(stringQuery);
+		query.executeUpdate();
+		s.getTransaction().commit();
 	}
 }

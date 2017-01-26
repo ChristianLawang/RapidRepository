@@ -48,6 +48,7 @@ import util.ExportJasper;
 import util.ExportToExcell;
 import util.ManagedFormHelper;
 import util.MessageBox;
+import util.PDFUtil2;
 import util.WindowsHelper;
 import util.formatRupiah;
 import utilfx.AutoCompleteComboBoxListener;
@@ -108,7 +109,7 @@ public class LaporanPerpelangganController implements Initializable {
 
 	private ObservableList<ReportVO> masterData2 = FXCollections.observableArrayList();
 
-	private String pelanggan = "";
+	private String pelanggan = null;
 
 	// ---------------------------------------------------TABLE 2
 	@FXML
@@ -180,6 +181,17 @@ public class LaporanPerpelangganController implements Initializable {
 		chkAllPelanggan.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				masterData.clear();
+				masterData2.clear();
+				txtHargaSetelahDiskonAll.setText("0");
+				txtTotalDiskonAll.setText("0");
+				txtTotalBiayaAll.setText("0");
+				txtTotalBaAll.setText("0");
+				txtTotalBeratAll.setText("0");
+				txtAwbAll.setText("0");
+				txtTotal.setText("0");
+				txtAsuransi.setText("0");
+				txtBiaya.setText("0");
 				if (newValue) {
 					tvPelanggan.setVisible(false);
 					txtTotal.setVisible(false);
@@ -213,7 +225,7 @@ public class LaporanPerpelangganController implements Initializable {
 		});
 	}
 
-	public void SetTable() {
+	public void SetTable(String kdPerwakilan) {
 		
 		System.out.println("KODE PELANGGAN : "+pelanggan);
 		List<String> listPelangganNotExists = ReportService.getIfPelangganExistForLapPerPelanggan(
@@ -231,7 +243,7 @@ public class LaporanPerpelangganController implements Initializable {
 			MessageBox.alertBesar(200, lstPel);
 		}else{
 			List<EntryDataShowVO> tt = ReportService.dataPerpelanggan(DateUtil.convertToDatabaseColumn(dpAwal.getValue()),
-					DateUtil.convertToDatabaseColumn(dpAkhir.getValue()), pelanggan);
+					DateUtil.convertToDatabaseColumn(dpAkhir.getValue()), pelanggan, kdPerwakilan);
 			Integer no = 1;
 			int totalBiaya = 0;
 			int asuransi = 0;
@@ -294,177 +306,87 @@ public class LaporanPerpelangganController implements Initializable {
 
 	@FXML
 	public void onClikCari() {
-		String kdPerwakilan = (String) cmbPerwakilan.getSelectionModel().getSelectedItem().toString();
-		System.out.println("--> kdPerwakilan : " + kdPerwakilan);
-		if(kdPerwakilan.equals("All Cabang")){
-			if (Checklist) {
-				masterData2.clear();
-				SetTableB();
-			} else {
-				masterData.clear();
-				SetTable();
-			}
+		System.out.println("pelanggan pelanggan pelanggan " + pelanggan);
+		if(!Checklist && pelanggan==null){
+			MessageBox.alert("Silahkan pilih pelanggan, bila anda ingin merekap seluruh pelanggan pilih centang All Pelanggan");
 		}else{
-			Date dateAwl = DateUtil.convertToDatabaseColumn(dpAwal.getValue());
-			Date dateAkh = DateUtil.convertToDatabaseColumn(dpAkhir.getValue());
+			txtHargaSetelahDiskonAll.setText("0");
+			txtTotalDiskonAll.setText("0");
+			txtTotalBiayaAll.setText("0");
+			txtTotalBaAll.setText("0");
+			txtTotalBeratAll.setText("0");
+			txtAwbAll.setText("0");
+			txtTotal.setText("0");
+			txtAsuransi.setText("0");
+			txtBiaya.setText("0");
 			
-			String kdPelanggan = pelanggan;			
-			List<EntryDataShowVO> ed = ReportService.dataPerPelangganNativeSQL(dateAwl, dateAkh, kdPelanggan, kdPerwakilan, Checklist);
-			
-			
-//			txtTotalBaAll, txtTotalBeratAll, txtAwbAll;
-			Integer no = 1;
-			if (!Checklist) {
-				int totalBiaya = 0;
-				int asuransi = 0;
-				int harga = 0;
-				masterData.clear();
-				for (EntryDataShowVO t : ed) {	
-					totalBiaya += t.gettBiaya().intValueExact();
-					asuransi += t.getAsuransi();
-					harga += t.getHarga();
-					txtTotal.setText(String.valueOf(formatRupiah.formatIndonesia(totalBiaya)));
-					txtAsuransi.setText(String.valueOf(formatRupiah.formatIndonesia(asuransi)));
-					txtBiaya.setText(String.valueOf(formatRupiah.formatIndonesia(harga)));
-					masterData.add(new ReportVO(no++, t.getAwbData(), t.getPengirim(), t.getTujuan(), t.getPenerima(),
-							t.getNoTlpn(), t.getResiJne(), t.getbFinal(),
-							String.valueOf(formatRupiah.formatIndonesia(t.getHarga())), t.getAsuransi(), t.getDiskon(),
-							t.getDiskonJne(), t.getDiskonRapid(), t.getDiskonPelanggan(),
-							String.valueOf(formatRupiah.formatIndonesia(t.gettBiaya().intValueExact()))));
+			String kdPerwakilan = (String) cmbPerwakilan.getSelectionModel().getSelectedItem().toString();
+			System.out.println("--> kdPerwakilan : " + kdPerwakilan);
+			if(kdPerwakilan.equals("All Cabang")){
+				if (Checklist) {
+					masterData2.clear();
+					SetTableB(null);
+				} else {
+					masterData.clear();
+					SetTable(null);
 				}
-					colNo.setCellValueFactory(cellData -> cellData.getValue().noProperty());
-					colResi.setCellValueFactory(cellData -> cellData.getValue().awbDataProperty());
-					colTujuan.setCellValueFactory(cellData -> cellData.getValue().tujuanProperty());
-					colPenerima.setCellValueFactory(cellData -> cellData.getValue().penerimaProperty());
-					colTlp.setCellValueFactory(cellData -> cellData.getValue().tlpProperty());
-					colResiJne.setCellValueFactory(cellData -> cellData.getValue().resiJNEProperty());
-					colBerat.setCellValueFactory(cellData -> cellData.getValue().bFinalProperty());
-					colBiaya.setCellValueFactory(cellData -> cellData.getValue().hargaProperty());
-					colAsuransi.setCellValueFactory(cellData -> cellData.getValue().asuransiProperty());
-					colDiskon.setCellValueFactory(cellData -> cellData.getValue().diskonProperty());
-					colTotal.setCellValueFactory(cellData -> cellData.getValue().biayaProperty());
-					FilteredList<ReportVO> filteredData = new FilteredList<>(masterData, p -> true);
-	
-					txtCari.textProperty().addListener((observable, oldValue, newValue) -> {
-						filteredData.setPredicate(data -> {
-							if (newValue == null || newValue.isEmpty()) {
-								return true;
-							}
-	
-							String lowerCaseFilter = newValue.toLowerCase();
-	
-							if (data.getNmSales().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-								return true;
-							} else if (data.getPengirim().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-								return true;
-							}
-							return false;
-						});
-					});
-	
-					SortedList<ReportVO> sortedData = new SortedList<>(filteredData);
-					sortedData.comparatorProperty().bind(tvPelanggan.comparatorProperty());
-					tvPelanggan.setItems(sortedData);
 			}else{
-				masterData2.clear();
-				int totalBiaya = 0;
-				int totalHargaSetelahDiskon = 0;
-				int totalDiskon = 0;
-				double totalBa = 0.00;
-				int totalBerat = 0;
-				int totalawb = 0;
-				System.out.println("--> ed.size() + " + ed.size());
-				for (EntryDataShowVO t : ed) {
-					totalBiaya += t.gettBiaya().intValueExact();
-					totalDiskon += t.getTotalDiskon().intValue();
-					totalHargaSetelahDiskon += t.getHargaSetelahDiskon().intValue();
-					totalBa += t.getSumBeratAsli();
-					totalBerat += t.getSumBerat();
-					totalawb += t.getCount().intValue();
-					txtHargaSetelahDiskonAll.setText(String.valueOf(formatRupiah.formatIndonesia(totalHargaSetelahDiskon)));
-					txtTotalDiskonAll.setText(String.valueOf(formatRupiah.formatIndonesia(totalDiskon)));
-					txtTotalBiayaAll.setText(String.valueOf(formatRupiah.formatIndonesia(totalBiaya)));
-					txtTotalBaAll.setText(BigDecimalUtil.truncateDecimal(totalBa, 2).toString());
-					txtTotalBeratAll.setText(String.valueOf(formatRupiah.formatIndonesia(totalBerat)));
-					txtAwbAll.setText(String.valueOf(formatRupiah.formatIndonesia(totalawb)));
-					
-					masterData2.add(new ReportVO(no++, t.getNmSales(), t.getPengirim(), t.getCount().intValueExact(),
-							t.getSumBerat().intValue(), String.valueOf(t.getSumBeratAsli()),
-							String.valueOf(formatRupiah.formatIndonesia(t.gettBiaya().intValue())),
-							String.valueOf(formatRupiah.formatIndonesia(t.getHargaSetelahDiskon().intValue())),
-							String.valueOf(formatRupiah.formatIndonesia(t.getTotalDiskon().intValue()))));
+				if (Checklist) {
+					masterData2.clear();
+					SetTableB(kdPerwakilan);
+				} else {
+					masterData.clear();
+					SetTable(kdPerwakilan);
 				}
-					colNoAll.setCellValueFactory(cellData -> cellData.getValue().noProperty());
-					colNamaSalesAll.setCellValueFactory(cellData -> cellData.getValue().nmSalesProperty());
-					colPengirimAll.setCellValueFactory(cellData -> cellData.getValue().pengirimProperty());
-					colAwbAll.setCellValueFactory(cellData -> cellData.getValue().jumlahBarangProperty());
-					collBeratAll.setCellValueFactory(cellData -> cellData.getValue().sumBeratProperty());
-					colBeratAsliAll.setCellValueFactory(cellData -> cellData.getValue().sumBeratAsliProperty());
-					colTotalBiayaAll.setCellValueFactory(cellData -> cellData.getValue().biayaProperty());
-					colHargaSetelahDiskonAll.setCellValueFactory(cellData -> cellData.getValue().hargaSetelahDiskonProperty());
-					colTotalDiskonAll.setCellValueFactory(cellData -> cellData.getValue().totalDiskonproperty());
-					FilteredList<ReportVO> filteredData = new FilteredList<>(masterData2, p -> true);
-
-					txtCari.textProperty().addListener((observable, oldValue, newValue) -> {
-						filteredData.setPredicate(data -> {
-							if (newValue == null || newValue.isEmpty()) {
-								return true;
-							}
-
-							String lowerCaseFilter = newValue.toLowerCase();
-
-							if (data.getNmSales().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-								return true;
-							} else if (data.getPengirim().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-								return true;
-							}
-							return false;
-						});
-					});
-
-					SortedList<ReportVO> sortedData = new SortedList<>(filteredData);
-					sortedData.comparatorProperty().bind(tvAllPelanggan.comparatorProperty());
-					tvAllPelanggan.setItems(sortedData);
 			}
 		}
 	}
 
 	@FXML
 	public void onClikPdf() {
-		Date dateAwl = DateUtil.convertToDatabaseColumn(dpAwal.getValue());
-		Date dateAkh = DateUtil.convertToDatabaseColumn(dpAkhir.getValue());
+//		Date dateAwl = DateUtil.convertToDatabaseColumn(dpAwal.getValue());
+//		Date dateAkh = DateUtil.convertToDatabaseColumn(dpAkhir.getValue());
+//		
+//		String dateFile = DateUtil.getDateNotSeparator(dateAwl)+" sd "+DateUtil.getDateNotSeparator(dateAkh).substring(4);
+//		
+//		if (Checklist) {
+//			try {
+//				Map<String, Object> parameters = new HashMap<String, Object>();
+//				parameters.put("tgl_awal", DateUtil.convertToDatabaseColumn(dpAwal.getValue()));
+//				parameters.put("tgl_akhir", DateUtil.convertToDatabaseColumn(dpAkhir.getValue()));
+//				ExportJasper.JasperExportPdf(parameters, "C:/DLL/REPORT/perpelanggan.jrxml", "C:/DLL/REPORT/EXPORT/",
+//						"SemuaPelanggan", dateFile);
+//				MessageBox.alert("Export Berhasil di Drive C:/DLL/REPORT/EXPORT/"
+//						+dateFile
+//						+" SemuaPelanggan.pdf");
+//			} catch (Exception e) {
+//				MessageBox.alert(e.getMessage());
+//			}
+//
+//		} else {
+//			try {
+//				Map<String, Object> parameters = new HashMap<String, Object>();
+//				parameters.put("kode_pelanggan", pelanggan);
+//				parameters.put("tgl_awal", DateUtil.convertToDatabaseColumn(dpAwal.getValue()));
+//				parameters.put("tgl_akhir", DateUtil.convertToDatabaseColumn(dpAkhir.getValue()));
+//				ExportJasper.JasperExportPdf(parameters, "C:/DLL/REPORT/email_tagihan.jrxml", "C:/DLL/REPORT/EXPORT/",
+//						pelanggan, dateFile);
+//				MessageBox.alert("Export Berhasil di Drive C:/DLL/REPORT/EXPORT/"
+//						+dateFile
+//						+" "+pelanggan+".pdf");
+//			} catch (Exception e) {
+//				MessageBox.alert(e.getMessage());
+//			}
+//		}
 		
-		String dateFile = DateUtil.getDateNotSeparator(dateAwl)+" sd "+DateUtil.getDateNotSeparator(dateAkh).substring(4);
-		
-		if (Checklist) {
-			try {
-				Map<String, Object> parameters = new HashMap<String, Object>();
-				parameters.put("tgl_awal", DateUtil.convertToDatabaseColumn(dpAwal.getValue()));
-				parameters.put("tgl_akhir", DateUtil.convertToDatabaseColumn(dpAkhir.getValue()));
-				ExportJasper.JasperExportPdf(parameters, "C:/DLL/REPORT/perpelanggan.jrxml", "C:/DLL/REPORT/EXPORT/",
-						"SemuaPelanggan", dateFile);
-				MessageBox.alert("Export Berhasil di Drive C:/DLL/REPORT/EXPORT/"
-						+dateFile
-						+" SemuaPelanggan.pdf");
-			} catch (Exception e) {
-				MessageBox.alert(e.getMessage());
-			}
-
-		} else {
-			try {
-				Map<String, Object> parameters = new HashMap<String, Object>();
-				parameters.put("kode_pelanggan", pelanggan);
-				parameters.put("tgl_awal", DateUtil.convertToDatabaseColumn(dpAwal.getValue()));
-				parameters.put("tgl_akhir", DateUtil.convertToDatabaseColumn(dpAkhir.getValue()));
-				ExportJasper.JasperExportPdf(parameters, "C:/DLL/REPORT/email_tagihan.jrxml", "C:/DLL/REPORT/EXPORT/",
-						pelanggan, dateFile);
-				MessageBox.alert("Export Berhasil di Drive C:/DLL/REPORT/EXPORT/"
-						+dateFile
-						+" "+pelanggan+".pdf");
-			} catch (Exception e) {
-				MessageBox.alert(e.getMessage());
-			}
-		}
+		PDFUtil2.createPDFLaporanPerpelanggan(
+				masterData, 
+				masterData2, 
+				chkAllPelanggan.isSelected(), 
+				(String) cbPelanggan.getValue(),
+				DateUtil.convertToDatabaseColumn(dpAwal.getValue()),
+				DateUtil.convertToDatabaseColumn(dpAkhir.getValue())
+			);
 	}
 
 	@FXML
@@ -511,7 +433,7 @@ public class LaporanPerpelangganController implements Initializable {
 		}
 	}
 
-	public void SetTableB() {
+	public void SetTableB(String kdPerwakilan) {
 		List<String> listPelangganNotExists = ReportService.getIfPelangganExistForLapPerPelanggan(
 				DateUtil.convertToDatabaseColumn(dpAwal.getValue()), 
 				DateUtil.convertToDatabaseColumn(dpAkhir.getValue()));
@@ -528,7 +450,8 @@ public class LaporanPerpelangganController implements Initializable {
 		}else{
 			List<EntryDataShowVO> ed = ReportService.dataPerpelangganAll(
 					DateUtil.convertToDatabaseColumn(dpAwal.getValue()),
-					DateUtil.convertToDatabaseColumn(dpAkhir.getValue()));
+					DateUtil.convertToDatabaseColumn(dpAkhir.getValue()),
+					kdPerwakilan);
 			Integer no = 1;
 			int totalBiaya = 0;
 			int totalHargaSetelahDiskon = 0;
@@ -544,6 +467,7 @@ public class LaporanPerpelangganController implements Initializable {
 				totalBa += t.getSumBeratAsli();
 				totalBerat += t.getSumBerat();
 				totalawb += t.getCount().intValue();
+
 				txtHargaSetelahDiskonAll.setText(String.valueOf(formatRupiah.formatIndonesia(totalHargaSetelahDiskon)));
 				txtTotalDiskonAll.setText(String.valueOf(formatRupiah.formatIndonesia(totalDiskon)));
 				txtTotalBiayaAll.setText(String.valueOf(formatRupiah.formatIndonesia(totalBiaya)));

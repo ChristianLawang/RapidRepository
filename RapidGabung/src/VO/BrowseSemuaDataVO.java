@@ -27,10 +27,11 @@ public class BrowseSemuaDataVO {
 	public final StringProperty resiJNE;
 	public final StringProperty reseller;
 	public final StringProperty idKardus;
-
+	public final StringProperty kecamatan;
+	
 	public BrowseSemuaDataVO(String awbData, String created, String layanan, String pengirim, String telp,
 			String asalPaket, String kdPerwakilan, String tujuan, String zona, String penerima, String bFinal,
-			String bpFinal, String bVolume, String harga, String totalBiaya, String resiJNE, String reseller, String idKardus) {
+			String bpFinal, String bVolume, String harga, String totalBiaya, String resiJNE, String reseller, String idKardus, String kecamatan) {
 		this.awbData = new SimpleStringProperty(awbData);
 		this.created = new SimpleStringProperty(created);
 		this.layanan = new SimpleStringProperty(layanan);
@@ -49,9 +50,17 @@ public class BrowseSemuaDataVO {
 		this.resiJNE = new SimpleStringProperty(resiJNE);
 		this.reseller = new SimpleStringProperty(reseller);
 		this.idKardus = new SimpleStringProperty(idKardus);
+		this.kecamatan = new SimpleStringProperty(kecamatan);
 	}
 
-
+	public String getKecamatan(){
+		return kecamatan.get();
+	}
+	
+	public void setKecamatan(String kecamatan){
+		this.kecamatan.set(kecamatan);
+	}
+	
 	// awb
 	public String getIdKardus() {
 		return idKardus.get();
@@ -214,7 +223,10 @@ public class BrowseSemuaDataVO {
 	}
 	
 	
-
+	public StringProperty kecamatanProperty(){
+		return kecamatan;
+	}
+	
 	public StringProperty awbDataProperty() {
 		return awbData;
 	}

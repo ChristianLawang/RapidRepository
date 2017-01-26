@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -64,6 +66,7 @@ import service.PelangganService;
 import util.DateUtil;
 import util.DtoBroadcaster;
 import util.DtoListener;
+import util.ExportToExcell;
 import util.ManagedFormHelper;
 import util.MessageBox;
 import util.UploadUtil;
@@ -85,7 +88,7 @@ public class MasterHargaController implements Initializable {
 	TableView<MasterHargaTV> listBoxMasterHarga;
 	
 	@FXML
-	Button btnImport;
+	Button btnImport,btnExport;
 	
 	@FXML
 	private TableColumn<MasterHargaTV, String>
@@ -128,10 +131,26 @@ public class MasterHargaController implements Initializable {
 				if (file != null) {
 					System.out.println("--> path : " + file.getAbsolutePath());
 //					hyperLink.setText(file.getAbsolutePath());
-					UploadUtil uu = new UploadUtil(file.getAbsolutePath());
-					uu.uploadMasterHarga();
-					settingListboksMasterHarga();
+					String fullPath = file.getAbsolutePath();
+					String extension = fullPath.substring(fullPath.indexOf(".") +1, fullPath.length());
+					System.out.println("extension : " + extension);
+					if(extension.toUpperCase().equals("XLSX")){
+						UploadUtil uu = new UploadUtil(file.getAbsolutePath());
+						uu.uploadMasterHarga();
+						masterData.clear();
+						settingListboksMasterHarga();
+					}else{
+						MessageBox.alert("Upload harga harus extensi XLSX");
+					}
 				}
+			}
+		});
+		
+		btnExport.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+					ExportToExcell.exportMasterHarga(masterData);	
+					MessageBox.alert("Export selesai, file ada di : C:/DLL/REPORT/EXPORT/MASTER_HARGA.xls");
 			}
 		});
 		
@@ -195,23 +214,30 @@ public class MasterHargaController implements Initializable {
 	}
 
 	public void settingListboksMasterHarga() {
-		List<TrHarga> olDokumen = MasterHargaService.getDataHarga();
-		for (TrHarga tr : olDokumen) {
+//		List<TrHarga> olDokumen = MasterHargaService.getDataHarga();
+		List<Map<String, Object>> olDokumen = MasterHargaService.getDataHarga2();
+		for (Map<String, Object> tr : olDokumen) {
+			
 			masterData.add(
 					new MasterHargaTV(
-							tr.getKodeZona()==null?"":tr.getKodeZona(), 
-							tr.getKodeAsal()==null?"":tr.getKodeAsal(), 
-							tr.getPropinsi()==null?"":tr.getPropinsi(), 
-							tr.getKabupaten()==null?"":tr.getKabupaten(), 
-							tr.getKecamatan()==null?"":tr.getKecamatan(), 
-							tr.getKodePerwakilan()==null?"":tr.getKodePerwakilan(), 
-							tr.getZona()==null?"":tr.getZona(), 
-							tr.getReg().toString()==null?"":tr.getReg().toString(), 
-							tr.getEtd()==null?"":tr.getEtd(), 
-							tr.getOne().toString()==null?"":tr.getOne().toString()
-							)
-					);
+							(String) tr.get("KODE_ZONA"),
+							(String) tr.get("KODE_ASAL"),
+							(String) tr.get("PROPINSI"),
+							(String) tr.get("KABUPATEN"),
+							(String) tr.get("KECAMATAN"),
+							(String) tr.get("KODE_PERWAKILAN"),
+							(String) tr.get("ZONA"),
+							(Integer) tr.get("REG"),
+							(String) tr.get("ETD"),
+							(Integer) tr.get("ONE"),
+							(String) tr.get("REGPERWAKILAN"),
+							(String) tr.get("ONEPERWAKILAN")						
+						)
+				);
 		}
+		
+		System.out.println("--> masterData : " + masterData.size());
+		
 		
 		colKodeZona.setCellValueFactory(cellData -> cellData.getValue().kodeZonaProperty());
 	    colKodeAsal.setCellValueFactory(cellData -> cellData.getValue().kodeAsalProperty());
@@ -233,11 +259,11 @@ public class MasterHargaController implements Initializable {
 				}
 				String lowerCaseFilter = newValue.toLowerCase();
 
-				if (data.getKodeZona().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-					return true;
-				} else if (data.getKodeAsal().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-					return true;
-				} else if (data.getPropinsi().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+//				if (data.getKodeZona().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+//					return true;
+//				} else if (data.getKodeAsal().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+//					return true;
+				if (data.getPropinsi().toLowerCase().indexOf(lowerCaseFilter) != -1) {
 					return true;
 				} else if (data.getKabupaten().toLowerCase().indexOf(lowerCaseFilter) != -1) {
 					return true;
@@ -245,8 +271,8 @@ public class MasterHargaController implements Initializable {
 					return true;
 				} else if (data.getPerwakilan().toString().toLowerCase().indexOf(lowerCaseFilter) != -1) {
 					return true;
-				} else if (data.getZona().toString().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-					return true;
+//				} else if (data.getZona().toString().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+//					return true;
 				} else if (data.getReg().toString().toLowerCase().indexOf(lowerCaseFilter) != -1) {
 					return true;
 				} else if (data.getZona().toString().toLowerCase().indexOf(lowerCaseFilter) != -1) {
@@ -277,6 +303,8 @@ public class MasterHargaController implements Initializable {
 		StringProperty reg;
 		StringProperty etd;
 		StringProperty one;
+		StringProperty regPerwakilan;
+		StringProperty onePerwakilan;
 		
 		public MasterHargaTV(
 				String kodeZona, 
@@ -286,9 +314,11 @@ public class MasterHargaController implements Initializable {
 				String kecamatan,
 				String perwakilan,
 				String zona, 
-				String reg, 
+				Integer reg, 
 				String etd,
-				String one){
+				Integer one,
+				String regPerwakilan,
+				String onePerwakilan){
 			this.kodeZona = new SimpleStringProperty(kodeZona);
 			this.kodeAsal = new SimpleStringProperty(kodeAsal);
 			this.propinsi = new SimpleStringProperty(propinsi);
@@ -296,9 +326,11 @@ public class MasterHargaController implements Initializable {
 			this.kecamatan = new SimpleStringProperty(kecamatan);
 			this.perwakilan = new SimpleStringProperty(perwakilan);
 			this.zona = new SimpleStringProperty(zona);
-			this.reg = new SimpleStringProperty(reg);
+			this.reg = new SimpleStringProperty(reg.toString());
 			this.etd = new SimpleStringProperty(etd);
-			this.one = new SimpleStringProperty(one);
+			this.one = new SimpleStringProperty(one.toString());
+			this.regPerwakilan = new SimpleStringProperty(regPerwakilan);
+			this.onePerwakilan = new SimpleStringProperty(onePerwakilan);
 		}
 
 		public String getKodeZona() {
@@ -381,6 +413,22 @@ public class MasterHargaController implements Initializable {
 			this.one.set(one);
 		}
 		
+		public String getRegPerwakilan(){
+			return this.regPerwakilan.get();
+		}
+		
+		public void setRegPerwakilan(String regPerwakilan){
+			this.regPerwakilan.set(regPerwakilan);
+		}
+		
+		public String getOnePerwakilan(){
+			return this.onePerwakilan.get();
+		}
+		
+		public void setOnePerwakilan(String onePerwakilan){
+			this.onePerwakilan.set(onePerwakilan);
+		}
+		
 		public StringProperty kodeZonaProperty(){return kodeZona;};
 		public StringProperty kodeAsalProperty(){return kodeAsal;};
 		public StringProperty propinsiProperty(){return propinsi;};
@@ -391,6 +439,8 @@ public class MasterHargaController implements Initializable {
 		public StringProperty regProperty(){return reg;};
 		public StringProperty etdProperty(){return etd;};
 		public StringProperty oneProperty(){return one;};
+		public StringProperty regPerwakilanProperty(){return regPerwakilan;};
+		public StringProperty onePerwakilanProperty(){return onePerwakilan;};
 	}
 	
 	@FXML
@@ -417,19 +467,29 @@ public class MasterHargaController implements Initializable {
 	@FXML
     public void onSave(Event evt){
 		List<TrHarga> test = MasterHargaService.getDataHargaByID(txtKdZona.getText(), txtKdAsal.getText());
+		Map<String, Object> perwakilan = MasterHargaService.getServicePerwakilan(txtKdZona.getText());
 		System.out.println(test.size());
 		if(test.size()>0){
 			// UPDATE TABLE
-			MasterHargaService.updateDataHarga(txtKdZona.getText(), txtKdAsal.getText()
-					, txtKdPropinsi.getText(), txtKdKabupaten.getText(), txtKdkecamatan.getText()
-					, txtKdPerwakilan.getText(), txtZona.getText() 
-					, Integer.parseInt(txtCGKReg.getText()), txtCGKRegEtd.getText(), Integer.parseInt(txtCGKBest.getText()));
+			MasterHargaService.updateDataHarga(
+					txtKdZona.getText(), 
+					txtKdAsal.getText(),
+					txtKdPropinsi.getText(), 
+					txtKdKabupaten.getText(), 
+					txtKdkecamatan.getText(),
+					txtKdPerwakilan.getText(), 
+					txtZona.getText(), 
+					Integer.parseInt(txtCGKReg.getText()), 
+					txtCGKRegEtd.getText(), 
+					Integer.parseInt(txtCGKBest.getText()),
+					(String)perwakilan.get("REGPERWAKILAN"),
+					(String)perwakilan.get("ONEPERWAKILAN"));
 		}else{
 			
-			//SAVE - TR_HARGA
+			// SAVE - TR_HARGA
 			TrHarga trcab = new TrHarga();
-			trcab.setKodeZona(txtKdZona.getText());
-			trcab.setKodeAsal(txtKdAsal.getText());
+			trcab.getPk().setKodeZona(txtKdZona.getText());
+			trcab.getPk().setKodeAsal(txtKdAsal.getText());
 			trcab.setPropinsi(txtKdPropinsi.getText());
 			trcab.setKabupaten(txtKdKabupaten.getText());
 			trcab.setKecamatan(txtKdkecamatan.getText());
@@ -454,8 +514,8 @@ public class MasterHargaController implements Initializable {
 			trPer.setKecamatan(txtKdkecamatan.getText());
 			trPer.setKodePerwakilan(txtKdPerwakilan.getText());
 			trPer.setZona(txtZona.getText());
-			trPer.setRegperwakilan(txtCGKReg.getText());
-			trPer.setOneperwakilan(txtCGKBest.getText());
+			trPer.setRegperwakilan("JNE"); // ini masih default kalo bikin harga baru
+			trPer.setOneperwakilan("JNE"); // ini masih default kalo bikin harga baru
 			trPer.setTglCreate(cal.getTime());
 			trPer.setTglUpdate(cal.getTime());
 			trPer.setFlag(0);
@@ -467,7 +527,7 @@ public class MasterHargaController implements Initializable {
 		clearForm();
 		btnSimpan.setText("SIMPAN");
 		
-}
+	}
     
     @FXML
     public void onCancel(Event evt)

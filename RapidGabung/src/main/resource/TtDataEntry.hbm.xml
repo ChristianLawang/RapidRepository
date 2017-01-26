@@ -26,6 +26,9 @@
         <property name="reseller" type="string">
             <column name="RESELLER" length="50" />
         </property>
+        <property name="noTelpReseller" type="string">
+            <column name="NO_TELP_RESELLER" length="40" />
+        </property>
         <property name="keterangan" type="string">
             <column name="KETERANGAN" length="400" />
         </property>

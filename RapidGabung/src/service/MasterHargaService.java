@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import entity.TrHarga;
+import entity.TrPerwakilan;
 import entity.TtJadwalPickup;
 
 import java.math.BigDecimal;
@@ -63,10 +64,10 @@ public class MasterHargaService {
 ////			everyRow.setAwbData((String) row.get("kode_pelanggan")!=null?(String) row.get("kode_pelanggan"):"");
 //			
 //			//get data kode_zona
-			everyRow.setKodeZona((String) row.get("KODE_ZONA")!=null?(String) row.get("KODE_ZONA"):"");
+			everyRow.getPk().setKodeZona((String) row.get("KODE_ZONA")!=null?(String) row.get("KODE_ZONA"):"");
 //			
 //			//get data kode_asal
-			everyRow.setKodeAsal((String) row.get("KODE_ASAL")!=null?(String) row.get("KODE_ASAL"):"");
+			everyRow.getPk().setKodeAsal((String) row.get("KODE_ASAL")!=null?(String) row.get("KODE_ASAL"):"");
 //			
 //			//get data propinsi
 			everyRow.setPropinsi((String) row.get("PROPINSI")!=null?(String) row.get("PROPINSI"):"");
@@ -119,7 +120,19 @@ public class MasterHargaService {
 		return true;
 	}
 	
-	public static Boolean updateDataHarga(String kdZona, String kdAsal, String kdProp, String kdKab, String kdKecamatan, String kdPerwakilan,String Zona,Integer reg,String etd,Integer one ) {
+	public static Boolean updateDataHarga(
+			String kdZona, 
+			String kdAsal, 
+			String kdProp, 
+			String kdKab, 
+			String kdKecamatan, 
+			String kdPerwakilan,
+			String Zona,
+			Integer reg,
+			String etd,
+			Integer one,
+			String regPerwakilan,
+			String onePerwakilan) {
 		Session sess = HibernateUtil.openSession();
 		sess.beginTransaction();
 		
@@ -167,12 +180,13 @@ public class MasterHargaService {
 				+ ", a.kecamatan = :pKdKecamatan "
 				+ ", a.kode_perwakilan = :pKdPerwakilan "
 				+ ", a.zona = :pZona "
-				+ ", a.regperwakilan = :pReg "				
-				+ ", a.oneperwakilan = :pOne "
+				+ ", a.regperwakilan = :pRegPerwakilan "				
+				+ ", a.oneperwakilan = :pOnePerwakilan "
 				+ ", a.tgl_update = :pUpdated "
-				+ "where a.kode_zona = :pKdZona";
+				+ "where a.kode_zona = :pKdZona and ";
 		Query queryPerwakilanUpdate = sess.createSQLQuery(sql)
 				.setParameter("pKdZona", kdZona)
+				.setParameter("pKdAsal", kdAsal)
 				.setParameter("pKdProp", kdProp)
 				.setParameter("pKdKab", kdKab)
 				.setParameter("pKdKecamatan", kdKecamatan)
@@ -180,6 +194,8 @@ public class MasterHargaService {
 				.setParameter("pKdPerwakilan", kdPerwakilan)
 				.setParameter("pReg", reg)
 				.setParameter("pOne", one)
+				.setParameter("pRegPerwakilan", regPerwakilan)
+				.setParameter("pOnePerwakilan", onePerwakilan)
 				.setParameter("pUpdated", DateUtil.getNow());
 		int resultPerwakilan = queryPerwakilanUpdate.executeUpdate();
 		queryPerwakilanUpdate.executeUpdate();
@@ -192,10 +208,24 @@ public class MasterHargaService {
 		Session s=HibernateUtil.openSession();
 		
 		Criteria c=s.createCriteria(TrHarga.class);
-		c.add(Restrictions.eq("kodeZona", kodeZona));
-		c.add(Restrictions.eq("kodeAsal", kodeAsal));
+		c.add(Restrictions.eq("pk.kodeZona", kodeZona));
+		c.add(Restrictions.eq("pk.kodeAsal", kodeAsal));
 		
 		List<TrHarga> list = c.list();
+		
+		s.getTransaction().commit();
+		
+		return list;
+	}
+	
+	public static List<TrPerwakilan> getDataPerwakilanByID(String kodeZona, String kodeAsal) {
+		Session s=HibernateUtil.openSession();
+		
+		Criteria c=s.createCriteria(TrPerwakilan.class);
+		c.add(Restrictions.eq("kodeZona", kodeZona));
+		c.add(Restrictions.eq("kodePerwakilan", kodeAsal));
+		
+		List<TrPerwakilan> list = c.list();
 		
 		s.getTransaction().commit();
 		
@@ -242,5 +272,92 @@ public class MasterHargaService {
 		int result = queryUpdate.executeUpdate();
 		queryUpdate.executeUpdate();
 		sess.getTransaction().commit();
+	}
+
+	public static boolean isHargaExist(String kodeZona, String kodeAsal) {
+		Session session=HibernateUtil.openSession();
+		String nativeSql = 
+				"select a.kode_zona from tr_harga a where a.kode_zona='" +kodeZona+ "' and a.kode_asal='"+kodeAsal+"'";
+
+		SQLQuery  query = session.createSQLQuery(nativeSql);
+		query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+		List result = query.list();
+		session.getTransaction().commit();
+		
+		return result.size()>0;
+	}
+
+	public static boolean isPerwakilanExist(String kodeZona, String kodeAsal) {
+		Session session=HibernateUtil.openSession();
+		String nativeSql = 
+				"select a.kode_zona from tr_perwakilan a where a.kode_zona='" +kodeZona+ "' and a.kode_perwakilan='"+kodeAsal+"'";
+
+		SQLQuery  query = session.createSQLQuery(nativeSql);
+		query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+		List result = query.list();
+		session.getTransaction().commit();
+		
+		return result.size()>0;
+	}
+
+	public static void emptyHarga() {
+		Session sess = HibernateUtil.openSession();
+		sess.beginTransaction();
+		
+		String sql = "delete from tr_harga ";
+				
+		Query queryUpdate = sess.createSQLQuery(sql);
+		int result = queryUpdate.executeUpdate();
+		queryUpdate.executeUpdate();		
+
+		String sqlA = "delete from tr_perwakilan ";
+				
+		queryUpdate = sess.createSQLQuery(sqlA);
+		int resultA = queryUpdate.executeUpdate();
+		queryUpdate.executeUpdate();		
+		sess.getTransaction().commit();
+		
+	}
+
+	public static List<Map<String, Object>> getDataHarga2() {
+		Session session=HibernateUtil.openSession();
+		String nativeSql = 
+				"select distinct " +
+			    "   a.kode_zona, " +
+			    "   a.kode_asal, " +
+			    "   a.propinsi, " +
+			    "   a.kabupaten, " +
+			    "   a.kecamatan, " +
+			    "   a.kode_perwakilan, " +
+			    "   a.zona, " +
+			    "   a.reg,  " +
+			    "   a.etd, " +
+			    "   a.one, " +
+			    "   b.regperwakilan, " +
+			    "   b.oneperwakilan " +
+			    "    from tr_harga a inner join tr_perwakilan b on a.kode_zona = b.kode_zona ";
+		SQLQuery  query = session.createSQLQuery(nativeSql);
+		query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+		List result = query.list();
+		session.getTransaction().commit();
+		
+		return result;
+	}
+
+	public static Map<String, Object> getServicePerwakilan(String text) {
+		Session session=HibernateUtil.openSession();
+		String nativeSql = 
+				"select * from tr_perwakilan a where a.kode_zona = '"+text+"'";
+
+		SQLQuery  query = session.createSQLQuery(nativeSql);
+		query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+		List result = query.list();
+		session.getTransaction().commit();
+		if(result.size()>0){
+			return (Map<String, Object>) result.get(0);
+		}else{
+			return null;
+		}
+		
 	}
 }

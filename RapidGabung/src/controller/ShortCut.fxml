@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" maxWidth="800" prefHeight="714.0" prefWidth="508.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ShortCutController">
+	<content>
+		<AnchorPane prefHeight="712.0" prefWidth="519.0">
+			<children>
+				<Label contentDisplay="CENTER" layoutX="218.0" layoutY="22.0" prefHeight="27.0" prefWidth="82.0" text="Short Cut" textAlignment="CENTER" underline="true">
+					<font>
+						<Font name="System Bold" size="18.0" />
+					</font>
+				</Label>
+            <Pane layoutX="19.0" layoutY="68.0" prefHeight="324.0" prefWidth="468.0">
+               <children>
+                  <Button fx:id="btnKirimManifest" layoutX="166.0" layoutY="62.0" mnemonicParsing="false" text="Kirim Manifest Cabang" />
+                  <Button fx:id="btnKirimTagihan" layoutX="190.0" layoutY="115.0" mnemonicParsing="false" text="Kirim Tagihan" />
+               </children>
+            </Pane>
+			</children>
+			
+		</AnchorPane>
+	</content>
+
+</ScrollPane>

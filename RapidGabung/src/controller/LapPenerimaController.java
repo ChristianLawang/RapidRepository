@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import VO.BrowseSemuaDataVO;
 import VO.EntryDataShowVO;
 import VO.LapPODVO;
 import VO.LaporanPenerimaVO;
@@ -36,15 +37,19 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import popup.PopUpLapPODController;
+import service.BrowseSemuaDataService;
 import service.LaporanPODService;
 import service.LaporanPenerimaService;
 import service.MasterKurirService;
+import service.MasterPerwakilanService;
 import service.ReportService;
 import util.DateUtil;
 import util.DtoListener;
@@ -61,10 +66,10 @@ public class LapPenerimaController implements Initializable {
 	private DatePicker dpAwal, dpAkhir;
 
 	@FXML
-	private TextField txtCari, txtPerwakilan;
+	private TextField txtCari;
 
 	@FXML
-	private ComboBox cbPengirim;
+	private ComboBox cbPengirim, cbPerwakilan;
 	
 	@FXML
 	private CheckBox chkAll;
@@ -147,13 +152,27 @@ public class LapPenerimaController implements Initializable {
 				cbPengirimValue = t1;
 			}
 		});
+		cbPerwakilan.getItems().add("All Cabang");
+		List<TrPerwakilan> lstPerwakilan = MasterPerwakilanService.getAllPerwakilanCabangDistinct();
+		for (TrPerwakilan trPerwakilan : lstPerwakilan) {
+			cbPerwakilan.getItems().add(trPerwakilan.getKodePerwakilan());
+		}
+		cbPerwakilan.setValue("All Cabang");
+		
 	}
 
 	public void SetTable() {
-		List<EntryDataShowVO> tt = LaporanPenerimaService.getListTableLapPenerima(cbPengirimValue,
+		List<EntryDataShowVO> tt = 
+			LaporanPenerimaService.getListTableLapPenerima(
+				cbPengirimValue,
 				DateUtil.convertToDatabaseColumn(dpAwal.getValue()),
-				DateUtil.convertToDatabaseColumn(dpAkhir.getValue()), txtPerwakilan.getText(), chkAll,chkDetail);
+				DateUtil.convertToDatabaseColumn(dpAkhir.getValue()), 
+				cbPerwakilan.getValue().toString(), 
+				chkAll,
+				chkDetail);
+		
 		System.out.println("--> table size : " + tt.size());
+		
 		Integer no = 1;
 		for (EntryDataShowVO t : tt) {
 			masterData.add(new LaporanPenerimaVO(no++, DateUtil.getStdDateDisplay2(t.getTglEntry()), t.getAwbData(), 
@@ -171,9 +190,115 @@ public class LapPenerimaController implements Initializable {
 		colBerat.setCellValueFactory(cellData -> cellData.getValue().beratProperty());
 		colEtd.setCellValueFactory(cellData -> cellData.getValue().EtdProperty());
 		colTglPenerima.setCellValueFactory(cellData -> cellData.getValue().tglPenerimaProperty());
+		colTglPenerima.setCellFactory(TextFieldTableCell.forTableColumn());
+		colTglPenerima.setOnEditCommit(new EventHandler<CellEditEvent<LaporanPenerimaVO, String>>() {
+			public void handle(CellEditEvent<LaporanPenerimaVO, String> t) {
+				LaporanPenerimaVO lp = (t.getTableView().getItems().get(t.getTablePosition().getRow()));
+				if(lp.getStatus().equals("JNE PROCESS")){
+					MessageBox.alert("Paket ini telah ditangani pihak JNE");
+				}else if(lp.getStatus().equals("ONPROCESS")){
+					MessageBox.alert("Paket ini masih belum di proses oleh kurir");
+				}else{
+					String newValue = t.getNewValue();
+					Date newDate = DateUtil.stdDateLiteralToDate(newValue);
+					
+					if(newDate==null){
+						MessageBox.alert("Format tanggal harusnya yyyy-mm-dd");
+					}else{
+						LaporanPenerimaService.updateTglTerima(
+								lp.getAwb(), 
+								t.getOldValue(), 
+								lp.getWaktuPenerima().split(":")[0], 
+								lp.getWaktuPenerima().split(":")[1],
+								newDate);
+					}
+				}
+				onClikCari();
+			}
+		});
 		colWaktuPenerima.setCellValueFactory(cellData -> cellData.getValue().waktuPenerimaProperty());
 		colStatus.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
+		colStatus.setCellFactory(TextFieldTableCell.forTableColumn());
+		colStatus.setOnEditCommit(new EventHandler<CellEditEvent<LaporanPenerimaVO, String>>() {
+			public void handle(CellEditEvent<LaporanPenerimaVO, String> t) {
+				LaporanPenerimaVO lp = (t.getTableView().getItems().get(t.getTablePosition().getRow()));
+				if(lp.getStatus().equals("JNE PROCESS")){
+					MessageBox.alert("Paket ini telah ditangani pihak JNE");
+				}else if(lp.getStatus().equals("ONPROCESS")){
+					MessageBox.alert("Paket ini masih belum di proses oleh kurir");
+				}else{
+					
+					String newValue = ValidationStatus(t.getNewValue());
+					if(newValue==null){
+						MessageBox.alert("Input status tidak dikenal, pastikan anda entry yg sesuai, contoh : diterima/au/antar ulang/coda/close/ba/bad address/nth/not at home/miss route/criscross/retur/pending");
+					}else{
+						LaporanPenerimaService.updateStatusPaket(
+								lp.getAwb(), 
+								lp.getTglPenerima(), 
+								lp.getWaktuPenerima().split(":")[0], 
+								lp.getWaktuPenerima().split(":")[1],
+								newValue);
+					}
+				}
+				onClikCari();
+			}
+
+			private String ValidationStatus(String newValue) {
+				String diterima = newValue.toUpperCase();
+				if(diterima.contains("DITERIMA")){
+					return "-1 - Diterima";
+				}
+				if(diterima.contains("AU")||diterima.contains("ANTAR ULANG")){
+					return "1 - AU (Antar Ulang)";
+				}
+				if(diterima.contains("CODA")||diterima.contains("CLOSE")){
+					return "4 - CODA (Closed of Delivery Attempt)";
+				}
+				if(diterima.contains("BA")||diterima.contains("BAD ADDRESS")){
+					return "2 - BA (Bad Address)";
+				}
+				if(diterima.contains("NTH")||diterima.contains("NOT AT HOME")){
+					return "3 - NTH (Not at Home)";
+				}
+				if(diterima.contains("MISS ROUTE")){
+					return "6 - Miss Route";
+				}
+				if(diterima.contains("CRISCROSS")){
+					return "5 - CrisCross";
+				}
+				if(diterima.contains("RETUR")){
+					return "9 - Retur";
+				}
+				if(diterima.contains("PENDING")){
+					return "8 - Pending";
+				}
+				return null;
+			}
+		});
 		colPenerimaPaket.setCellValueFactory(cellData -> cellData.getValue().penerimaPaketProperty());
+		colPenerimaPaket.setCellFactory(TextFieldTableCell.forTableColumn());
+		colPenerimaPaket.setOnEditCommit(new EventHandler<CellEditEvent<LaporanPenerimaVO, String>>() {
+			public void handle(CellEditEvent<LaporanPenerimaVO, String> t) {
+				LaporanPenerimaVO lp = (t.getTableView().getItems().get(t.getTablePosition().getRow()));
+				if(lp.getStatus().equals("JNE PROCESS")){
+					MessageBox.alert("Paket ini telah ditangani pihak JNE");
+				}else if(lp.getStatus().equals("ONPROCESS")){
+					MessageBox.alert("Paket ini masih belum di proses oleh kurir");
+				}else{
+					if(lp.getTglPenerima()==null||lp.getWaktuPenerima()==null){
+						MessageBox.alert("Nama penerima tidak bisa diberikan bila kurir belum pernah mengantarkan paket tersebut");
+					}else{
+						LaporanPenerimaService.updateNamaPenerimaBelakang(
+								lp.getAwb(), 
+								lp.getTglPenerima(), 
+								lp.getWaktuPenerima().split(":")[0], 
+								lp.getWaktuPenerima().split(":")[1],
+								t.getNewValue());
+					}
+				}
+				onClikCari();
+			}
+		});
 		colKeterangan.setCellValueFactory(cellData -> cellData.getValue().keteranganProperty());
 		FilteredList<LaporanPenerimaVO> filteredData = new FilteredList<>(masterData, p -> true);
 
@@ -209,8 +334,6 @@ public class LapPenerimaController implements Initializable {
 		SortedList<LaporanPenerimaVO> sortedData = new SortedList<>(filteredData);
 		sortedData.comparatorProperty().bind(tvLapPengiriman.comparatorProperty());
 		tvLapPengiriman.setItems(sortedData);
-
-
 	}
 
 	@FXML
@@ -221,26 +344,19 @@ public class LapPenerimaController implements Initializable {
 
 	@FXML
 	public void onClikExcel() {
-		try {
-			Date dateAwl = DateUtil.convertToDatabaseColumn(dpAwal.getValue());
-			Date dateAkh = DateUtil.convertToDatabaseColumn(dpAkhir.getValue());
+		Date dateAwl = DateUtil.convertToDatabaseColumn(dpAwal.getValue());
+		Date dateAkh = DateUtil.convertToDatabaseColumn(dpAkhir.getValue());
 			
-			String dateFile = DateUtil.getDateNotSeparator(dateAwl)+" sd "+DateUtil.getDateNotSeparator(dateAkh).substring(4);
-			String namaFile = "";
-			if(cbPengirimValue!=null||cbPengirimValue.equals("")){
-				namaFile = " Report_Penerima ("+cbPengirimValue+")";
-			}else{
-				namaFile = " Report_Penerima";
-			}
+		String dateFile = DateUtil.getDateNotSeparator(dateAwl)+" sd "+DateUtil.getDateNotSeparator(dateAkh).substring(4);
+		String namaFile = "";
+
+		namaFile = " Report_Penerima";
+
 			
-			ExportToExcell.exportToExcellReportPenerima(masterData, namaFile,
-					dateFile);
-			MessageBox.alert("Export Berhasil Di Drive C:/DLL/REPORT/EXPORT/"
-					+dateFile
-					+namaFile+".xls");
-		} catch (Exception e) {
-			MessageBox.alert(e.getMessage());
-		}
+		ExportToExcell.exportToExcellReportPenerima(masterData, namaFile,
+				dateFile);
+
+
 	}
 	
 	@FXML

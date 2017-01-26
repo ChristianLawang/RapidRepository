@@ -57,7 +57,7 @@ public class MasterKurirController implements Initializable {
 	ComboBox cbJabatan, cbWilayah;
 	
 	@FXML
-	Tanggalan txtTglMasuk;
+	Tanggalan txtTglMasuk, txtTglKeluar;
 	
 	@FXML
 	Button btnSimpan, btnReset;
@@ -197,6 +197,19 @@ public class MasterKurirController implements Initializable {
 				});
 		listBoxMasterKurir.getColumns().addAll(col);
 		
+		col = new TableColumn("Status");
+		col.setPrefWidth(120.0);
+		col.setCellValueFactory(
+				new Callback<TableColumn.CellDataFeatures<TrKurir, String>, ObservableValue<String>>() {
+					@Override
+					public ObservableValue<String> call(TableColumn.CellDataFeatures<TrKurir, String> param) {
+						// return null;
+						String test = param.getValue().getFlag()==0?"Aktif":"Tidak Aktif";
+						return new SimpleStringProperty(test);
+					}
+				});
+		listBoxMasterKurir.getColumns().addAll(col);
+		
 		col = new TableColumn("Action");
 		col.setPrefWidth(110.0);
 		col.setStyle("-fx-alignment: CENTER;");
@@ -266,6 +279,10 @@ public class MasterKurirController implements Initializable {
 					, txtNoHP.getText(), cbJabatan.getValue(), txtNoKendaraan.getText()
 					, txtKdPerwakilan.getText(), cbWilayah.getValue() 
 					, txtTglMasuk.getTanggalText(), txtKeterangan.getText());
+			String passToken = txtTglKeluar.getText()==null?"":txtTglKeluar.getText();
+			if(!passToken.equals("")){
+				MasterKurirService.kickKurir(txtNIK.getText(), txtTglKeluar.getTanggalText());
+			}
 		}else{
 			
 			//SAVE

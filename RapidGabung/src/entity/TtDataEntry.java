@@ -14,6 +14,7 @@ public class TtDataEntry implements java.io.Serializable {
 	private String tujuan;
 	private String telpPenerima;
 	private String reseller;
+	private String noTelpReseller;
 	private String keterangan;
 	private String bclose;
 	private String pbclose;
@@ -49,7 +50,7 @@ public class TtDataEntry implements java.io.Serializable {
 	}
 	
 	public TtDataEntry(String awbDataEntry, String asalPaket, String pengirim, String penerima, String tujuan,
-			String telpPenerima, String reseller, String keterangan, String bclose, String pbclose, Integer harga,
+			String telpPenerima, String reseller, String noTelpReseller, String keterangan, String bclose, String pbclose, Integer harga,
 			Integer biaya, String kodePerwakilan, Integer jneFlag, Integer asuransi, Integer totalDiskon,
 			Integer totalBiaya, String user, Integer flagEntry, Date tglCreate, Date tglUpdate, Integer flag) {
 		this.awbDataEntry = awbDataEntry;
@@ -59,6 +60,7 @@ public class TtDataEntry implements java.io.Serializable {
 		this.tujuan = tujuan;
 		this.telpPenerima = telpPenerima;
 		this.reseller = reseller;
+		this.noTelpReseller = noTelpReseller;
 		this.keterangan = keterangan;
 		this.bclose = bclose;
 		this.pbclose = pbclose;
@@ -130,6 +132,14 @@ public class TtDataEntry implements java.io.Serializable {
 
 	public void setReseller(String reseller) {
 		this.reseller = reseller;
+	}
+	
+	public String getNoTelpReseller() {
+		return this.noTelpReseller;
+	}
+
+	public void setNoTelpReseller(String noTelpReseller) {
+		this.noTelpReseller = noTelpReseller;
 	}
 
 	public String getKeterangan() {
@@ -252,4 +262,31 @@ public class TtDataEntry implements java.io.Serializable {
 		this.flag = flag;
 	}
 
+	public void print(){
+		System.out.println("-- TT_DATA_ENTRY");
+		System.out.println(awbDataEntry);
+		System.out.println(asalPaket);
+		System.out.println(pengirim);
+		System.out.println(penerima);
+		System.out.println(tujuan);
+		System.out.println(telpPenerima);
+		System.out.println(reseller);
+		System.out.println(noTelpReseller);
+		System.out.println(keterangan);
+		System.out.println(bclose);
+		System.out.println(pbclose);
+		System.out.println(harga);
+		System.out.println(biaya);
+		System.out.println(kodePerwakilan);
+		System.out.println(jneFlag);
+		System.out.println(asuransi);
+		System.out.println(totalDiskon);
+		System.out.println(totalBiaya);
+		System.out.println(user);
+		System.out.println(flagEntry);
+		System.out.println(tglCreate);
+		System.out.println(tglUpdate);
+		System.out.println(flag);
+		
+	}
 }

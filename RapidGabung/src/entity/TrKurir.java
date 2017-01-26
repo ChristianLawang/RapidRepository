@@ -22,6 +22,7 @@ public class TrKurir implements java.io.Serializable {
 	private Date tglCreate;
 	private Date tglUpdate;
 	private Integer flag;
+	private Date tglKeluar;
 
 	public TrKurir() {
 	}
@@ -31,7 +32,7 @@ public class TrKurir implements java.io.Serializable {
 	}
 
 	public TrKurir(String nik, String nama, String telp, String idJabatan, String noKendaraan, String kodeCabang,
-			String kodePerwakilan, Date tglMasuk, String keterangan, Date tglCreate, Date tglUpdate, Integer flag) {
+			String kodePerwakilan, Date tglMasuk, String keterangan, Date tglCreate, Date tglUpdate, Integer flag, Date tglKeluar) {
 		this.nik = nik;
 		this.nama = nama;
 		this.telp = telp;
@@ -44,6 +45,7 @@ public class TrKurir implements java.io.Serializable {
 		this.tglCreate = tglCreate;
 		this.tglUpdate = tglUpdate;
 		this.flag = flag;
+		this.tglKeluar = tglKeluar;
 	}
 
 	public String getNik() {
@@ -142,4 +144,11 @@ public class TrKurir implements java.io.Serializable {
 		this.flag = flag;
 	}
 
+	public Date getTglKeluar() {
+		return this.tglKeluar;
+	}
+
+	public void setTglKeluar(Date tglKeluar) {
+		this.tglKeluar = tglKeluar;
+	}
 }

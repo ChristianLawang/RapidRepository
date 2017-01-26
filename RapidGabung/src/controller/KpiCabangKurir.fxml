@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -15,11 +16,15 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane prefHeight="600.0" prefWidth="1372.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KPICabangKurirController">
+<ScrollPane prefHeight="600.0" prefWidth="1372.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.KPICabangKurirController">
 	<content>
 		<AnchorPane prefHeight="593.0" prefWidth="1323.0">
 			<children>
-            <Pane layoutX="51.0" layoutY="58.0" prefHeight="85.0" prefWidth="1272.0" styleClass="combo-box-base" />
+            <Pane layoutX="51.0" layoutY="58.0" prefHeight="85.0" prefWidth="1272.0" styleClass="combo-box-base">
+               <children>
+                  <ComboBox fx:id="cmbPerwakilan" layoutX="106.0" layoutY="46.0" prefHeight="25.0" prefWidth="225.0" />
+                  <CheckBox fx:id="chkAllPerwakilan" layoutX="339.0" layoutY="50.0" mnemonicParsing="false" text="All" visible="false" />
+               </children></Pane>
 				<Label layoutX="525.0" layoutY="14.0" text="KPI KURIR PER CABANG" textAlignment="CENTER">
 					<font>
 						<Font name="System Bold" size="18.0" />
@@ -29,17 +34,14 @@
 				<DatePicker fx:id="dpAkhir" layoutX="327.0" layoutY="73.0" prefHeight="25.0" prefWidth="133.0" />
 				<Label layoutX="76.0" layoutY="77.0" text="Periode" />
 				<Label layoutX="301.0" layoutY="77.0" text="s/d" />
-				<TableView fx:id="tvLapPengiriman" editable="true" layoutX="50.0" layoutY="154.0" prefHeight="327.0" prefWidth="1272.0">
+				<TableView fx:id="tvLapKurirCabang" editable="true" layoutX="50.0" layoutY="154.0" prefHeight="327.0" prefWidth="1272.0">
 					<columns>
-						<TableColumn fx:id="colNo" prefWidth="53.0" text="NO" />
-						<TableColumn fx:id="colAwb" prefWidth="186.0" text="AWB" />
-                  		<TableColumn fx:id="colTanggal" editable="true" prefWidth="121.0" text="TANGGAL" />
-						<TableColumn fx:id="colPengirim" prefWidth="140.0" text="PENGIRIM" />
-						<TableColumn fx:id="colPenerima" prefWidth="140.0" text="PENERIMA" />
-						<TableColumn fx:id="colKecamatan" minWidth="5.0" prefWidth="180.0" text="KECAMATAN" />
-						<TableColumn fx:id="colKdPerwakilan" prefWidth="131.0" text="KODE PERWAKILAN" />
-						<TableColumn fx:id="colTglPenerima" prefWidth="115.0" text="TGL TERIMA" />
-						<TableColumn fx:id="colPenerimaPaket" prefWidth="160.0" text="PENERIMA PAKET" />
+						<TableColumn fx:id="colTanggal" prefWidth="140.0" text="TANGGAL" />
+						<TableColumn fx:id="colKdPerwakilan" prefWidth="140.0" text="KODE PERWAKILAN" />
+						<TableColumn fx:id="colKirim" prefWidth="140.0" text="KIRIM" />
+						<TableColumn fx:id="colTerima" prefWidth="140.0" text="TERIMA" />
+						<TableColumn fx:id="colSisa" prefWidth="140.0" text="SISA" />
+						<TableColumn fx:id="colPersen" prefWidth="140.0" text="PERSENTASE" />
 					</columns>
 				</TableView>
             <TextField fx:id="txtCari" layoutX="1082.0" layoutY="101.0" prefHeight="25.0" prefWidth="174.0" />
@@ -47,10 +49,8 @@
             <Button layoutX="471.0" layoutY="73.0" mnemonicParsing="false" onAction="#onClikCari" prefHeight="25.0" prefWidth="50.0" text="Cari" />
             <Button layoutX="954.0" layoutY="103.0" mnemonicParsing="false" onAction="#onClikExcel" text="Print Excel" />
             <Button layoutX="873.0" layoutY="118.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Print PDF" visible="false" />
-            <TextField fx:id="txtPerwakilan" layoutX="157.0" layoutY="106.0" prefHeight="25.0" prefWidth="302.0" />
             <Label layoutX="76.0" layoutY="110.0" text="Perwakilan" />
-            <CheckBox fx:id="chkAll" layoutX="471.0" layoutY="110.0" mnemonicParsing="false" text="All" />
-            <GridPane layoutX="52.0" layoutY="480.0" snapToPixel="false">
+            <GridPane layoutX="52.0" layoutY="480.0" prefHeight="120.0" prefWidth="444.0" snapToPixel="false">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -64,18 +64,47 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="AU" />
-                  <Label text="BA" GridPane.rowIndex="1" />
-                  <Label text="NTH" GridPane.rowIndex="2" />
-                  <Label text="CODA" GridPane.rowIndex="3" />
-                  <Label text="MISS ROUTE" GridPane.columnIndex="2" />
-                  <Label text="CNEE U" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Label text="JNE" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <Label text="TOTAL" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                  <Label prefHeight="17.0" prefWidth="94.0" text="AU">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label prefHeight="17.0" prefWidth="94.0" text="BA" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label prefHeight="17.0" prefWidth="94.0" text="NTH" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label prefHeight="17.0" prefWidth="94.0" text="CODA" GridPane.rowIndex="3">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label prefHeight="17.0" prefWidth="94.0" text="  MISS ROUTE" GridPane.columnIndex="2">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label prefHeight="17.0" prefWidth="94.0" text="  CNEE U" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label prefHeight="17.0" prefWidth="94.0" text="  JNE" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label prefHeight="17.0" prefWidth="94.0" text="  TOTAL" GridPane.columnIndex="2" GridPane.rowIndex="3">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
+                  <TextField fx:id="txtAu" disable="true" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtBa" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtNth" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtCoda" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtMiss" disable="true" GridPane.columnIndex="3" />
+                  <TextField fx:id="txtCnee" disable="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtJne" disable="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtTotal" disable="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                </children>
             </GridPane>
 			</children>

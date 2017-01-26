@@ -855,19 +855,21 @@ public class JadwalPickupController implements Initializable {
 				@Override
 				public void handle(ActionEvent event) {
 					TrPelanggan trPelanggan = PelangganService.getPelangganByName( (String) cmbPelanggan.getValue());
-					if(trPelanggan!=null){
-						String lastMaxId = JadwalPickupService.getTTPickupMaxID();
+					if(trPelanggan!=null){						
+						String lastMaxId = GenericService.getLastVarcharID("tt_pickup", "Id");
 						System.out.println("--> lastMaxId : " + lastMaxId);
 						Integer intNum = 0;
-						String newid = "";
 						if(lastMaxId==null){
-							newid = "S1";
+							System.out.println("part 1");
+							lastMaxId="S00000000";
+							intNum = Integer.parseInt(lastMaxId.substring(2));
 						}else{
-							intNum = Integer.parseInt(lastMaxId.substring(1));
-							newid = "S"+(intNum+1);
-						}						
+							System.out.println("part 2");
+							intNum = Integer.parseInt(lastMaxId.substring(2));
+						}		
+						String fixedID = String.format("%08d", intNum+1);
 						JadwalPickupService.insertJadwalPickupLangsung(
-								newid,
+								"S"+fixedID,
 								trPelanggan.getKodePelanggan(),
 								DateUtil.getNomorHariDalamSeminggu(DateUtil.convertToDateColumn(dtpickup.getValue())),
 								txtDialogJam.getText() + ":" +	txtDialogMin.getText(),

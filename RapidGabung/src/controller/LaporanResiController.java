@@ -60,9 +60,6 @@ public class LaporanResiController implements Initializable {
 					.getDataTagihan(DateUtil.convertToDatabaseColumn(dpDate.getValue()));
 			ExportToExcell.exportToExcellReportTagihan(en, "ReportDataTagihanCustomer",
 					DateUtil.getDateNotSeparator(DateUtil.convertToDatabaseColumn(dpDate.getValue())));
-			MessageBox.alert("Export Berhasil Di Drive C:/DLL/REPORT/EXPORT/"
-					+DateUtil.getDateNotSeparator(DateUtil.convertToDatabaseColumn(dpDate.getValue()))
-					+" ReportDataTagihanCustomer.xls");
 		} catch (Exception e) {
 			MessageBox.alert(e.getMessage());
 		}
@@ -74,9 +71,6 @@ public class LaporanResiController implements Initializable {
 			List<EntryDataShowVO> en = ReportService.getDataResi(DateUtil.convertToDatabaseColumn(dpDate.getValue()));
 			ExportToExcell.exportToExcellReportResi(en, "ReportDataSMSCustomer",
 					DateUtil.getDateNotSeparator(DateUtil.convertToDatabaseColumn(dpDate.getValue())));
-			MessageBox.alert("Export Berhasil Di Drive C:/DLL/REPORT/EXPORT/"
-					+DateUtil.getDateNotSeparator(DateUtil.convertToDatabaseColumn(dpDate.getValue()))
-					+" ReportDataSMSCustomer.xls");
 		} catch (Exception e) {
 			MessageBox.alert(e.getMessage());
 		}

@@ -107,15 +107,19 @@ public class MasterPickupController implements Initializable {
 					MessageBox.alert("Nama Pelanggan salah input");
 				}else{
 					TrPickup trPickup = new TrPickup();
-					String lastMaxId = GenericService.getMaxTableStringRaw(TrPickup.class, "id");
+					String lastMaxId = GenericService.getLastVarcharID("tr_pickup", "ID");
 					Integer intNum = 0;
 					if(lastMaxId==null){
-						lastMaxId="M0";
-						intNum = Integer.parseInt(lastMaxId.substring(1));
+						System.out.println("part 1");
+						lastMaxId="M00000000";
+						intNum = Integer.parseInt(lastMaxId.substring(2));
 					}else{
-						intNum = Integer.parseInt(lastMaxId.substring(1));
+						System.out.println("part 2");
+						intNum = Integer.parseInt(lastMaxId.substring(2));
 					}
-					trPickup.setId("M"+(intNum+1));
+					System.out.println(Integer.parseInt(lastMaxId.substring(2)));
+					String fixedID = String.format("%08d", intNum+1);
+					trPickup.setId("M"+fixedID);
 					trPickup.setKodePelanggan(trPelanggan.getKodePelanggan());
 					trPickup.setKodeHari(getKodeHariByName((String) cmbHari.getSelectionModel().getSelectedItem().toString()));
 					trPickup.setJamPickup(txtJam.getText() + ":" + txtMenit.getText());

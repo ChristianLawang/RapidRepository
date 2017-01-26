@@ -23,6 +23,7 @@ public class TagihanVO {
 	BigInteger jumlahPaket;
 	String kodePickup;
 	Date created;
+	String kodeTujuan;
 
 	public TagihanVO(
 			String awb,
@@ -41,7 +42,8 @@ public class TagihanVO {
 			BigDecimal totalBiaya,
 			BigInteger jumlahPaket,
 			String kodePickup,
-			Date created
+			Date created,
+			String kodeTujuan
 			) {
 
 		this.awb = awb;
@@ -61,9 +63,17 @@ public class TagihanVO {
 		this.jumlahPaket = jumlahPaket;
 		this.kodePickup = kodePickup;
 		this.created = created;
-		
+		this.kodeTujuan = kodeTujuan;
 	}
 
+	public String getKodeTujuan(){
+		return this.kodeTujuan;
+	}
+	
+	public void setKodeTujuan(String kodeTujuan){
+		this.kodeTujuan = kodeTujuan;
+	}
+	
 	public String getAwb() {
 		return awb;
 	}
@@ -219,5 +229,6 @@ public class TagihanVO {
 		System.out.println("jumlahPaket : " + jumlahPaket);
 		System.out.println("kodePickup : " + kodePickup);
 		System.out.println("created : " + created);
+		System.out.println("kodeTujuan : " + kodeTujuan);
 	}
 }

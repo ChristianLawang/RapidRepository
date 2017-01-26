@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="lib/barcode/core-3.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/barcode/itext-1.4.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/camera/bridj-0.6.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/camera/slf4j-api-1.7.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/camera/webcam-capture-0.3.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/antlr-2.7.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/c3p0-0.9.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/commons-collections-3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/dom4j-1.6.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/hibernate3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/javassist-3.12.0.GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/jta-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/mchange-commons-java-0.2.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/mysql-connector-java-5.1.6-bin.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/ojdbc14.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate/slf4j-api-1.6.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/sun.misc.BASE64Decoder.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Tpb.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jna/jna.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jna/jnaerator-0.9.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jna/platform.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/email/java-mail-1.4.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/excel/commons-codec-1.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/excel/poi-3.11-beta2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/excel/poi-ooxml-3.11-beta2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/excel/poi-ooxml-schemas-3.11-beta2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/excel/stax-api-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/excel/xmlbeans-2.6.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/excel/apache-commons-lang.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/pdf/itextpdf-5.4.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/pdf/xmlworker-5.4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/comm-2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasper/commons-beanutils-1.9.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasper/commons-codec-1.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasper/commons-collections-3.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasper/commons-digester-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasper/commons-logging-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasper/groovy-all-2.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasper/itext-pdfa-5.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasper/itextpdf-5.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasper/jasperreports-6.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasper/jxl.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jasper/poi-3.7-beta1.jar"/>
+	<classpathentry kind="lib" path="lib/xdoclet-1.2.1.jar"/>
+	<classpathentry kind="output" path="src"/>
+</classpath>

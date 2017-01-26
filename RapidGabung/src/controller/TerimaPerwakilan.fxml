@@ -30,7 +30,7 @@
 					</font>
 				</Label>
 				<DateTimePicker fx:id="dtpTglTerima" layoutX="505.0" layoutY="93.0" />
-				<TextField fx:id="txtIdKardus" layoutX="505.0" layoutY="127.0" prefHeight="27.0" prefWidth="346.0" />
+				<ComboBox fx:id="txtIdKardus" layoutX="505.0" layoutY="127.0" prefHeight="27.0" prefWidth="346.0" />
 				<Label layoutX="375.0" layoutY="132.0" text="ID Kardus" />
             <TextField fx:id="txtAwb" layoutX="505.0" layoutY="160.0" prefHeight="27.0" prefWidth="346.0" />
             <Label layoutX="375.0" layoutY="164.0" text="No AWB " />

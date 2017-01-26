@@ -125,15 +125,22 @@ public class PopUpKirimDataManifestController<T> implements Initializable {
             						DateUtil.convertToDatabaseColumn(dateAwal.getValue()),
             						DateUtil.convertToDatabaseColumn(dateAkhir.getValue()), tv.getKodePerwakilan());
                     		
-                    		ExportToExcell.exportToExcell3(en, tv.getKodePerwakilan(), "Data Manifest Master Cabang", DateUtil.dateToStdDateLiteral(DateUtil.getNow()));
+                    		String body = "Berikut adalah data transaksi manifest cabang"+System.lineSeparator();
+                    		for (EntryDataShowVO t : en) {
+								body+=t.getAwbData() + " - " + t.getPenerima() + " - " + t.getKecamatan() 
+										+System.lineSeparator();
+							}
+                    		ExportToExcell.exportToExcell3(en, tv.getKodePerwakilan(), "Data Manifest Master Cabang", DateUtil.dateToStdDateLiteral(DateUtil.convertToDateColumn(dateAkhir.getValue())));
                     		
                     		String toEmail = tv.getEmail();
                     		EmailUtil.kirimManifestWithEmail(
+                    				body,
             						username, 
             						password, 
             						toEmail, 
-            						"Data Manifest Master Cabang" + "-" + tv.getKodePerwakilan() + "-" + DateUtil.dateToStdDateLiteral(DateUtil.getNow()) + ".xls", 
-            						"C:/DLL/REPORT/EXPORTEXCEL/" + "Data Manifest Master Cabang" + "-" + tv.getKodePerwakilan() + "-" + DateUtil.dateToStdDateLiteral(DateUtil.getNow()) + ".xls");
+            						"Data Manifest Master Cabang" + "-" + tv.getKodePerwakilan() + "-" + DateUtil.dateToStdDateLiteral(DateUtil.convertToDateColumn(dateAkhir.getValue())) + ".xls", 
+            						"C:/DLL/REPORT/EXPORTEXCEL/" + "Data Manifest Master Cabang" + "-" + tv.getKodePerwakilan() + "-" + DateUtil.dateToStdDateLiteral(DateUtil.convertToDateColumn(dateAkhir.getValue())) + ".xls",
+            						DateUtil.convertToDateColumn(dateAkhir.getValue()));
                     		
                     		Platform.runLater(new Runnable() {
         			            @Override public void run() {

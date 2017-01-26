@@ -40,6 +40,7 @@ import util.DtoListener;
 import util.ExportJasper;
 import util.ManagedFormHelper;
 import util.MessageBox;
+import util.PDFUtil2;
 import util.WindowsHelper;
 import util.formatRupiah;
 import utilfx.AutoCompleteComboBoxListener;
@@ -146,7 +147,7 @@ public class LaporanPerperwakilanController implements Initializable {
 				(String) cmbPerwakilan.getSelectionModel().getSelectedItem().toString(),
 				(String) cmbPelanggan.getSelectionModel().getSelectedItem());
 		Integer no=1;
-		int totalBiaya =0;
+		long totalBiaya =0;
 		int jumlahBarang = 0;
 		int jumlahBerat = 0;
 		for (EntryDataShowVO t : tt) {
@@ -163,7 +164,7 @@ public class LaporanPerperwakilanController implements Initializable {
 		}		
 		txtJumlahBarang.setText(String.valueOf(jumlahBarang));
 		txtJumlahBerat.setText(String.valueOf(jumlahBerat));
-		txtTotalBiaya.setText(String.valueOf(formatRupiah.formatIndonesia(totalBiaya)));
+		txtTotalBiaya.setText(String.valueOf(formatRupiah.formatIndonesia(Math.toIntExact(totalBiaya))));
 		txtJumlahPerwakilan.setText(String.valueOf(tt.size()));
 		colNo.setCellValueFactory(cellData -> cellData.getValue().noProperty());
 		colPerwakilan.setCellValueFactory(cellData -> cellData.getValue().kdPerwakilanProperty());
@@ -203,22 +204,23 @@ public class LaporanPerperwakilanController implements Initializable {
 	}
 
 	public void onClikPdf() {
-		try {
-			Date dateAwl = DateUtil.convertToDatabaseColumn(dpAwal.getValue());
-			Date dateAkh = DateUtil.convertToDatabaseColumn(dpAkhir.getValue());
-			
-			String dateFile = DateUtil.getDateNotSeparator(dateAwl)+" sd "+DateUtil.getDateNotSeparator(dateAkh).substring(4);
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("tgl_awal", DateUtil.convertToDatabaseColumn(dpAwal.getValue()));
-			parameters.put("tgl_akhir", DateUtil.convertToDatabaseColumn(dpAkhir.getValue()));
-			ExportJasper.JasperExportPdf(parameters, "C:/DLL/REPORT/perperwakilan.jrxml", "C:/DLL/REPORT/EXPORT/",
-					"PerPerwakilan", dateFile);
-			MessageBox.alert("Export Berhasil di Drive C:/DLL/REPORT/EXPORT/"
-					+dateFile
-					+" "+"PerPerwakilan.pdf");
-		} catch (Exception e) {
-			MessageBox.alert(e.getMessage());
-		}
+		PDFUtil2.createPDFLaporanPerperwakilan(masterData, DateUtil.convertToDateColumn(dpAwal.getValue()), DateUtil.convertToDateColumn(dpAkhir.getValue()));
+//		try {
+//			Date dateAwl = DateUtil.convertToDatabaseColumn(dpAwal.getValue());
+//			Date dateAkh = DateUtil.convertToDatabaseColumn(dpAkhir.getValue());
+//			
+//			String dateFile = DateUtil.getDateNotSeparator(dateAwl)+" sd "+DateUtil.getDateNotSeparator(dateAkh).substring(4);
+//			Map<String, Object> parameters = new HashMap<String, Object>();
+//			parameters.put("tgl_awal", DateUtil.convertToDatabaseColumn(dpAwal.getValue()));
+//			parameters.put("tgl_akhir", DateUtil.convertToDatabaseColumn(dpAkhir.getValue()));
+//			ExportJasper.JasperExportPdf(parameters, "C:/DLL/REPORT/perperwakilan.jrxml", "C:/DLL/REPORT/EXPORT/",
+//					"PerPerwakilan", dateFile);
+//			MessageBox.alert("Export Berhasil di Drive C:/DLL/REPORT/EXPORT/"
+//					+dateFile
+//					+" "+"PerPerwakilan.pdf");
+//		} catch (Exception e) {
+//			MessageBox.alert(e.getMessage());
+//		}
 
 	}
 

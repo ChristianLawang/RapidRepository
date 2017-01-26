@@ -1,10 +1,14 @@
 package controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.javafx.main.Main;
 
 import entity.TrUser;
 import javafx.event.Event;
@@ -27,12 +31,59 @@ import util.WindowsHelper;
 public class MenuController implements Initializable {
 
 	@FXML
-	AnchorPane mnMasterUser, mnMasterCabang, mnMasterPelanggan, mnMasterHarga, mnMasterKurir, mnMasterZona,
-			mnFotoTimbang, mnBrowseDataEntry, mnScanKuirIn, mnScanKuirOut, mnGabungPaket, mnMapingResi,
-			mnBrowseSemuaData, mnBarangKembali, mnKpiCabangKurir, mnLapPelanggan,
-			mnLapPerperwakilan, mnLapResi, mnSync, mnPenandaLunas, mnBrowseDelete, mnHistoryAwb, mnTerimaDiperwakilan,
-			mnLaporanPod, mnLaporanPenerima,mnLayananPelanggan,mnLaporanPerKecamatan, mnMasterPickup,mnNewsLetter,mnJadwalPickup;
-
+	AnchorPane 
+			mnMasterUser, 
+			mnMasterCabang, 
+			mnMasterPelanggan, 
+			mnMasterHarga, 
+			mnMasterKurir, 
+			mnMasterZona,
+			mnFotoTimbang, 
+			mnBrowseDataEntry, 
+			mnScanKuirIn, 
+			mnScanKuirOut, 
+			mnGabungPaket, 
+			mnMapingResi,
+			mnBrowseSemuaData, 
+			mnBarangKembali, 
+			mnKpiCabangKurir, 
+			mnLapPelanggan,
+			mnLapPerperwakilan, 
+			mnLapResi, 
+			mnSync, 
+			mnPenandaLunas, 
+			mnBrowseDelete, 
+			mnHistoryAwb, 
+			mnTerimaDiperwakilan,
+			mnLaporanPod, 
+			mnLaporanPenerima,
+			mnLayananPelanggan,
+			mnLaporanPerKecamatan, 
+			mnMasterPickup,
+			mnNewsLetter,
+			mnJadwalPickup, 
+			mnLaporanKomisi, 
+			mnLaporanDiskon,
+			mnShortCut;
+	
+	public static final String sourcePath = isProgramRunnedFromJar() ? "src/controller" : "";
+	public static boolean isProgramRunnedFromJar() {
+	    File x = getCurrentJarFileLocation();
+	    if(x.getAbsolutePath().contains("target"+File.separator+"classes")){
+	        return false;
+	    } else {
+	        return true;
+	    }
+	}
+	public static File getCurrentJarFileLocation() {
+        try {
+            return new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+        } catch(URISyntaxException e){
+            e.printStackTrace();
+            return null;
+        }
+	}
+	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 
@@ -46,8 +97,228 @@ public class MenuController implements Initializable {
 		setListenerEnterFotoTimbang();
 		ManagedFormHelper.instanceController = this;
 	}
-
 	private void setViewMenu() {
+		// Data Master
+		mnMasterUser.setDisable(true);
+		mnMasterCabang.setDisable(true);
+		mnMasterPelanggan.setDisable(true);
+		mnMasterHarga.setDisable(true);
+		mnMasterKurir.setDisable(true);
+		mnMasterZona.setDisable(true);
+		mnSync.setDisable(true);
+		mnMasterPickup.setDisable(true);
+		mnNewsLetter.setDisable(true);
+		// Transaksi
+		mnFotoTimbang.setDisable(true);
+		mnBrowseDataEntry.setDisable(true);
+		mnScanKuirIn.setDisable(true);
+		mnScanKuirOut.setDisable(true);
+		mnGabungPaket.setDisable(true);
+		mnMapingResi.setDisable(true);
+		mnBrowseSemuaData.setDisable(true);
+		mnBrowseDelete.setDisable(true);
+		mnPenandaLunas.setDisable(true);
+		mnBrowseDelete.setDisable(true);
+		mnJadwalPickup.setDisable(true);
+		mnTerimaDiperwakilan.setDisable(true);
+		// Call Center
+		mnBarangKembali.setDisable(true);
+		mnHistoryAwb.setDisable(true);
+		mnLayananPelanggan.setDisable(true);
+		// Laporan
+		mnKpiCabangKurir.setDisable(true);
+		mnLapPelanggan.setDisable(true);
+		mnLapPerperwakilan.setDisable(true);
+		mnLapResi.setDisable(true);	
+		mnLaporanPod.setDisable(true);
+		mnLaporanPenerima.setDisable(true);
+		mnLaporanPerKecamatan.setDisable(true);
+		mnLaporanKomisi.setDisable(true);
+		mnLaporanDiskon.setDisable(true);		
+		
+		TrUser uLogin = LoginController.getUserLogin();
+		System.out.println("--> uLogin " + uLogin.getIdRole());
+		if (uLogin.getIdRole().equals("admin")) { // admin
+			// data master
+			mnMasterKurir.setDisable(false);
+			mnMasterZona.setDisable(false);
+			mnSync.setDisable(false);
+			mnMasterPickup.setDisable(false);
+			mnNewsLetter.setDisable(false);
+			// transaksi
+			mnFotoTimbang.setDisable(false);
+			mnBrowseDataEntry.setDisable(false);
+			mnScanKuirIn.setDisable(false);
+			mnScanKuirOut.setDisable(false);
+			mnGabungPaket.setDisable(false);
+			mnMapingResi.setDisable(false);
+			mnBrowseSemuaData.setDisable(false);
+			mnPenandaLunas.setDisable(false);
+			mnBrowseDelete.setDisable(false);
+			mnJadwalPickup.setDisable(false);
+			mnTerimaDiperwakilan.setDisable(false);
+			// call center
+			mnBarangKembali.setDisable(false);
+			mnHistoryAwb.setDisable(false);
+			mnLayananPelanggan.setDisable(false);
+			// laporan
+			mnKpiCabangKurir.setDisable(false);
+			mnLapPelanggan.setDisable(false);
+			mnLapPerperwakilan.setDisable(false);
+			mnLapResi.setDisable(false);	
+			mnLaporanPod.setDisable(false);
+			mnLaporanPenerima.setDisable(false);
+			mnLaporanPerKecamatan.setDisable(false);
+			// Call Center
+			mnBarangKembali.setDisable(true);
+			mnHistoryAwb.setDisable(true);
+			mnLayananPelanggan.setDisable(true);
+		} else if (uLogin.getIdRole().equals("fototimbang")) { // fototimbang
+			mnFotoTimbang.setDisable(false);
+			mnBrowseSemuaData.setDisable(false);
+
+		} else if (uLogin.getIdRole().equals("dataentry")) { // data entry
+			mnBrowseSemuaData.setDisable(false);
+			mnBrowseDataEntry.setDisable(false);
+
+		} else if (uLogin.getIdRole().equals("gabungpaket")) { // gabung paket
+			mnScanKuirIn.setDisable(false);
+			mnScanKuirOut.setDisable(false);
+			mnGabungPaket.setDisable(false);
+		} else if (uLogin.getIdRole().equals("sales")) { // sales
+			mnMasterPelanggan.setDisable(false);
+			mnLapPelanggan.setDisable(false);
+			mnLapResi.setDisable(false);
+		} else if (uLogin.getIdRole().equals("finance")) { // finance
+			// Data Master
+			mnMasterCabang.setDisable(true);
+			mnMasterPelanggan.setDisable(true);
+			mnMasterHarga.setDisable(true);
+			mnMasterKurir.setDisable(true);
+			mnMasterZona.setDisable(true);
+			mnSync.setDisable(true);
+			mnMasterPickup.setDisable(true);
+			mnNewsLetter.setDisable(true);
+			// Transaksi
+			mnFotoTimbang.setDisable(false);
+			mnBrowseDataEntry.setDisable(false);
+			mnScanKuirIn.setDisable(false);
+			mnScanKuirOut.setDisable(false);
+			mnGabungPaket.setDisable(false);
+			mnMapingResi.setDisable(false);
+			mnBrowseSemuaData.setDisable(false);
+			mnPenandaLunas.setDisable(false);
+			mnBrowseDelete.setDisable(false);
+			mnJadwalPickup.setDisable(false);
+			mnTerimaDiperwakilan.setDisable(false);
+			// Laporan
+			mnKpiCabangKurir.setDisable(false);
+			mnLapPelanggan.setDisable(false);
+			mnLapPerperwakilan.setDisable(false);
+			mnLapResi.setDisable(false);	
+			mnLaporanPod.setDisable(false);
+			mnLaporanPenerima.setDisable(false);
+			mnLaporanPerKecamatan.setDisable(true);
+			
+		} else if (uLogin.getIdRole().equals("callcenter")) { // call center
+			mnMasterCabang.setDisable(false);
+			mnMasterPelanggan.setDisable(false);
+			mnMasterHarga.setDisable(false);
+			mnMasterKurir.setDisable(false);
+			mnMasterZona.setDisable(false);
+			mnLapPelanggan.setDisable(false);
+			mnLapPerperwakilan.setDisable(false);
+			mnLapResi.setDisable(false);
+			mnKpiCabangKurir.setDisable(false);
+		} else if (uLogin.getIdRole().equals("superadmin")) { // superadmin
+			// Data Master
+			mnMasterCabang.setDisable(false);
+			mnMasterPelanggan.setDisable(false);
+			mnMasterHarga.setDisable(false);
+			mnMasterKurir.setDisable(false);
+			mnMasterZona.setDisable(false);
+			mnSync.setDisable(false);
+			mnMasterPickup.setDisable(false);
+			mnNewsLetter.setDisable(false);
+			// Transaksi
+			mnFotoTimbang.setDisable(false);
+			mnBrowseDataEntry.setDisable(false);
+			mnScanKuirIn.setDisable(false);
+			mnScanKuirOut.setDisable(false);
+			mnGabungPaket.setDisable(false);
+			mnMapingResi.setDisable(false);
+			mnBrowseSemuaData.setDisable(false);
+			mnBrowseDelete.setDisable(false);
+			mnPenandaLunas.setDisable(false);
+			mnBrowseDelete.setDisable(false);
+			mnJadwalPickup.setDisable(false);
+			mnTerimaDiperwakilan.setDisable(false);
+			// Call Center
+			mnBarangKembali.setDisable(false);
+			mnHistoryAwb.setDisable(false);
+			mnLayananPelanggan.setDisable(false);
+			// Laporan
+			mnKpiCabangKurir.setDisable(false);
+			mnLapPelanggan.setDisable(false);
+			mnLapPerperwakilan.setDisable(false);
+			mnLapResi.setDisable(false);	
+			mnLaporanPod.setDisable(false);
+			mnLaporanPenerima.setDisable(false);
+			mnLaporanPerKecamatan.setDisable(false);
+			mnLaporanKomisi.setDisable(false);
+			mnLaporanDiskon.setDisable(false);	
+		} else if (uLogin.getIdRole().equals("superuser")) { // superuser
+			// Data Master
+			mnMasterUser.setDisable(false);
+			mnMasterCabang.setDisable(false);
+			mnMasterPelanggan.setDisable(false);
+			mnMasterHarga.setDisable(false);
+			mnMasterKurir.setDisable(false);
+			mnMasterZona.setDisable(false);
+			mnSync.setDisable(false);
+			mnMasterPickup.setDisable(false);
+			mnNewsLetter.setDisable(false);
+			// Transaksi
+			mnFotoTimbang.setDisable(false);
+			mnBrowseDataEntry.setDisable(false);
+			mnScanKuirIn.setDisable(false);
+			mnScanKuirOut.setDisable(false);
+			mnGabungPaket.setDisable(false);
+			mnMapingResi.setDisable(false);
+			mnBrowseSemuaData.setDisable(false);
+			mnBrowseDelete.setDisable(false);
+			mnPenandaLunas.setDisable(false);
+			mnBrowseDelete.setDisable(false);
+			mnJadwalPickup.setDisable(false);
+			mnTerimaDiperwakilan.setDisable(false);
+			// Call Center
+			mnBarangKembali.setDisable(false);
+			mnHistoryAwb.setDisable(false);
+			mnLayananPelanggan.setDisable(false);
+			// Laporan
+			mnKpiCabangKurir.setDisable(false);
+			mnLapPelanggan.setDisable(false);
+			mnLapPerperwakilan.setDisable(false);
+			mnLapResi.setDisable(false);	
+			mnLaporanPod.setDisable(false);
+			mnLaporanPenerima.setDisable(false);
+			mnLaporanPerKecamatan.setDisable(false);
+			mnLaporanKomisi.setDisable(false);
+			mnLaporanDiskon.setDisable(false);	
+		}
+
+		if (!uLogin.getKodeCabang().equalsIgnoreCase("CGK001")) {
+			mnMasterUser.setDisable(true);
+			mnMasterCabang.setDisable(false);
+			mnMasterPelanggan.setDisable(false);
+			mnMasterHarga.setDisable(true);
+			mnMasterKurir.setDisable(false);
+			mnMasterZona.setDisable(true);
+			mnPenandaLunas.setDisable(true);
+		}
+	}
+	
+	private void setViewMenu2() {
 		mnMasterUser.setDisable(true);
 		mnMasterCabang.setDisable(true);
 		mnMasterPelanggan.setDisable(true);
@@ -68,7 +339,8 @@ public class MenuController implements Initializable {
 		mnLapResi.setDisable(true);		
 
 		TrUser uLogin = LoginController.getUserLogin();
-		if (uLogin.getIdRole() == 4) {
+		System.out.println("--> uLogin " + uLogin.getIdRole());
+		if (uLogin.getIdRole().equals("admin")) { // admin
 			mnMasterUser.setDisable(false);
 			mnMasterCabang.setDisable(false);
 			mnMasterPelanggan.setDisable(false);
@@ -79,29 +351,29 @@ public class MenuController implements Initializable {
 			mnLapPerperwakilan.setDisable(false);
 			mnLapResi.setDisable(false);
 
-		} else if (uLogin.getIdRole() == 1) {
+		} else if (uLogin.getIdRole().equals("fototimbang")) { // fototimbang
 			mnFotoTimbang.setDisable(false);
 			mnBrowseSemuaData.setDisable(false);
 
-		} else if (uLogin.getIdRole() == 2) {
+		} else if (uLogin.getIdRole().equals("dataentry")) { // data entry
 			mnBrowseSemuaData.setDisable(false);
 			mnBrowseDataEntry.setDisable(false);
 
-		} else if (uLogin.getIdRole() == 3) {
+		} else if (uLogin.getIdRole().equals("gabungpaket")) { // gabung paket
 			mnScanKuirIn.setDisable(false);
 			mnScanKuirOut.setDisable(false);
 			mnGabungPaket.setDisable(false);
-		} else if (uLogin.getIdRole() == 5) {
+		} else if (uLogin.getIdRole().equals("sales")) { // sales
 			mnMasterPelanggan.setDisable(false);
 			mnLapPelanggan.setDisable(false);
 			mnLapResi.setDisable(false);
-		} else if (uLogin.getIdRole() == 6) {
+		} else if (uLogin.getIdRole().equals("finance")) { // finance
 			mnMasterHarga.setDisable(false);
 			mnLapPelanggan.setDisable(false);
 			mnLapPerperwakilan.setDisable(false);
 			mnLapResi.setDisable(false);
 			mnKpiCabangKurir.setDisable(false);
-		} else if (uLogin.getIdRole() == 7) {
+		} else if (uLogin.getIdRole().equals("callcenter")) { // call center
 			mnMasterCabang.setDisable(false);
 			mnMasterPelanggan.setDisable(false);
 			mnMasterHarga.setDisable(false);
@@ -111,7 +383,7 @@ public class MenuController implements Initializable {
 			mnLapPerperwakilan.setDisable(false);
 			mnLapResi.setDisable(false);
 			mnKpiCabangKurir.setDisable(false);
-		} else if (uLogin.getIdRole() == 0) {
+		} else if (uLogin.getIdRole().equals("superadmin")) { // superuser
 			mnMasterUser.setDisable(false);
 			mnMasterCabang.setDisable(false);
 			mnMasterPelanggan.setDisable(false);
@@ -146,9 +418,10 @@ public class MenuController implements Initializable {
 	@FXML
 	public void onMasterUser() {
 		try {
+			System.out.println("--> sourcePath : " + sourcePath);
 			ManagedFormHelper.kodeDokumenPabean = "masterUser";
 			HBox bodyHBox = new HBox();
-			FXMLLoader menu = new FXMLLoader(getClass().getResource("MasterUser.fxml"));
+			FXMLLoader menu = new FXMLLoader(getClass().getResource("/controller/MasterUser.fxml"));
 			ScrollPane menuPage = (ScrollPane) menu.load();
 			bodyHBox.getChildren().add(menuPage);
 			bodyHBox.setAlignment(Pos.CENTER);
@@ -156,7 +429,7 @@ public class MenuController implements Initializable {
 			if (WindowsHelper.rootLayout != null) {
 				WindowsHelper.rootLayout.setCenter(bodyHBox);
 			}
-
+			System.out.println();
 		} catch (IOException ex) {
 			Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -218,6 +491,25 @@ public class MenuController implements Initializable {
 	}
 
 	@FXML
+	public void onMnShortCut() {
+		try {
+			ManagedFormHelper.kodeDokumenPabean = "shortcut";
+			HBox bodyHBox = new HBox();
+			FXMLLoader menu = new FXMLLoader(getClass().getResource("ShortCut.fxml"));
+			ScrollPane menuPage = (ScrollPane) menu.load();
+			bodyHBox.getChildren().add(menuPage);
+			bodyHBox.setAlignment(Pos.CENTER);
+
+			if (WindowsHelper.rootLayout != null) {
+				WindowsHelper.rootLayout.setCenter(bodyHBox);
+			}
+
+		} catch (IOException ex) {
+			Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	@FXML
 	public void onMasterCabang() {
 		try {
 			ManagedFormHelper.kodeDokumenPabean = "masterCabang";
@@ -260,9 +552,11 @@ public class MenuController implements Initializable {
 	@FXML
 	public void onMnSync() {
 		try {
+			System.out.println("--> sourcePath : " + sourcePath);
+			
 			ManagedFormHelper.kodeDokumenPabean = "mnSync";
 			HBox bodyHBox = new HBox();
-			FXMLLoader menu = new FXMLLoader(getClass().getResource("SyncData.fxml"));
+			FXMLLoader menu = new FXMLLoader(getClass().getResource("/controller/SyncData.fxml"));
 			ScrollPane menuPage = (ScrollPane) menu.load();
 			bodyHBox.getChildren().add(menuPage);
 			bodyHBox.setAlignment(Pos.CENTER);
@@ -921,6 +1215,47 @@ public class MenuController implements Initializable {
 
 		} catch (IOException ex) {
 			Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	//HENDRY: tambah menu Laporan Komisi
+	public void onLaporanKomisi(Event evt){
+		try {
+			ManagedFormHelper.kodeDokumenPabean = "Laporan Komisi";
+			HBox bodyHBox = new HBox();
+			FXMLLoader menu = new FXMLLoader(getClass().getResource("LaporanKomisi.fxml"));
+			ScrollPane menuPage = (ScrollPane) menu.load();
+			bodyHBox.getChildren().add(menuPage);
+			bodyHBox.setAlignment(Pos.CENTER);
+			// WindowsHelper.rootLayout.setCenter(null);
+
+			if (WindowsHelper.rootLayout != null) {
+				WindowsHelper.rootLayout.setCenter(bodyHBox);
+			}
+
+		} catch (IOException ex) {
+			Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	//HENDRY
+	
+	//FA: tambah menu Laporan Diskon
+	public void onLaporanDiskon(Event evt){
+		try {
+			ManagedFormHelper.kodeDokumenPabean = "Laporan Komisi";
+			HBox bodyHBox = new HBox();
+			FXMLLoader menu = new FXMLLoader(getClass().getResource("LaporanDiskon.fxml"));
+			ScrollPane menuPage = (ScrollPane) menu.load();
+			bodyHBox.getChildren().add(menuPage);
+			bodyHBox.setAlignment(Pos.CENTER);
+			// WindowsHelper.rootLayout.setCenter(null);
+
+			if (WindowsHelper.rootLayout != null) {
+				WindowsHelper.rootLayout.setCenter(bodyHBox);
+			}
+
+		} catch (IOException ex) {
+				Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 	

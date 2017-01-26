@@ -10,7 +10,8 @@ import java.util.Date;
  */
 public class TrPerwakilan implements java.io.Serializable {
 
-	private String kodeZona;
+//	private String kodeZona;
+	private TrPerwakilanPK pk;
 	private String propinsi;
 	private String kabupaten;
 	private String kecamatan;
@@ -23,15 +24,19 @@ public class TrPerwakilan implements java.io.Serializable {
 	private Integer flag;
 
 	public TrPerwakilan() {
+		this.pk = new TrPerwakilanPK();
 	}
 
-	public TrPerwakilan(String kodeZona) {
-		this.kodeZona = kodeZona;
+	public TrPerwakilan(String kodeZona, String kodeAsal) {
+//		this.kodeZona = kodeZona;
+		this.pk.setKodeZona(kodeZona);
+		this.pk.setKodeAsal(kodeAsal);
 	}
 
-	public TrPerwakilan(String kodeZona, String propinsi, String kabupaten, String kecamatan, String kodePerwakilan,
+	public TrPerwakilan(String kodeZona, String kodeAsal, String propinsi, String kabupaten, String kecamatan, String kodePerwakilan,
 			String zona, String regperwakilan, String oneperwakilan, Date tglCreate, Date tglUpdate, Integer flag) {
-		this.kodeZona = kodeZona;
+		this.pk.setKodeZona(kodeZona);
+		this.pk.setKodeAsal(kodeAsal);
 		this.propinsi = propinsi;
 		this.kabupaten = kabupaten;
 		this.kecamatan = kecamatan;
@@ -44,12 +49,28 @@ public class TrPerwakilan implements java.io.Serializable {
 		this.flag = flag;
 	}
 
+	public TrPerwakilanPK getPk(){
+		return this.pk;
+	}
+	
+	public void setPk(TrPerwakilanPK pk){
+		this.pk = pk;
+	}
+	
 	public String getKodeZona() {
-		return this.kodeZona;
+		return this.pk.getKodeZona();
 	}
 
 	public void setKodeZona(String kodeZona) {
-		this.kodeZona = kodeZona;
+		this.pk.setKodeZona(kodeZona);
+	}
+	
+	public String getKodeAsal() {
+		return this.pk.getKodeAsal();
+	}
+
+	public void setKodeAsal(String kodeAsal) {
+		this.pk.setKodeAsal(kodeAsal);
 	}
 
 	public String getPropinsi() {

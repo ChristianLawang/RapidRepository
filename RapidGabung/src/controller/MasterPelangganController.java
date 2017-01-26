@@ -61,6 +61,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -74,6 +75,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import service.BrowseSemuaDataService;
 import service.GenericService;
 import service.MasterCabangService;
 import service.MasterPickupService;
@@ -82,6 +84,7 @@ import util.DateUtil;
 import util.DtoBroadcaster;
 import util.DtoListener;
 import util.EmailUtil;
+import util.ExportToExcell;
 import util.ManagedFormHelper;
 import util.MessageBox;
 import util.PDFUtil;
@@ -95,8 +98,11 @@ public class MasterPelangganController implements Initializable {
 
 	@FXML
 	javafx.scene.control.TextField txtKodePelanggan, txtNamaAkun, txtNamaPemilik, txtEmailPelanggan, txtLineID,
-			txtTelpPelanggan, txtInstagram, txtDiskonRapid, txtDiskonJNE,  txtAlamatPelanggan, txtKeterangan ;
+			txtTelpPelanggan, txtInstagram, txtDiskonRapid, txtDiskonJNE;
 
+	@FXML
+	TextArea txtAlamatPelanggan, txtKeterangan;
+	
 	@FXML
 	Button btnSimpan, btnBatal;
 
@@ -104,16 +110,15 @@ public class MasterPelangganController implements Initializable {
 	CheckBox chkSMS;
 
 	@FXML
-	Tanggalan dpMulaigabung, dpMulaiDiskon ;
+	Tanggalan dpMulaigabung, dpMulaiDiskon, dpAkhirDiskon;
 	
 	@FXML
-	ComboBox cbJabatan1, txtNamaSales, cbJabatan2, txtReferensi;
+	ComboBox cbJabatan1, txtNamaSales, cbJabatan2, txtReferensi, cbCabang;
 
 	Task emailWorker;
 	
 	@FXML
 	TableView<PelangganTV> tvTagihanPelanggan;
-	
 	
 	// non FXML
 	private CheckBox chkAll = new CheckBox();
@@ -128,6 +133,22 @@ public class MasterPelangganController implements Initializable {
 //		cbJabatan2.getItems().addAll("Sales", "Agen", "Referensi");
 		settingListboksMasterPelanggan();
 		setListenerEnterSimpan();
+		cbJabatan2.valueProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue ov, String t, String t1) {
+				if(t1.equals("Referensi")){
+					ObservableList<TrPelanggan> listReferensi = FXCollections.observableArrayList();
+					listReferensi.clear();					
+					listReferensi = FXCollections.observableArrayList(PelangganService.getDataReferensi());
+					for (TrPelanggan i : listReferensi) {
+						txtReferensi.getItems().add(i.getNamaAkun());
+					}
+					txtReferensi.setValue(listReferensi.get(0).getNamaAkun());
+				}else{
+					txtReferensi.getItems().clear();
+				}
+			}
+		});
 		
 		cbJabatan1.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -144,13 +165,14 @@ public class MasterPelangganController implements Initializable {
 					for (TrSales i : listSales) {
 						txtNamaSales.getItems().add(i.getNamaSales());
 					}
-					cbJabatan2.getItems().addAll("Referensi");
+					cbJabatan2.getItems().addAll("Referensi", "");
 					ObservableList<TrPelanggan> listReferensi = FXCollections.observableArrayList();
-					listReferensi.clear();
+					listReferensi.clear();					
 					listReferensi = FXCollections.observableArrayList(PelangganService.getDataReferensi());
 					for (TrPelanggan i : listReferensi) {
 						txtReferensi.getItems().add(i.getNamaAkun());
 					}
+					txtReferensi.setValue(listReferensi.get(0).getNamaAkun());
 					cbJabatan2.setValue("Referensi");
 				}else if(t1.equals("Agen")){
 					ObservableList<TrSales> listSales = FXCollections.observableArrayList();
@@ -189,6 +211,10 @@ public class MasterPelangganController implements Initializable {
 				   tvTagihanPelanggan = generateTableViewTagihanPelanggan(tvTagihanPelanggan, tr);
 	          }
 	        });
+		List<Map> lstCabang = BrowseSemuaDataService.getDataCabangAsal2();
+		for (Map trCabang : lstCabang) {
+			cbCabang.getItems().add(trCabang.get("KODE_PERWAKILAN"));
+		}
 
 	}
 	public static class DiskonTV {
@@ -303,6 +329,7 @@ public class MasterPelangganController implements Initializable {
 					DatePicker dtAwal = (DatePicker) innerStage.getScene().lookup("#dtAwal");
 					
 					Button btnTambahkan = (Button) innerStage.getScene().lookup("#btnTambahkan");
+					Button btnSelesai = (Button) innerStage.getScene().lookup("#btnSelesai");
 					tblPelanggan.setOnMousePressed(new EventHandler<MouseEvent>() {
 					    @Override 
 					    public void handle(MouseEvent event) {
@@ -310,12 +337,26 @@ public class MasterPelangganController implements Initializable {
 					    	loadRightList(tblDiskon, selection.getKode());
 					    }
 					});
+					btnSelesai.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							stgKirimTagihan.close();
+						}
+					});
+					
 					btnTambahkan.setOnAction(new EventHandler<ActionEvent>() {
 						@Override
 						public void handle(ActionEvent event) {
 							PelangganTV selection = tblPelanggan.getSelectionModel().getSelectedItem();
 							TrDiskon diskon = new TrDiskon();
-							diskon.setIdDiskon(GenericService.getMaxTableString(TrDiskon.class, "idDiskon"));
+							String idDiskon = GenericService.getLastVarcharID("tr_diskon", "ID_DISKON");
+							System.out.println("--> idDiskon : " + idDiskon);
+							if(idDiskon==null){
+								idDiskon = "00000001";
+							}else{
+								idDiskon = String.format("%08d", Integer.parseInt(idDiskon)+1);
+							}
+							diskon.setIdDiskon(idDiskon);
 							diskon.setKodePelanggan(selection.getKode());
 							diskon.setDiskonRapid(Integer.parseInt(txtRapidPercentage.getText()));
 							diskon.setDiskonJne(Integer.parseInt(txtJNEPercentage.getText()));
@@ -325,6 +366,9 @@ public class MasterPelangganController implements Initializable {
 							diskon.setFlag(0);
 							GenericService.save(TrDiskon.class, diskon, true);
 							loadRightList(tblDiskon, selection.getKode());
+							txtRapidPercentage.setText("0");
+							txtJNEPercentage.setText("0");
+							dtAwal.setValue(null);
 						}
 					});
 					
@@ -366,7 +410,7 @@ public class MasterPelangganController implements Initializable {
 	}
 	
 	private void loadRightList(TableView<DiskonTV> tbl, String kode) {
-		List<TrDiskon> lstDiskon = PelangganService.getDataDiskonByPelangganID(kode);
+		List<TrDiskon> lstDiskon = PelangganService.getDataDiskonByPelangganID2(kode);
 		
 		tbl.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		ObservableList<DiskonTV> pops = FXCollections.observableArrayList();
@@ -404,22 +448,29 @@ public class MasterPelangganController implements Initializable {
                     public TableCell call( final TableColumn<DiskonTV, String> param ){
                         final TableCell<DiskonTV, String> cell = new TableCell<DiskonTV, String>(){
 
-                            final Button btn = new Button( "Delete" );
+                            final Button btn = new Button( "Aktifkan" );
 
                             @Override
                             public void updateItem( String item, boolean empty ){
                                 super.updateItem( item, empty );
                                 if ( empty ){setGraphic( null );setText( null );
                                 }else{
+                                	DiskonTV row = getTableView().getItems().get( getIndex() );
+                                	if(row.getFlag()==1){
+                                		btn.setDisable(true);
+                                	}else{
+                                		btn.setDisable(false);
+                                	}
                                     btn.setOnAction( ( ActionEvent event ) -> {
                                     	int[] dataButtonMessageBox = new int[2];
                     					dataButtonMessageBox[0] = MessageBox.BUTTON_OK;
                     					dataButtonMessageBox[1] = MessageBox.BUTTON_CANCEL;
-                                    	int hasilMessageBox = MessageBox.confirm("Apakah Yakin akan Melakukan Delete?",
+                                    	int hasilMessageBox = MessageBox.confirm("Apakah anda yakin ingin melakukan aktifasi diskon, proses ini akan mempengaruhi total biaya "+ row.getKode()+" sejak tanggal " + row.getTglMulaiDiskon(),
                     							dataButtonMessageBox);
                     					if (hasilMessageBox == 6) { 
-                    						DiskonTV row = getTableView().getItems().get( getIndex() );
                     						PelangganService.setDiskonFlag(row.getIdDiskon(),1);
+                    						PelangganService.updateWholeDataEntry(row.getIdDiskon());
+                    						PelangganService.updateDiskonMasterPelanggan(row.getKode(), row.getDiskonJNE(), row.getDiskonRapid());
                     						loadRightList(tbl, kode);
                     					}
 	                                });
@@ -508,12 +559,15 @@ public class MasterPelangganController implements Initializable {
 
 	@FXML
 	public void onMouseClicked(MouseEvent evt) {
+		dpAkhirDiskon.clear();
 		if (evt.getClickCount() > 1) {
-			TrPelanggan dataHeader = (TrPelanggan) listBoxPelanggan.getSelectionModel().getSelectedItem();
+			TrPelanggan dataHeader = (TrPelanggan) listBoxPelanggan.getSelectionModel().getSelectedItem();			
 			System.out.println("---------------Data Header : " + dataHeader.getKodePelanggan());
 			txtKodePelanggan.setDisable(true);
 			txtNamaAkun.requestFocus();
 			if (dataHeader != null) {
+				Date tglAkhirDiskon = PelangganService.getAkhirDiskon(dataHeader.getKodePelanggan());
+				dpAkhirDiskon.setTanggalText(tglAkhirDiskon);
 				DtoBroadcaster.broadcast(ManagedFormHelper.instanceController, "loadHeader", dataHeader);
 				Stage stage = (Stage) listBoxPelanggan.getScene().getWindow();
 				
@@ -547,14 +601,18 @@ public class MasterPelangganController implements Initializable {
 		List<TrPelanggan> test = PelangganService.getDataPelangganByID(txtKodePelanggan.getText());
 		if(test.size()>0){
 			// UPDATE TABLE
-			PelangganService.updateDataPelanggan(txtKodePelanggan.getText()
+			Boolean hasil = PelangganService.updateDataPelanggan(
+					txtKodePelanggan.getText()
 					, txtNamaAkun.getText(), txtNamaPemilik.getText()
 					, txtEmailPelanggan.getText(), txtTelpPelanggan.getText()
 					, txtAlamatPelanggan.getText()
 					, txtLineID.getText(), txtInstagram.getText(), txtKeterangan.getText()
 					, Integer.parseInt(txtDiskonRapid.getText().toString())
 					, Integer.parseInt(txtDiskonJNE.getText().toString()), txtNamaSales.getValue(), txtReferensi.getValue()
-					, dpMulaiDiskon.getTanggalText(), dpMulaigabung.getTanggalText(), cbJabatan1.getValue(), cbJabatan2.getValue());
+					, dpMulaiDiskon.getTanggalText(), dpAkhirDiskon.getTanggalText(), dpMulaigabung.getTanggalText(), cbJabatan1.getValue(), cbJabatan2.getValue(),cbCabang.getValue());
+			if(!hasil){
+				MessageBox.alert("Update pelanggan gagal, kode pelanggan sudah pernah dibentuk sebelumnya");
+			}
 		}else{
 			
 			//SAVE
@@ -571,6 +629,7 @@ public class MasterPelangganController implements Initializable {
 			trpel.setDiskonRapid(Integer.parseInt(txtDiskonRapid.getText()));
 			trpel.setDiskonJne(Integer.parseInt(txtDiskonJNE.getText()));
 			trpel.setTglMulaiDiskon(dpMulaiDiskon.getTanggalText());
+			trpel.setTglAkhirDiskon(dpAkhirDiskon.getTanggalText());
 			trpel.setNamaSales(txtNamaSales.getValue().toString());
 			trpel.setTglCreate(DateUtil.getNow());
 		    trpel.setReferensi(txtReferensi.getValue()==null?"":txtReferensi.getValue().toString());
@@ -578,15 +637,46 @@ public class MasterPelangganController implements Initializable {
 			trpel.setFlag(0);
 			trpel.setJabatan1(cbJabatan1.getValue().toString());
 			trpel.setJabatan2(cbJabatan2.getValue()==null?"":cbJabatan2.getValue().toString());
+			trpel.setAsalPelanggan(cbCabang.getValue()==null?"":cbCabang.getValue().toString());
+			
 			System.out.println("------------------->>>> Pelanggan Kode : "+trpel.getKodePelanggan());
 			GenericService.save(TrPelanggan.class, trpel, true); 
 			settingListboksMasterPelanggan();
 		}
+//		updateDiskon(
+//				txtNamaAkun.getText(), 
+//				dpMulaiDiskon.getTanggalText(), 
+//				dpAkhirDiskon.getTanggalText(), 
+//				Integer.parseInt(txtDiskonRapid.getText()), 
+//				Integer.parseInt(txtDiskonJNE.getText()));
 		settingListboksMasterPelanggan();
 	clearForm();
 	txtKodePelanggan.setDisable(false);
 	btnSimpan.setText("SUBMIT");	
 }
+
+	private void updateDiskon(
+			String kodePelanggan, 
+			Date dtAwal, 
+			Date dtAkhir, 
+			Integer diskonRapid, 
+			Integer diskonJNE) {
+		Boolean isExist = PelangganService.checkExisting(
+				txtNamaAkun.getText(), 
+				diskonRapid, 
+				diskonJNE, 
+				dtAwal, 
+				dtAkhir);
+		System.out.println("--> isExist : " + isExist);
+		if(!isExist){
+			PelangganService.insertDiskon(
+					txtNamaAkun.getText(), 
+					diskonRapid, 
+					diskonJNE, 
+					dtAwal, 
+					dtAkhir);
+			}
+	}
 
 	@FXML
 	public void onCancel(Event evt) {
@@ -594,7 +684,6 @@ public class MasterPelangganController implements Initializable {
 	}
 
 	public void clearForm()
-
 	{
 		txtKodePelanggan.clear();
 		txtNamaAkun.clear();
@@ -608,6 +697,7 @@ public class MasterPelangganController implements Initializable {
 		txtDiskonRapid.setText("0");
 		txtDiskonJNE.setText("0");
 		dpMulaiDiskon.clear();
+		dpAkhirDiskon.clear();
 		txtNamaSales.setValue("");
 		txtReferensi.setValue("");
 		dpMulaigabung.clear();
@@ -616,6 +706,7 @@ public class MasterPelangganController implements Initializable {
 		cbJabatan2.setValue("");
 		cbJabatan1.getItems().removeAll(cbJabatan1.getItems());
 		cbJabatan1.getItems().addAll("Sales", "Agen", "Referensi");
+		cbCabang.setValue("");
 		}
     
 	@FXML
@@ -720,6 +811,7 @@ public class MasterPelangganController implements Initializable {
 		try {
 			UploadUtil.generateExcel(dataRapid, "C:/DLL/REPORT/SMSRapid.XLSX"); // for rapid
 			UploadUtil.generateExcel(dataJNE, "C:/DLL/REPORT/SMSJNE.XLSX"); // for JNE
+			MessageBox.alert("Download SMS sukses, kedua file ada di : "+System.getProperty("line.separator") + " C:/DLL/REPORT/SMSRapid.XLSX "+System.getProperty("line.separator") + " C:/DLL/REPORT/SMSJNE.XLSX");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -761,7 +853,7 @@ public class MasterPelangganController implements Initializable {
 					cmbCabang.getItems().add("All Cabang");
 					List<TrCabang> lstCabang = MasterCabangService.getAllPerwakilanCabangDistinct();
 					for (TrCabang trCabang : lstCabang) {
-						cmbCabang.getItems().add(trCabang.getKodePerwakilan());
+						cmbCabang.getItems().add(trCabang.getKodeCabang());
 					}
 					cmbCabang.setValue("All Cabang");
 
@@ -845,6 +937,11 @@ public class MasterPelangganController implements Initializable {
 							        							pdfFolder+"/"+trPelanggan.getKode()+"-"+
 							        							DateUtil.convertToDatabaseColumn(dateAwl.getValue())+"-"+
 							        							DateUtil.convertToDatabaseColumn(dateAkhir.getValue())+".PDF";
+							        					
+							        					String path2 = pdfFolder+"/"+trPelanggan.getKode()+"-"+
+							        							DateUtil.convertToDatabaseColumn(dateAwl.getValue())+"-"+
+							        							DateUtil.convertToDatabaseColumn(dateAkhir.getValue())+".xls";
+							        					
 							        					List<TagihanVO> vo = PelangganService
 							        							.getNotifikationEmailPelanggan(
 							        									trPelanggan.getKode(), 
@@ -866,6 +963,8 @@ public class MasterPelangganController implements Initializable {
 							        							DateUtil.convertToDatabaseColumn(dateAkhir.getValue()).toString(),
 							        							""		        							
 							        							);
+							        					
+							        					ExportToExcell.exportToExcelEmailTagihan(vo, path2);
 							        					
 							        					String text = getBodyEmail(vo);
 //							        					String toUser = "zechreich2015@gmail.com";

@@ -31,6 +31,9 @@
         <property name="tglMasuk" type="timestamp">
             <column name="TGL_MASUK" length="19" />
         </property>
+        <property name="tglKeluar" type="timestamp">
+            <column name="TGL_KELUAR" length="19" />
+        </property>
         <property name="keterangan" type="string">
             <column name="KETERANGAN" length="200" />
         </property>

@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.hibernate.Session;
 
 import VO.SMSExportVO;
 import entity.TrHarga;
@@ -24,6 +25,7 @@ import entity.TrPerwakilan;
 import entity.TtMappingResiJne;
 import service.GenericService;
 import service.MapingJneService;
+import service.MasterHargaService;
 import service.MasterPerwakilanService;
 
 public class UploadUtil {
@@ -212,6 +214,7 @@ public class UploadUtil {
 	}
 
 	public void uploadMasterHarga() {
+//		MasterHargaService.emptyHarga();
 		File myFile = new File(this.path);
         FileInputStream fis;
 		try {
@@ -227,6 +230,7 @@ public class UploadUtil {
 		    Iterator<Row> rowIterator = mySheet.iterator();
 //		    List<TtMappingResiJne> lstUpload = new ArrayList<TtMappingResiJne>();
 		    
+		    Session s = HibernateUtil.openSession();
 		    // Traversing over each row of XLSX file
 		    Row row = rowIterator.next();
 		    while (rowIterator.hasNext()) {		        
@@ -240,15 +244,17 @@ public class UploadUtil {
 		            Cell cell = cellIterator.next();
 		            switch(col){
 			        	case 0: // kode zona
-			        		uplHarga.setKodeZona((String) heyWhatsUp(cell));
-			        		uplPerwakilan.setKodeZona((String) heyWhatsUp(cell));
+					        System.out.println("--> kodezona : " + heyWhatsUp(cell));					        
+			        		uplHarga.getPk().setKodeZona((String) heyWhatsUp(cell));
+			        		uplPerwakilan.getPk().setKodeZona((String) heyWhatsUp(cell));
 			        		break;
 			        	case 1: // propinsi
 			        		uplHarga.setPropinsi((String) heyWhatsUp(cell));
 			        		uplPerwakilan.setPropinsi((String) heyWhatsUp(cell));
 			        		break;
 			        	case 2: // kode asal
-			        		uplHarga.setKodeAsal((String) heyWhatsUp(cell));
+			        		uplHarga.getPk().setKodeAsal((String) heyWhatsUp(cell));
+			        		uplPerwakilan.getPk().setKodeAsal((String) heyWhatsUp(cell));
 			        		break;
 			        	case 3: // kabupaten
 			        		uplHarga.setKabupaten((String) heyWhatsUp(cell));
@@ -259,26 +265,32 @@ public class UploadUtil {
 			        		uplPerwakilan.setKecamatan((String) heyWhatsUp(cell));
 			        		break;
 			        	case 5: // kode perwakilan
+			        		System.out.println("--> kodePerwakilan : " + heyWhatsUp(cell));
 			        		uplHarga.setKodePerwakilan((String) heyWhatsUp(cell));
 			        		uplPerwakilan.setKodePerwakilan((String) heyWhatsUp(cell));
 			        		break;
 			        	case 6: // zona
-			        		uplHarga.setZona((String) heyWhatsUp(cell));
-			        		uplPerwakilan.setKodeZona((String) heyWhatsUp(cell));
+			        		String zona = (String) heyWhatsUp(cell);
+			        		uplHarga.setZona(zona);
+			        		uplPerwakilan.setZona(zona);
 			        		break;
 			        	case 7: // reg
 			        		System.out.println("--> cell : " + cell);
 			        		Double dblReg = cell.getNumericCellValue();
-			        		uplHarga.setReg(dblReg.intValue());
-			        		uplPerwakilan.setRegperwakilan(dblReg.toString());
+			        		uplHarga.setReg(dblReg.intValue());			        		
 			        		break;
 			        	case 8: // etd
 			        		uplHarga.setEtd((String) heyWhatsUp(cell));
 			        		break;
 			        	case 9: // one
 			        		Double dblOne = cell.getNumericCellValue();
-			        		uplHarga.setOne(dblOne.intValue());
-			        		uplPerwakilan.setOneperwakilan(dblOne.toString());
+			        		uplHarga.setOne(dblOne.intValue());			        		
+			        		break;
+			        	case 10: // regPerwakilan
+			        		uplPerwakilan.setRegperwakilan((String) heyWhatsUp(cell));
+			        		break;
+			        	case 11: // onePerwakilan
+			        		uplPerwakilan.setOneperwakilan((String) heyWhatsUp(cell));
 			        		break;
 			        	}
 		            col++;
@@ -290,10 +302,27 @@ public class UploadUtil {
 		        uplPerwakilan.setTglCreate(new Date());
 		        uplPerwakilan.setTglUpdate(new Date());
 		        uplPerwakilan.setFlag(0);
-		        
-		        GenericService.saveOrUpdate(TrHarga.class, uplHarga);
-		        GenericService.saveOrUpdate(TrPerwakilan.class, uplPerwakilan);
+
+//		        GenericService.saveOrUpdate(TrHarga.class, uplHarga);
+//		        GenericService.saveOrUpdate(TrPerwakilan.class, uplPerwakilan);
+//		        if(MasterHargaService.isHargaExist(uplHarga.getKodeZona(), uplHarga.getKodeAsal())){
+//		        	MasterHargaService.updateDataHarga(
+//		        			uplHarga.getKodeZona(), 
+//		        			uplHarga.getKodeAsal(), 
+//		        			uplHarga.getPropinsi(), 
+//		        			uplHarga.getKabupaten(), 
+//		        			uplHarga.getKecamatan(),
+//		        			uplHarga.getKodePerwakilan(),
+//		        			uplHarga.getZona(),
+//		        			uplHarga.getReg(),
+//		        			uplHarga.getEtd(),
+//		        			uplHarga.getOne());
+//		        }else{
+		        	GenericService.saveOrUpdate(s, TrHarga.class, uplHarga);
+		        	GenericService.saveOrUpdate(s, TrPerwakilan.class, uplPerwakilan);
+//		        }
 		    }
+		    s.getTransaction().commit();
 		    MessageBox.alert("Upload Harga baru selesai");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -9,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" maxWidth="1.7976931348623157E308" prefHeight="746.0" prefWidth="1617.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.BarangKembaliController">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxWidth="1.7976931348623157E308" prefHeight="746.0" prefWidth="1617.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.BarangKembaliController">
 	<content>
 		<AnchorPane>
 			<children>
@@ -30,7 +35,10 @@
             <TableView fx:id="lstView" layoutX="53.0" layoutY="148.0" prefHeight="399.0" prefWidth="689.0">
 
             </TableView>
-            <Pane layoutX="758.0" layoutY="148.0" prefHeight="400.0" prefWidth="568.0" styleClass="combo-box-base" />
+            <Pane fx:id="pane" layoutX="758.0" layoutY="148.0" prefHeight="400.0" prefWidth="568.0" styleClass="combo-box-base">
+               <children>
+                  <ImageView fx:id="imgViewMainView" fitHeight="401.0" fitWidth="568.0" pickOnBounds="true" preserveRatio="true" />
+               </children></Pane>
 			</children>
 		</AnchorPane>
 	</content>

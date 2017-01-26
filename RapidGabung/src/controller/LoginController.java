@@ -51,8 +51,8 @@ public class LoginController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		setListener();
-		txt_username.setText("superuser");
-		txt_password.setText("123");
+		txt_username.setText("");
+		txt_password.setText("");
 	}
 
 	public static TrUser getUserLogin() {

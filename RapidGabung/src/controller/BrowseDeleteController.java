@@ -151,7 +151,7 @@ public class BrowseDeleteController implements Initializable {
 			masterData.add(new BrowseSemuaDataVO(t.getAwbData(), t.getCreated(), t.getLayanan(), t.getPengirim(),
 					t.getTelp(), t.getAsalPaket(), t.getKodePerwakilan(), t.getTujuan(), t.getZona(), t.getPenerima(),
 					t.getBFinal(), t.getBpFinal(), t.getBVolume(), t.getHarga(), t.getTotalBiaya(), t.getResiJNE(),
-					t.getReseller(), t.getIdKardus()));
+					t.getReseller(), t.getIdKardus(), t.getKecamatan()));
 		}
 		
 		colResiJNE.setCellFactory(TextFieldTableCell.forTableColumn());

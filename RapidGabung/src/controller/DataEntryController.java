@@ -47,6 +47,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import popup.PopUpTujuanController;
 import service.DataPaketService;
+import service.PelangganService;
 import service.UserService;
 import util.DateUtil;
 import util.DtoListener;
@@ -66,7 +67,7 @@ public class DataEntryController implements Initializable {
 	@FXML
 	private ScrollPane scrollPane;
 	@FXML
-	private TextField txt_awb, txt_kode_pickup, txt_pengirim, txt_reseller, txt_penerima, txt_no_hp, txt_kode_tujuan,
+	private TextField txt_awb, txt_kode_pickup, txt_pengirim, txt_reseller, txtNoTelpReseller, txt_penerima, txt_no_hp, txt_kode_tujuan,
 			txt_kode_perwakilan, txt_berat, txt_berat_bulat, txt_admin_input, txt_asal_paket;
 
 	@FXML
@@ -261,6 +262,7 @@ public class DataEntryController implements Initializable {
 			}
 		};
 		txt_reseller.setOnKeyPressed(eH);
+		txtNoTelpReseller.setOnKeyPressed(eH);
 		txt_penerima.setOnKeyPressed(eH);
 		txt_no_hp.setOnKeyPressed(eH);
 		txt_Ket.setOnKeyPressed(eH);
@@ -506,10 +508,16 @@ public class DataEntryController implements Initializable {
 			noLoop++;
 			TtDataEntry saveDataPaket = new TtDataEntry();
 			txt_Ket.requestFocus();
+			
+			Integer diskon = PelangganService.getPelangganDiskon(txt_pengirim.getText(), txt_kode_perwakilan.getText());
+			Integer totalBiaya = getTotalBiaya();
+			Integer totalDiskon = (totalBiaya * diskon) / 100;
+			
 			saveDataPaket.setPenerima(txt_penerima.getText().trim());
 			saveDataPaket.setTujuan(txt_kode_tujuan.getText().trim());
 			saveDataPaket.setTelpPenerima(txt_no_hp.getText().trim());
 			saveDataPaket.setReseller(txt_reseller.getText().trim());
+			saveDataPaket.setNoTelpReseller(txtNoTelpReseller.getText().trim());
 			saveDataPaket.setKeterangan(txt_Ket.getText().trim());
 			// get harga
 			saveDataPaket.setHarga(getHarga());
@@ -517,8 +525,9 @@ public class DataEntryController implements Initializable {
 			saveDataPaket.setBiaya(Integer.parseInt(txt_harga_per_kg.getUangteks().trim()));
 			// Perhitungan Asuransi
 			saveDataPaket.setAsuransi(getAsuransi());
+			saveDataPaket.setTotalDiskon(diskon);
 			// Perhitungan Total Biaya
-			saveDataPaket.setTotalBiaya(getTotalBiaya());
+			saveDataPaket.setTotalBiaya(totalBiaya - totalDiskon);
 			saveDataPaket.setTglUpdate(DateUtil.getNow());
 			saveDataPaket.setAwbDataEntry(idDataPaket);
 			saveDataPaket.setUser(uLogin.getNamaUser());
@@ -681,6 +690,7 @@ public class DataEntryController implements Initializable {
 		txt_kode_pickup.setText("");
 		txt_pengirim.setText("");
 		txt_reseller.setText("");
+		txtNoTelpReseller.setText("");
 		txt_penerima.setText("");
 		txt_no_hp.setText("");
 		txt_kode_tujuan.setText("");

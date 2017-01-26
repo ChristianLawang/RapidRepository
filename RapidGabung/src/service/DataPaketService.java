@@ -111,20 +111,22 @@ public class DataPaketService {
 
 	//OK
 	public static Boolean updateSaveEntry(TtDataEntry par) {
+		par.print();
 		Session sess = HibernateUtil.openSession();
 		String sql = "UPDATE tt_data_entry SET PENERIMA=:pPenerima, tujuan=:pTujuan, TELP_PENERIMA=:pTlpPen, "
-				+ "RESELLER=:pReseller, KETERANGAN=:pKet, ASURANSI=:pAsuransi, TOTAL_BIAYA=:pTBiaya, "
-				+ "Flag_Entry=:pEntry, tgl_update=:pUpdate, biaya=:pBiaya, user=:pUser, harga=:pHarga, Kode_perwakilan=:PkdPerw "
+				+ "RESELLER=:pReseller, KETERANGAN=:pKet, ASURANSI=:pAsuransi, TOTAL_BIAYA=:pTBiaya, TOTAL_DISKON=:pTDiskon, "
+				+ "Flag_Entry=:pEntry, tgl_update=:pUpdate, biaya=:pBiaya, user=:pUser, harga=:pHarga, Kode_perwakilan=:PkdPerw, no_telp_reseller=:noTelpReseller "
 				+ "WHERE awb_data_entry=:rId";
 		Query query = sess.createSQLQuery(sql).setParameter("pPenerima", par.getPenerima())
 				.setParameter("pTujuan", par.getTujuan()).setParameter("pTlpPen", par.getTelpPenerima())
 				.setParameter("pReseller", par.getReseller()).setParameter("pKet", par.getKeterangan())
 				.setParameter("pAsuransi", par.getAsuransi()).setParameter("pTBiaya", par.getTotalBiaya())
 				.setParameter("pEntry", 2).setParameter("pUpdate", par.getTglUpdate())
-				.setParameter("pBiaya", par.getBiaya()).setParameter("pUser", par.getUser())
+				.setParameter("pBiaya", par.getBiaya()).setParameter("pTDiskon", par.getTotalDiskon()).setParameter("pUser", par.getUser())
 				.setParameter("pHarga", par.getHarga()).setParameter("PkdPerw", par.getKodePerwakilan())
-				.setParameter("rId", par.getAwbDataEntry());
+				.setParameter("rId", par.getAwbDataEntry()).setParameter("noTelpReseller", par.getNoTelpReseller());
 		int result = query.executeUpdate();
+		System.out.println("--> par.getTotalDiskon() : " + par.getTotalDiskon());
 
 		if (par.getKodePerwakilan().equals("JNE")) {
 			String sql2 = "UPDATE tt_data_entry SET JNE_FLAG='1' WHERE awb_data_entry=:rIdPak";
@@ -226,7 +228,7 @@ public class DataPaketService {
 		String sql = "select c.awb_data, c.kode_pickup, b.pengirim, c.bclose, c.bpclose, a.tgl_create"
 				+ ", c.kode_perwakilan, b.asal_paket, b.awb_data_entry, c.gambar, b.reseller"
 				+ ", b.penerima, b.telp_penerima, b.tujuan, b.kode_perwakilan, b.keterangan"
-				+ ", b.asal_paket, b.biaya, b.asuransi, b.total_biaya, c.layanan, d.kecamatan, d.kabupaten, d.propinsi "
+				+ ", b.asal_paket, b.biaya, b.asuransi, b.total_biaya, c.layanan, d.kecamatan, d.kabupaten, d.propinsi, b.no_telp_reseller "
 				+ "from  tt_header a, tt_data_entry b, tt_poto_timbang c, tr_perwakilan d "
 				+ "where "
 				+ "a.awb_header = b.awb_data_entry "
@@ -262,6 +264,7 @@ public class DataPaketService {
 			en.setKecamatan(objects[21]!=null?(String) objects[21]:"");
 			en.setKabupaten(objects[22]!=null?(String) objects[22]:"");
 			en.setPorvinsi(objects[23]!=null?(String) objects[23]:"");
+			en.setNoTelpReseller(objects[24]!=null?(String) objects[24]:"");
 			returnList.add(en);
 		}
 		    s.getTransaction().commit();

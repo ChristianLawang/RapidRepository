@@ -8,9 +8,22 @@ public class EntryDataShowVO {
 	private String idDataPaket, nmSales, awbData, kdPickup, pengirim, penerima, tujuan, ketTujuan, kdPerwakilan, ket,
 			volume, bVolume, bpVolume, timbang, btTimbang, bFinal, bpFinal, resseler, asalPaket, user, gambar, noTlpn,
 			layanan, kecamatan, kabupaten, porvinsi, resiJne, kdPelanggan, penerimaPaket, bank, statusLaporan,
-			pelanggaranKurir, NoLaporan2, notes, status,tglTerimaPaket, waktuTerimaPaket, Etd, keterangan, zona;
+			pelanggaranKurir, NoLaporan2, notes, status,tglTerimaPaket, waktuTerimaPaket, Etd, keterangan, zona, noTelpReseller, service;
 	private Date tglTerimaPaketDate;
 	
+	public String getService(){
+		return service;
+	}
+	public void setService(String service){
+		this.service = service;
+	}
+	public void setNoTelpReseller(String noTelpReseller){
+		this.noTelpReseller = noTelpReseller;
+	}
+	
+	public String getNoTelpReseller(){
+		return this.noTelpReseller;
+	}
 	public void setTglTerimaPaketDate(Date tglTerimaPaketDate){
 		this.tglTerimaPaketDate = tglTerimaPaketDate;
 	}

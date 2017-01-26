@@ -360,11 +360,11 @@ public class PDFUtil {
 		
 			while((line = reader.readLine()) != null){
 				if(line.trim().equalsIgnoreCase("[!TRTR]")){
-					content+="\r\n";
-					
+					content+="\r\n";					
 					for (TagihanVO kur : objs) {
 //						kur.print();
 						if(!kur.getPenerima().trim().equalsIgnoreCase("XXX")){
+//						if(!kur.getTujuan().trim().equalsIgnoreCase("XXX10000")){
 							intInd++;
 							intAsuransi = intAsuransi + (kur.getAsuransi()==null?0:kur.getAsuransi());
 							intDiskon = intDiskon + (kur.getDiskonPelanggan()==null?0:kur.getDiskonPelanggan().intValue());
@@ -379,13 +379,13 @@ public class PDFUtil {
 							String berat = kur.getPbFinal()==null?"0":kur.getPbFinal();
 							String harga = kur.getHarga()==null?"0":kur.getHarga().toString();
 							String asuransi = kur.getAsuransi()==null?"0":kur.getAsuransi().toString();
-	//						String diskon = kur.getResiJNE()==null?kur.getDiskonRapid().toString():kur.getDiskonJNE()==null?"0":kur.getDiskonJNE().toString();
-							String diskon = "";
-							if(kur.getResiJNE()==null){
-								diskon = kur.getDiskonRapid()==null?"0":kur.getDiskonRapid().toString();
-							}else{
-								diskon = kur.getDiskonJNE()==null?"0":kur.getDiskonJNE().toString();
-							}
+//							String diskon = kur.getResiJNE()==null?kur.getDiskonRapid().toString():kur.getDiskonJNE()==null?"0":kur.getDiskonJNE().toString();
+							String diskon = kur.getDiskon()==null?"0":kur.getDiskon().toString();
+//							if(kur.getResiJNE()==null){
+//								diskon = kur.getDiskonRapid()==null?"0":kur.getDiskonRapid().toString();
+//							}else{
+//								diskon = kur.getDiskonJNE()==null?"0":kur.getDiskonJNE().toString();
+//							}
 							String total = kur.getTotalBiaya()==null?"0": ""+kur.getTotalBiaya().intValue();
 							String penerimaRaw = penerima.length()>12?penerima.substring(0,12):penerima;
 							String penerimaFix = "";
@@ -420,6 +420,73 @@ public class PDFUtil {
 											"<td align='center'>" + diskon + "%"+"</td> " +
 											"<td align='right'>" + formatRupiah.formatIndonesiaTanpaKoma(total) + "</td> " +
 	
+									"</tr>";
+							content+=isi;
+						}
+					}
+				}else if(line.trim().equalsIgnoreCase("[!TRPR]")){
+						content+="\r\n";
+						
+					for (TagihanVO kur : objs) {
+//						kur.print();
+						if(kur.getPenerima().trim().equalsIgnoreCase("XXX")){
+								System.out.println("--> found XXX");
+							intInd++;
+							intAsuransi = intAsuransi + (kur.getAsuransi()==null?0:kur.getAsuransi());
+							intDiskon = intDiskon + (kur.getDiskonPelanggan()==null?0:kur.getDiskonPelanggan().intValue());
+							intBiaya = intBiaya + (kur.getHarga()==null?0:kur.getHarga().intValue());
+							intTotalTagihan = intTotalTagihan + (kur.getTotalBiaya()==null?0:kur.getTotalBiaya().intValue());
+								
+							String awb = kur.getAwb()==null?"-":kur.getAwb();
+							String tujuan = kur.getTujuan()==null?"-":kur.getTujuan();
+							String penerima = kur.getPenerima()==null?"-":kur.getPenerima();
+							String telp = kur.getTelpPenerima()==null?"-":kur.getTelpPenerima();
+							String JNE = kur.getResiJNE()==null?"-":kur.getResiJNE();
+							String berat = kur.getPbFinal()==null?"0":kur.getPbFinal();
+							String harga = kur.getHarga()==null?"0":kur.getHarga().toString();
+							String asuransi = kur.getAsuransi()==null?"0":kur.getAsuransi().toString();
+		//					String diskon = kur.getResiJNE()==null?kur.getDiskonRapid().toString():kur.getDiskonJNE()==null?"0":kur.getDiskonJNE().toString();
+//							String diskon = "";
+//							if(kur.getResiJNE()==null){
+//								diskon = kur.getDiskonRapid()==null?"0":kur.getDiskonRapid().toString();
+//							}else{
+//								diskon = kur.getDiskonJNE()==null?"0":kur.getDiskonJNE().toString();
+//							}
+							String diskon = kur.getDiskon()==null?"0":kur.getDiskon().toString();
+							String total = kur.getTotalBiaya()==null?"0": ""+kur.getTotalBiaya().intValue();
+							String penerimaRaw = penerima.length()>12?penerima.substring(0,12):penerima;
+							String penerimaFix = "";
+							String[] nama = penerimaRaw.split(" ");
+							for(Integer i=0; i<nama.length;i++){
+								if(!nama[i].trim().equals("")){
+									penerimaFix += nama[i].substring(0, 1).toUpperCase() + nama[i].substring(1, nama[i].length());
+									penerimaFix += " ";
+								}
+							}
+							String noTelpPenerima = "";
+								
+							if(!telp.equalsIgnoreCase("-")){
+								if(!telp.equals("")){
+									if(telp.length()>2){
+										noTelpPenerima = telp.substring(0, telp.length()-3) + "XXX";
+									}
+								}
+							}
+								
+							String isi = 
+									"<tr height='16px' style='font-size: 9px;font-family: Arial, Helvetica, sans-serif;'>" +
+											"<td>" + intInd + "</td> " +
+											"<td>" + awb + "</td> " +
+											"<td>" + tujuan + "</td> " +
+											"<td>" + penerimaFix + "</td> " +
+											"<td>" + noTelpPenerima + "</td> " +
+											"<td align='center'>" + JNE + "</td> " +
+											"<td align='center'>" + berat + "</td> " +
+											"<td align='right'>" + formatRupiah.formatIndonesiaTanpaKoma(harga) + "</td> " +
+											"<td align='right'>" + formatRupiah.formatIndonesiaTanpaKoma(asuransi) + "</td> " +
+											"<td align='center'>" + diskon + "%"+"</td> " +
+											"<td align='right'>" + formatRupiah.formatIndonesiaTanpaKoma(total) + "</td> " +
+		
 									"</tr>";
 							content+=isi;
 						}

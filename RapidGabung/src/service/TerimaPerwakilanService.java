@@ -1,6 +1,7 @@
 package service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import entity.TrPickup;
 import javafx.scene.control.TreeItem;
 import util.DateUtil;
 import util.HibernateUtil;
+import util.PropertiesUtil;
 
 public class TerimaPerwakilanService {
 		public static List<EntryDataShowVO> getListDatPaket(String idKardus) {
@@ -166,6 +168,35 @@ public class TerimaPerwakilanService {
 			}
 			
 			return returnList;
+		}
+
+		public static List<String> getIdKardusForCombo(LocalDate value) {
+			String tgl = DateUtil.getDateRipTimeForSQL(DateUtil.convertToDatabaseColumn(value));
+			String kodeCabangLokal = PropertiesUtil.getPerwakilan();
+			Session session = HibernateUtil.openSession();
+			String sql =
+				"select " + 
+				"      distinct  " +
+				"                a.id_kardus  " +
+				"from tt_header a  " +
+				"inner join tt_data_entry b on a.awb_header = b.awb_data_entry  " +
+				"where date(a.tgl_create) = '"+tgl+"'  " +
+				"and b.kode_perwakilan = '"+kodeCabangLokal+"'  ";
+			
+			SQLQuery query = session.createSQLQuery(sql);
+			query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+			List result = query.list();
+			session.getTransaction().commit();
+
+			List<String> returnList = new ArrayList<String>();
+			for (Object obj : result) {
+				Map row = (Map) obj;
+				String str = new String((String) row.get("ID_KARDUS"));
+				returnList.add(str);
+			}
+			
+			return returnList;
+		
 		}
 
 }

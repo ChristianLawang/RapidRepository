@@ -32,8 +32,8 @@ public class MasterKurirService {
 		String kodePerwakilan = PropertiesUtil.getPerwakilan();
 		String nativeSql = 
 				"select a.nik, a.nama, a.telp, a.id_jabatan, a.no_kendaraan, a.kode_perwakilan"
-				+ ", a.kode_cabang, a.tgl_masuk, a.keterangan, a.tgl_create, a.tgl_update from tr_kurir a "
-				+ "where a.flag=0 and a.kode_perwakilan = '"+kodePerwakilan+"'";
+				+ ", a.kode_cabang, a.tgl_masuk, a.keterangan, a.tgl_create, a.tgl_update, a.flag from tr_kurir a "
+				+ "where a.kode_perwakilan = '"+kodePerwakilan+"'";
 		SQLQuery  query = session.createSQLQuery(nativeSql);
 		query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
 		List result = query.list();
@@ -85,7 +85,9 @@ public class MasterKurirService {
 			
 			//get tanggal updated
 			everyRow.setTglUpdate((Date) row.get("TGL_UPDATE"));
-//			
+			
+			everyRow.setFlag((Integer) row.get("FLAG"));
+//						
 //			//get tanggal bergabung
 //			everyRow.setUpdated((Date) row.get("TGL_GABUNG"));
 			
@@ -206,6 +208,23 @@ public class MasterKurirService {
 		}else{
 			return null;
 		}
+	}
+
+	public static void kickKurir(String nik, Date tglKeluar) {
+		Session sess = HibernateUtil.openSession();
+		sess.beginTransaction();
+		
+		String sql = "UPDATE tr_kurir a "
+				+ "SET flag = :pFlag, TGL_KELUAR = :tglKeluar "
+				+ "WHERE a.nik = :pKodeCab";
+		Query queryUpdate = sess.createSQLQuery(sql)
+				.setParameter("pFlag", 1)
+				.setParameter("tglKeluar", tglKeluar)
+				.setParameter("pKodeCab", nik);
+		int result = queryUpdate.executeUpdate();
+		queryUpdate.executeUpdate();
+		sess.getTransaction().commit();
+		
 	}
 	
 }

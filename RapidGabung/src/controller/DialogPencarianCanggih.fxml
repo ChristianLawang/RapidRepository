@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane fx:id="anchorDialogPencarianCanggih" prefHeight="430.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <RadioButton fx:id="rdPencarianResi" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Pencarian dengan nomor resi" />
+      <RadioButton fx:id="rdPencarianSpesifik" layoutX="14.0" layoutY="85.0" mnemonicParsing="false" text="Pencarian spesifik" />
+      <Label layoutX="35.0" layoutY="40.0" text="No. Resi" />
+      <CheckBox fx:id="chkPeriode" layoutX="43.0" layoutY="247.0" mnemonicParsing="false" text="Berdasarkan periode" />
+      <DatePicker fx:id="dtFrom" layoutX="98.0" layoutY="274.0" prefHeight="25.0" prefWidth="122.0" />
+      <Label layoutX="64.0" layoutY="277.0" text="Dari" />
+      <Label layoutX="230.0" layoutY="278.0" text="Sampai" />
+      <DatePicker fx:id="dtTo" layoutX="277.0" layoutY="274.0" prefHeight="25.0" prefWidth="122.0" />
+      <CheckBox fx:id="chkDelete" layoutX="43.0" layoutY="312.0" mnemonicParsing="false" text="Dengan resi yang dihapus" />
+      <Button fx:id="btnCari" layoutX="249.0" layoutY="343.0" mnemonicParsing="false" text="Cari" />
+      <Button fx:id="btnReset" layoutX="293.0" layoutY="343.0" mnemonicParsing="false" text="Reset" />
+      <Button fx:id="btnBatal" layoutX="345.0" layoutY="343.0" mnemonicParsing="false" text="Batal" />
+      <TextField fx:id="txtAWB" layoutX="127.0" layoutY="36.0" prefHeight="25.0" prefWidth="245.0" />
+      <ComboBox fx:id="cmbCabang" layoutX="182.0" layoutY="107.0" prefHeight="25.0" prefWidth="232.0" />
+      <ComboBox fx:id="cmbTujuan" layoutX="182.0" layoutY="155.0" prefHeight="25.0" prefWidth="232.0" />
+      <ComboBox fx:id="cmbPelanggan" layoutX="182.0" layoutY="207.0" prefHeight="25.0" prefWidth="232.0" />
+      <CheckBox layoutX="43.0" layoutY="111.0" mnemonicParsing="false" text="Cabang Asal" />
+      <CheckBox layoutX="43.0" layoutY="159.0" mnemonicParsing="false" text="Kecamatan Tujuan" />
+      <CheckBox layoutX="43.0" layoutY="211.0" mnemonicParsing="false" text="Pelanggan" />
+   </children>
+</AnchorPane>

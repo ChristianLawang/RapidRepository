@@ -54,7 +54,9 @@ public class JadwalPickupService {
 	}
 	
 	public static List<TrKurir> getKurirLokalAsc(){
+		System.out.println("mampir dulu gan");
 		String kodePerwakilan = PropertiesUtil.getPerwakilan();
+		System.out.println("--> kode perwakilan : " + kodePerwakilan);
 		
 		Session s = HibernateUtil.openSession();
 		Criteria c = s.createCriteria(TrKurir.class);

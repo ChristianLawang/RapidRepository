@@ -38,8 +38,8 @@
 		<property name="flag" type="java.lang.Integer">
 			<column name="FLAG" />
 		</property>
-		<property name="idRole" type="java.lang.Integer">
-			<column name="ID_ROLE" />
+		<property name="idRole" type="string">
+			<column name="ID_ROLE" length="20"/>
 		</property>
 	</class>
 </hibernate-mapping>

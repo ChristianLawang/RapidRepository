@@ -9,6 +9,9 @@ import entity.TrDiskon;
 import entity.TrPelanggan;
 import entity.TrPickup;
 import entity.TrSales;
+import javafx.beans.property.StringProperty;
+import tpb.popup.MessageBox;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -18,6 +21,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import VO.SMSExportVO;
@@ -35,7 +39,7 @@ public class PelangganService {
 				+ "and b.kode_pelanggan = c.kode_pelanggan and a.flag=0 and date(a.tgl_create) between '"+awal+"' and '"+akhir+"' ";
 		
 		if(!kodeCabang.equals("All Cabang")){
-			sql+= "and substr(b.asal_paket,1,3) = '"+kodeCabang+"' ";
+			sql+= "and b.asal_paket = '"+kodeCabang+"' ";
 		}
 		
 		System.out.println(sql);
@@ -346,55 +350,127 @@ public class PelangganService {
 	public static Boolean updateDataPelanggan(String kdPelanggan, String nmAkun, String nmPemilik
 			, String email, String telp, String alamat
 			, String lineId, String instag, String ket, Integer disRapid, Integer disJne
-			, Object nmSales, Object nmRef, Date dtMulaiDiskon, Date dtMulaiGabung, Object cbJabatan1
-			, Object cbJabatan2) {
-		Session sess = HibernateUtil.openSession();
-		String sql = "update tr_pelanggan a "
-				+ "set a.kode_pelanggan = :pKdPelanggan "
-				+ ", a.nama_akun = :pNmAkun "
-				+ ", a.nama_pemilik = :pNmPemilik "
-				+ ", a.email = :pEmail "
-				+ ", a.telp = :pTelp "
-				+ ", a.alamat = :pAlamat "
-				+ ", a.line = :pLineId "
-				+ ", a.instagram = :pInstag "
-				+ ", a.keterangan = :pKet "
-				+ ", a.diskon_rapid = :pDisRapid "
-				+ ", a.diskon_jne = :pDisJne "
-				+ ", a.nama_sales = :pNmSales "
-				+ ", a.referensi = :pNmRef "
-				+ ", a.tgl_mulai_diskon = :pDtMulaiDiskon "
-				+ ", a.tgl_gabung = :pDtMulaiGabung "
-				+ ", a.tgl_update = :pUpdated "
-				+ ", a.jabatan1 = :pJabatan1 "
-				+ ", a.jabatan2 = :pJabatan2 "
-				+ "where a.kode_pelanggan = :pKdPelanggan";
-		Query queryUpdate = sess.createSQLQuery(sql)
-				.setParameter("pKdPelanggan", kdPelanggan)
-				.setParameter("pNmAkun", nmAkun)
-				.setParameter("pNmPemilik", nmPemilik)
-				.setParameter("pEmail", email)
-				.setParameter("pTelp", telp)
-				.setParameter("pAlamat", alamat)
-				.setParameter("pLineId", lineId)
-				.setParameter("pInstag", instag)
-				.setParameter("pKet", ket)
-				.setParameter("pDisRapid", disRapid)
-				.setParameter("pDisJne", disJne)
-				.setParameter("pNmSales", nmSales)
-				.setParameter("pNmRef", nmRef)
-				.setParameter("pDtMulaiDiskon", dtMulaiDiskon)
-				.setParameter("pDtMulaiGabung", dtMulaiGabung)
-				.setParameter("pUpdated", DateUtil.getNow())
-				.setParameter("pJabatan1", cbJabatan1)
-				.setParameter("pJabatan2", cbJabatan2);
-		int result = queryUpdate.executeUpdate();
-		queryUpdate.executeUpdate();
-		sess.getTransaction().commit();
-//		sess.close();
+			, Object nmSales, Object nmRef, Date dtMulaiDiskon, Date dtAkhirDiskon, Date dtMulaiGabung, Object cbJabatan1
+			, Object cbJabatan2, Object cbCabang) {
+		Boolean lanjut = true;
+		if(!kdPelanggan.equals(nmAkun)){
+			Session sessValidation = HibernateUtil.openSession();
+			String nativeSql = "select * from tr_pelanggan where kode_pelanggan = '"+nmAkun+"'";
+			SQLQuery query = sessValidation.createSQLQuery(nativeSql);
+			query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+			List result = query.list();
+			sessValidation.getTransaction().commit();
+			if(result.size()>0){
+				lanjut = false;
+				return false;
+			}
+		}
+		if(lanjut){
+			Session sess = HibernateUtil.openSession();
+			String sql = "update tr_pelanggan a "
+					+ "set a.kode_pelanggan = :pKdPelanggan "
+					+ ", a.nama_akun = :pNmAkun "
+					+ ", a.nama_pemilik = :pNmPemilik "
+					+ ", a.email = :pEmail "
+					+ ", a.telp = :pTelp "
+					+ ", a.alamat = :pAlamat "
+					+ ", a.line = :pLineId "
+					+ ", a.instagram = :pInstag "
+					+ ", a.keterangan = :pKet "
+					+ ", a.diskon_rapid = :pDisRapid "
+					+ ", a.diskon_jne = :pDisJne "
+					+ ", a.nama_sales = :pNmSales "
+					+ ", a.referensi = :pNmRef "
+					+ ", a.tgl_mulai_diskon = :pDtMulaiDiskon "
+					+ ", a.tgl_akhir_diskon = :pDtAkhirDiskon "
+					+ ", a.tgl_gabung = :pDtMulaiGabung "
+					+ ", a.tgl_update = :pUpdated "
+					+ ", a.jabatan1 = :pJabatan1 "
+					+ ", a.jabatan2 = :pJabatan2 "
+					+ ", a.asal_pelanggan = :pCabang"
+					+ "where a.kode_pelanggan = :pKdPelanggan";
+			Query queryUpdate = sess.createSQLQuery(sql)
+					.setParameter("pKdPelanggan", kdPelanggan)
+					.setParameter("pNmAkun", nmAkun)
+					.setParameter("pNmPemilik", nmPemilik)
+					.setParameter("pEmail", email)
+					.setParameter("pTelp", telp)
+					.setParameter("pAlamat", alamat)
+					.setParameter("pLineId", lineId)
+					.setParameter("pInstag", instag)
+					.setParameter("pKet", ket)
+					.setParameter("pDisRapid", disRapid)
+					.setParameter("pDisJne", disJne)
+					.setParameter("pNmSales", nmSales)
+					.setParameter("pNmRef", nmRef)
+					.setParameter("pDtMulaiDiskon", dtMulaiDiskon)
+					.setParameter("pDtAkhirDiskon", dtAkhirDiskon)
+					.setParameter("pDtMulaiGabung", dtMulaiGabung)
+					.setParameter("pUpdated", DateUtil.getNow())
+					.setParameter("pJabatan1", cbJabatan1)
+					.setParameter("pJabatan2", cbJabatan2)
+					.setParameter("pCabang", cbCabang);
+			int result = queryUpdate.executeUpdate();
+			queryUpdate.executeUpdate();
+			// tambahan, untuk mengubah semua kode pelanggan
+			editWholeKodePelanggan(sess, kdPelanggan, nmAkun);
+			sess.getTransaction().commit();
+	//		sess.close();
+		}
 		return true;
 	}
 	
+	private static void editWholeKodePelanggan(Session sess, String oldKodePelanggan, String newKodePelanggan) {
+		String trPelanggan =
+				"UPDATE tr_pelanggan " +
+				"SET KODE_PELANGGAN='"+newKodePelanggan+"' " +
+				"WHERE KODE_PELANGGAN='"+oldKodePelanggan+"'  ";
+		Query queryUpdate = sess.createSQLQuery(trPelanggan);
+		queryUpdate.executeUpdate();
+		String trDiskon =
+				"UPDATE tr_diskon " +
+				"SET KODE_PELANGGAN='"+newKodePelanggan+"' " +
+				"WHERE KODE_PELANGGAN='"+oldKodePelanggan+"'  ";
+		queryUpdate = sess.createSQLQuery(trDiskon);
+		queryUpdate.executeUpdate();
+		String trPickup =
+				"UPDATE tr_pickup " +
+				"SET KODE_PELANGGAN='"+newKodePelanggan+"' " +
+				"WHERE KODE_PELANGGAN='"+oldKodePelanggan+"'  ";
+		queryUpdate = sess.createSQLQuery(trPickup);
+		queryUpdate.executeUpdate();
+		String tt_data_entry =
+				"UPDATE tt_data_entry " +
+				"SET PENGIRIM='"+newKodePelanggan+"' " +
+				"WHERE PENGIRIM='"+oldKodePelanggan+"'  ";
+		queryUpdate = sess.createSQLQuery(tt_data_entry);
+		queryUpdate.executeUpdate();
+		String tt_deposit =
+				"UPDATE tt_deposit " +
+				"SET KD_PELANGGAN='"+newKodePelanggan+"' " +
+				"WHERE KD_PELANGGAN='"+oldKodePelanggan+"'  ";
+		queryUpdate = sess.createSQLQuery(tt_deposit);
+		queryUpdate.executeUpdate();
+		String tt_jadwal_pickup =
+				"UPDATE tt_jadwal_pickup " +
+				"SET KODE_PELANGGAN='"+newKodePelanggan+"' " +
+				"WHERE KODE_PELANGGAN='"+oldKodePelanggan+"'  ";
+		queryUpdate = sess.createSQLQuery(tt_jadwal_pickup);
+		queryUpdate.executeUpdate();
+		String tt_pickup =
+				"UPDATE tt_pickup " +
+				"SET KODE_PELANGGAN='"+newKodePelanggan+"' " +
+				"WHERE KODE_PELANGGAN='"+oldKodePelanggan+"'  ";
+		queryUpdate = sess.createSQLQuery(tt_pickup);
+		queryUpdate.executeUpdate();
+		String tt_poto_timbang =
+				"UPDATE tt_poto_timbang " +
+				"SET KODE_PELANGGAN='"+newKodePelanggan+"' " +
+				"WHERE KODE_PELANGGAN='"+oldKodePelanggan+"'  ";
+		queryUpdate = sess.createSQLQuery(tt_poto_timbang);
+		queryUpdate.executeUpdate();		
+	}
+
 	public static List<TrPelanggan> getDataPelangganByID(String id) {
 		Session s=HibernateUtil.openSession();
 		
@@ -446,10 +522,9 @@ public class PelangganService {
 		Session session = HibernateUtil.openSession();
 
 		String strQuery = 
-				"select " +
+				"select DISTINCT" +
 			    "	c.awb_data, " +
 			    "   b.pengirim, " +
-//			    "   b.tujuan, " +
 			    "	e.kecamatan, " +
 			    "   b.penerima, " +
 			    "   b.telp_penerima, " +
@@ -457,24 +532,23 @@ public class PelangganService {
 			    "   b.pbclose, " +
 			    "   b.harga, " +
 			    "   b.asuransi, " +
-
-			    "   case " +
-			    "   when a.resi_jne is null then d.diskon_rapid " +
-			    "   else d.diskon_jne " +
-			    "   end as diskon, " +
-
+			    "	b.tujuan, " +
+			    
 			    "   d.diskon_rapid, " +
 			    "   d.diskon_jne, " +
 
-			    "   case " +
-			    "   when a.resi_jne is null then ((diskon_rapid/100) * b.harga) " +
-			    "   else ((diskon_jne/100) * b.harga) " +
-			    "   end as diskon_pelanggan, " +
-
-			    "  case " +
-			    "  when a.resi_jne is null then (b.harga - ((diskon_rapid/100) * b.harga)) " +
-			    "  else (b.harga - ((diskon_jne/100) * b.harga)) " +
-			    "  end as total_biaya, " +
+				"	case " +
+				"	    when b.total_diskon is null then 0 " +
+				"	    else b.total_diskon " +
+				"	end as diskon,         " +
+				"	case  " +
+				"	    when b.total_diskon is null then 0 " +
+				"	    else truncate(((b.total_diskon/100) * b.harga),0)  " +
+				"	end as diskon_pelanggan, " +
+				"	case " +
+				"	    when b.total_diskon is null then b.harga " +
+				"	    else truncate((b.harga - ((b.total_diskon/100) * b.harga)),0) " +
+				"	end as total_biaya, " +
 
 			    "  (select count(*) from tt_header a, tt_data_entry b, tt_poto_timbang c, tr_pelanggan d " +
 			    "  where a.awb_header = b.awb_data_entry " +
@@ -492,7 +566,7 @@ public class PelangganService {
 			"      and d.kode_pelanggan = '" + kodePelanggan + "' " +
 			"      and a.flag=0 and date(a.tgl_create) between '"+awal+"' and '"+akhir+"' " + 
 			"	   order by penerima";
-		
+
 		System.out.println("--> "+kodePelanggan+" strQuery : " + strQuery);
 		SQLQuery query = session.createSQLQuery(strQuery);
 		query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
@@ -528,7 +602,8 @@ public class PelangganService {
 							(BigDecimal) row.get("total_biaya"),
 							(BigInteger) row.get("jumlah_paket"),
 							(String) row.get("KODE_PICKUP"),
-							(Date) row.get("TGL_CREATE")
+							(Date) row.get("TGL_CREATE"),
+							(String) row.get("TUJUAN")
 						);
 			returnList.add(everyRow);
 		}
@@ -758,6 +833,18 @@ public class PelangganService {
 		return list;
 	}
 
+	// chris nambah
+	public static List<TrDiskon> getDataDiskonByPelangganID2(String kode) {
+		Session s = HibernateUtil.openSession();
+		Criteria c = s.createCriteria(TrDiskon.class);
+		c.add(Restrictions.eq("kodePelanggan", kode));
+		c.addOrder(Order.desc("tglCreate"));
+		
+		List<TrDiskon> list = c.list();
+		s.getTransaction().commit();
+		return list;
+	}
+	
 	public static void setDiskonFlag(String id, int flag) {
 		Session s = HibernateUtil.openSession();
 
@@ -779,5 +866,171 @@ public class PelangganService {
 		List<TrPelanggan> list = c.list();
 		s.getTransaction().commit();
 		return list;
+	}
+
+	public static void insertDiskon(String kdPelanggan, Integer diskonRapid, Integer diskonJNE, Date tglMulai, Date tglAkhir) {
+		String sql =
+			    "insert into tr_diskon " +
+		        
+			    "(   id_diskon, " +
+			    "    kode_pelanggan, " +
+			    "    diskon_rapid, " +
+			    "    diskon_jne, " +
+			    "    tgl_mulai_diskon, " +
+			    "    tgl_akhir_diskon, " +
+			    "    tgl_create, " +
+			    "    tgl_update, " +
+			    "    flag) " +
+			    "values " +
+			    "    (:idDiskon , " +
+			    "    :kdPelanggan , " +
+			    "    :diskonRapid , " +
+			    "    :dikonJNE , " +
+			    "    :tglMulai , " +
+			    "    :tglAkhir , " +
+			    "    :tglCreate , " +
+			    "    :tglUpdate , " +
+			    "    :flag )";
+		System.out.println(sql);
+		String idDiskon = GenericService.getLastVarcharID("tr_diskon", "ID_DISKON");
+		System.out.println("--> idDiskon : " + idDiskon);
+		if(idDiskon==null){
+			idDiskon = "00000001";
+		}else{
+			idDiskon = String.format("%08d", Integer.parseInt(idDiskon)+1);
+		}
+		Session sess = HibernateUtil.openSession();
+		Query queryUpdate = sess.createSQLQuery(sql)
+				.setParameter("idDiskon", idDiskon)
+				.setParameter("kdPelanggan", kdPelanggan)
+				.setParameter("diskonRapid", diskonRapid)
+				.setParameter("dikonJNE", diskonJNE)
+				.setParameter("tglMulai", tglMulai)
+				.setParameter("tglAkhir", tglAkhir)
+				.setParameter("tglCreate", new Date())
+				.setParameter("tglUpdate", new Date())
+				.setParameter("flag", 0);
+		int result = queryUpdate.executeUpdate();
+		sess.getTransaction().commit();
+	}
+
+	public static Date getAkhirDiskon(String kodePelanggan) {
+		Session session=HibernateUtil.openSession();
+		String nativeSql = 
+				" select a.tgl_akhir_diskon "
+			  + " from tr_pelanggan a where kode_pelanggan='"+kodePelanggan+"'";
+		SQLQuery  query = session.createSQLQuery(nativeSql);
+		query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+		Map result = (Map) query.uniqueResult();
+		session.getTransaction().commit();
+		return (Date) result.get("TGL_AKHIR_DISKON");
+	}
+
+	public static Boolean checkExisting(
+			String kodePelanggan, 
+			Integer diskonRapid, 
+			Integer diskonJNE, 
+			Date dtAwal, 
+			Date dtAkhir) {
+		Session session=HibernateUtil.openSession();
+		String nativeSql = 
+			"select " +
+			"    a.id_diskon, " +
+			"    a.kode_pelanggan,  " +
+			"    date(max(a.tgl_create)),  " +
+			"    a.diskon_rapid,  " +
+			"    a.diskon_jne,  " +
+			"    date(a.tgl_mulai_diskon) as DTMULAI,  " +
+			"    date(a.tgl_akhir_diskon) as DTAKHIR " +
+			"from tr_diskon as a  " +
+			"where  " +
+			"      a.kode_pelanggan = '"+kodePelanggan+"'" +
+			"      group by a.kode_pelanggan";
+		SQLQuery  query = session.createSQLQuery(nativeSql);
+		query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+		Map result = (Map) query.uniqueResult();
+		session.getTransaction().commit();
+		System.out.println("--> result : " + result);
+		Integer dskRapid = 0;
+		Integer dskJNE = 0;
+		Date tglMulai = new Date();
+		Date tglAkhir = new Date();
+		if(result==null){
+			return false;
+		}else{
+			Date curDate = new Date();
+			dskRapid = (Integer) result.get("DISKON_RAPID");
+			dskJNE = (Integer) result.get("DISKON_JNE");
+			tglMulai = (Date) result.get("DTMULAI");
+			tglAkhir = (Date) result.get("DTAKHIR");
+			if(
+					dskRapid==diskonRapid&&
+					dskJNE==diskonJNE&&
+					dtAwal.equals(tglMulai==null?null:tglMulai)&&
+					dtAkhir.equals(tglAkhir==null?curDate:tglAkhir)){
+				System.out.println("Diskon Not Update");
+				return true;
+			}else{
+				System.out.println("Diskon Update");
+				return false;
+			}
+		}
+	}
+
+	public static Integer getPelangganDiskon(
+			String kodePelanggan, 
+			String tipeDiskon) {
+		Session s = HibernateUtil.openSession();
+		Criteria c = s.createCriteria(TrPelanggan.class);
+		c.add(Restrictions.eq("kodePelanggan", kodePelanggan));
+
+		List<TrPelanggan> list = c.list();
+		s.getTransaction().commit();
+		if(tipeDiskon.equals("JNE")){
+			System.out.println("--> diskon JNE");
+			return list.get(0).getDiskonJne();
+		}else{
+			System.out.println("--> diskon Rapid");
+			return list.get(0).getDiskonRapid();
+		}
+	}
+
+	public static void updateWholeDataEntry(String idDiskon) {
+		String sql =
+				"UPDATE tt_data_entry v, tr_diskon a " +
+				"SET v.total_diskon=( " +
+				"    case  " +
+				"         when v.kode_perwakilan='JNE' then a.diskon_jne  " +
+				"         else a.diskon_rapid  " +
+				"    end), " +
+				"    v.total_biaya=( " +
+				"    case  " +
+				"         when v.kode_perwakilan='JNE' then (v.harga-((v.harga*a.diskon_jne)/100))  " +
+				"         else (v.harga-((v.harga*a.diskon_rapid)/100))  " +
+				"    end) " +
+				"where v.pengirim = a.kode_pelanggan " +
+				"and date(v.tgl_create) >= date(a.tgl_mulai_diskon) " +
+				"and a.id_diskon = '"+idDiskon+"'";
+		System.out.println(sql);
+		Session sess = HibernateUtil.openSession();
+		Query queryUpdate = sess.createSQLQuery(sql);
+		int result = queryUpdate.executeUpdate();
+		sess.getTransaction().commit();				
+	}
+
+	public static void updateDiskonMasterPelanggan(
+			String kode, 
+			Integer diskonJNE, 
+			Integer diskonRapid) {
+		String sql =
+				"UPDATE tr_pelanggan  " +
+				"SET diskon_rapid="+diskonRapid+",diskon_jne="+diskonJNE+" " +
+				"where kode_pelanggan = '"+kode+"' ";
+		System.out.println(sql);
+		Session sess = HibernateUtil.openSession();
+		Query queryUpdate = sess.createSQLQuery(sql);
+		int result = queryUpdate.executeUpdate();
+		sess.getTransaction().commit();			
+		
 	}
 }

@@ -56,7 +56,8 @@
                </font>
             </Label>
             <ComboBox fx:id="cbWilayah" layoutX="1067.0" layoutY="245.0" prefHeight="25.0" prefWidth="274.0" />
-            <Tanggalan fx:id="txtTglMasuk" layoutX="1067.0" layoutY="279.0" />
+            <Tanggalan fx:id="txtTglMasuk" layoutX="1067.0" layoutY="279.0" prefWidth="80.0"/>
+            <Tanggalan fx:id="txtTglKeluar" layoutX="1257.0" layoutY="279.0" prefWidth="80.0"/>
             <TextField fx:id="txtKeterangan" layoutX="1068.0" layoutY="316.0" prefHeight="102.0" prefWidth="272.0" />
             <Button fx:id="btnSimpan" layoutX="1068.0" layoutY="443.0" mnemonicParsing="false" onAction="#onSave" text="SIMPAN" />
             <Button fx:id="btnReset" layoutX="1138.0" layoutY="443.0" mnemonicParsing="false" onAction="#onCancel" text="RESET" />
@@ -74,6 +75,11 @@
             </Label>
             
             <Label layoutX="960.0" layoutY="282.0" text="Tanggal masuk  :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="1150.0" layoutY="282.0" text="Tanggal keluar  :">
                <font>
                   <Font size="13.0" />
                </font>

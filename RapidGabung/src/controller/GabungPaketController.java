@@ -548,7 +548,9 @@ public class GabungPaketController implements Initializable {
 		List<TtGabungSementara> listDataGabungSession = GabungPaketService
 				.getDataGabungPaketSession(txt_resi_kardus.getText());
 		List<TtGabungPaket> gabungPaketSave = new ArrayList<TtGabungPaket>();
+		System.out.println("listDataGabungSession : " + listDataGabungSession.size());
 		for (TtGabungSementara dat : listDataGabungSession) {
+			dat.print();
 			TtGabungPaket gabPaket = new TtGabungPaket();
 			gabPaket.setId(dat.getId());
 			gabPaket.setIdKardus(dat.getIdKardus());

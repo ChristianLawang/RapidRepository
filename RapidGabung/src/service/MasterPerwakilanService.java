@@ -49,7 +49,7 @@ public class MasterPerwakilanService {
 	public static List<TrPerwakilan> getDataPerwakilan(){
 		Session session=HibernateUtil.openSession();
 		String nativeSql = 
-				" select a.kode_zona, a.propinsi, a.kabupaten, a.kecamatan"
+				" select distinct a.kode_zona, a.propinsi, a.kabupaten, a.kecamatan"
 				+ ", a.kode_perwakilan, a.zona, a.regperwakilan, a.oneperwakilan, a.tgl_create, a.tgl_update "
 				+ "from tr_perwakilan a;";
 		SQLQuery  query = session.createSQLQuery(nativeSql);

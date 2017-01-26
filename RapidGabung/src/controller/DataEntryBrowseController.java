@@ -46,6 +46,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import popup.PopUpTujuanBrowseController;
 import service.DataPaketService;
+import service.PelangganService;
 import service.TujuanService;
 import util.DateUtil;
 import util.DtoListener;
@@ -65,7 +66,7 @@ public class DataEntryBrowseController implements Initializable {
 	@FXML
 	private ScrollPane scrollPane;
 	@FXML
-	private TextField txt_awb, txt_kode_pickup, txt_pengirim, txt_reseller, txt_penerima, txt_no_hp, txt_kode_tujuan,
+	private TextField txt_awb, txt_kode_pickup, txt_pengirim, txt_reseller, txtNoTelpReseller, txt_penerima, txt_no_hp, txt_kode_tujuan,
 			txt_kode_perwakilan, txt_berat, txt_berat_bulat, txt_admin_input, txt_asal_paket;
 
 	@FXML
@@ -498,6 +499,7 @@ public class DataEntryBrowseController implements Initializable {
 				idDataPaket = dat.getIdDataPaket();
 				dp_tanggal_transaksi.setTanggalText(dat.getCreated());
 				txt_reseller.setText(dat.getResseler());
+				txtNoTelpReseller.setText(dat.getNoTelpReseller());
 				txt_penerima.setText(dat.getPenerima());
 				txt_no_hp.setText(dat.getNoTlpn());
 				txt_kode_tujuan.setText(dat.getTujuan());
@@ -533,15 +535,20 @@ public class DataEntryBrowseController implements Initializable {
 		if (isValidFormEntry()) {
 			TtDataEntry saveDataPaket = new TtDataEntry();
 			txt_Ket.requestFocus();
+			Integer diskon = PelangganService.getPelangganDiskon(txt_pengirim.getText(), txt_kode_perwakilan.getText());
+			Integer totalBiaya = getTotalBiaya();
+			Integer totalDiskon = (totalBiaya * diskon) / 100;
 			saveDataPaket.setPenerima(txt_penerima.getText().trim());
 			saveDataPaket.setTujuan(txt_kode_tujuan.getText().trim());
 			saveDataPaket.setTelpPenerima(txt_no_hp.getText().trim());
 			saveDataPaket.setReseller(txt_reseller.getText().trim());
+			saveDataPaket.setNoTelpReseller(txtNoTelpReseller.getText().trim());
 			saveDataPaket.setKeterangan(txt_Ket.getText().trim());
 			saveDataPaket.setHarga(getHarga());
 			saveDataPaket.setBiaya(Integer.parseInt(txt_harga_per_kg.getUangteks().trim()));
 			saveDataPaket.setAsuransi(getAsuransi());
-			saveDataPaket.setTotalBiaya(getTotalBiaya());
+			saveDataPaket.setTotalDiskon(diskon);
+			saveDataPaket.setTotalBiaya(totalBiaya - totalDiskon);
 			saveDataPaket.setTglUpdate(DateUtil.getNow());
 			saveDataPaket.setAwbDataEntry(idDataPaket);
 			saveDataPaket.setUser(uLogin.getNamaUser());
@@ -697,6 +704,7 @@ public class DataEntryBrowseController implements Initializable {
 		txt_kode_pickup.setText("");
 		txt_pengirim.setText("");
 		txt_reseller.setText("");
+		txtNoTelpReseller.setText("");
 		txt_penerima.setText("");
 		txt_no_hp.setText("");
 		txt_kode_tujuan.setText("");
@@ -749,6 +757,12 @@ public class DataEntryBrowseController implements Initializable {
 		return jmhAsuransi;
 	}
 
+	public int getTotalBiaya2() {
+		int totalBiaya = PerhitunganBiaya.getTotalBiaya(txt_asuransi.getUangteks(), txt_harga_per_kg.getUangteks(),
+				txt_berat_bulat.getText());
+		return totalBiaya;
+	}
+	
 	public int getTotalBiaya() {
 		int totalBiaya = PerhitunganBiaya.getTotalBiaya(txt_asuransi.getUangteks(), txt_harga_per_kg.getUangteks(),
 				txt_berat_bulat.getText());

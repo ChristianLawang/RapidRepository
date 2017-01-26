@@ -3,9 +3,9 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -13,7 +13,9 @@ import java.util.Set;
 import com.sun.prism.impl.Disposer.Record;
 
 import VO.BrowseSemuaDataVO;
+import entity.TrCabang;
 import entity.TrPelanggan;
+import entity.TrPerwakilan;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -35,11 +37,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
@@ -48,8 +51,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -59,13 +61,14 @@ import javafx.util.Callback;
 import javafx.util.Pair;
 import service.BrowseSemuaDataService;
 import service.GabungPaketService;
+import service.MasterPerwakilanService;
 import service.PelangganService;
-import service.PotoTimbangService;
 import util.DateUtil;
 import util.DtoListener;
 import util.ManagedFormHelper;
 import util.MessageBox;
 import util.WindowsHelper;
+import util.formatRupiah;
 import utilfx.AutoCompleteComboBoxListener;
 
 public class BrowseSemuaDataController implements Initializable {
@@ -115,6 +118,8 @@ public class BrowseSemuaDataController implements Initializable {
 	private TableColumn<BrowseSemuaDataVO, String> colReseller;
 	@FXML
 	private TableColumn<BrowseSemuaDataVO, String> colIdKardus;
+	@FXML
+	private TableColumn<BrowseSemuaDataVO, String> colKecamatan;
 
 	@FXML
 	private TableColumn colActionUpdate;
@@ -122,22 +127,112 @@ public class BrowseSemuaDataController implements Initializable {
 	private ObservableList<BrowseSemuaDataVO> masterData = FXCollections.observableArrayList();
 
 	@FXML
-	private Button btnMultiple, btnResetGP;
+	private Button btnMultiple, btnResetGP, btnPencarian;
+	
+	@FXML
+	private RadioButton radioAWB, radioSpec;
+	
+	@FXML
+	private TextField txtAWB, txtPenerima;
+	
+	@FXML
+	private ComboBox cmbAsal, cmbPerwakilan, cmbPelanggan;
+	
+	@FXML
+	private Button btnClear;
+	
+	@FXML
+	private TextField txtTotRow, txtTotBerat, txtTotBiaya;
+	
+	private void setStandardFormBehaviour() {
+		filterEnable("spec");
+		radioAWB.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				radioSpec.setSelected(false);
+				filterClear();
+				filterEnable("awb");
+				txtAWB.requestFocus();	
+			}
+		});
+		radioSpec.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				radioAWB.setSelected(false);
+				filterClear();	
+				filterEnable("spec");
+			}
+		});
+		List<TrPelanggan> lstPelanggan = PelangganService.getDataPelanggan();
+		for (TrPelanggan trPelanggan : lstPelanggan) {
+			cmbPelanggan.getItems().add(trPelanggan.getNamaAkun());
+		}
+		new AutoCompleteComboBoxListener<TrPelanggan>(cmbPelanggan);
+		List<Map> lstCabang = BrowseSemuaDataService.getDataCabangAsal2();
+		for (Map trCabang : lstCabang) {
+			cmbAsal.getItems().add(trCabang.get("KODE_PERWAKILAN"));
+		}
+		List<TrPerwakilan> lstPerwakilan = MasterPerwakilanService.getAllPerwakilanCabangDistinct();
+		cmbPerwakilan.getItems().add("JNE");
+		for (TrPerwakilan trPerwakilan : lstPerwakilan) {
+			cmbPerwakilan.getItems().add(trPerwakilan.getKodePerwakilan());
+		}
+	}
+	
+	private void filterClear() {
+		txtAWB.setText(null);
+		cmbAsal.setValue(null);
+		cmbPelanggan.setValue(null);
+		cmbPerwakilan.setValue(null);
+		txtTotRow.setText("0");
+		txtTotBerat.setText("0.0");
+		txtTotBiaya.setText("0");
+		txtPenerima.setText(null);
+	}
+	
+	private void filterEnable(String side) {
+		if(side.equals("awb")){
+			txtAWB.setDisable(false);
+			cmbAsal.setDisable(true);
+			cmbPelanggan.setDisable(true);
+			cmbPerwakilan.setDisable(true);
+			txtTglMulai.setDisable(true);
+			txtTglAkhir.setDisable(true);
+//			btnClear.setDisable(true);
+			txtPenerima.setDisable(true);
+		}else{
+			txtAWB.setDisable(true);
+			cmbAsal.setDisable(false);
+			cmbPelanggan.setDisable(false);
+			cmbPerwakilan.setDisable(false);
+			txtTglMulai.setDisable(false);
+			txtTglAkhir.setDisable(false);
+//			btnClear.setDisable(false);
+			txtPenerima.setDisable(false);
+		}
+		
+	}
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		ManagedFormHelper.instanceController = this;
+		
+		setStandardFormBehaviour();
 
 		txtTglMulai.setValue(LocalDate.now());
 		txtTglAkhir.setValue(LocalDate.now());
-//		txtTglAkhir.setOnAction(event -> {
-//			masterData.clear();
-//			settingListboksBrowseSemuaData(DateUtil.convertToDatabaseColumn(txtTglMulai.getValue()),
-//					DateUtil.convertToDatabaseColumn(txtTglAkhir.getValue()));
-//		});
 		masterData.clear();
-		settingListboksBrowseSemuaData(DateUtil.convertToDatabaseColumn(txtTglMulai.getValue()),
-				DateUtil.convertToDatabaseColumn(txtTglAkhir.getValue()));
+//		settingListboksBrowseSemuaData(DateUtil.convertToDatabaseColumn(txtTglMulai.getValue()),
+//				DateUtil.convertToDatabaseColumn(txtTglAkhir.getValue()));
+		
+		listBrowse.setOnMousePressed(new EventHandler<MouseEvent>() {
+		    @Override 
+		    public void handle(MouseEvent event) {
+		    	System.out.println("test");
+		    }
+		    
+		});
+		Set<BrowseSemuaDataVO> selection = new HashSet<BrowseSemuaDataVO>(listBrowse.getSelectionModel().getSelectedItems());
 		btnResetGP.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -186,7 +281,7 @@ public class BrowseSemuaDataController implements Initializable {
 					ComboBox cmbPelanggan = new ComboBox();
 					List<TrPelanggan> lstPelanggan = PelangganService.getDataPelanggan();
 					for (TrPelanggan trPelanggan : lstPelanggan) {
-						cmbPelanggan.getItems().add(trPelanggan.getNamaAkun());
+						cmbPelanggan.getItems().add(trPelanggan.getKodePelanggan());
 					}
 					new AutoCompleteComboBoxListener<TrPelanggan>(cmbPelanggan);
 					
@@ -248,6 +343,19 @@ public class BrowseSemuaDataController implements Initializable {
 				}
 			}
 		});
+		btnClear.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				filterClear();
+				radioAWB.setSelected(false);
+				radioSpec.setSelected(true);
+				txtTglMulai.setValue(LocalDate.now());
+				txtTglAkhir.setValue(LocalDate.now());
+				masterData.clear();
+				settingListboksBrowseSemuaData(DateUtil.convertToDatabaseColumn(txtTglMulai.getValue()),
+						DateUtil.convertToDatabaseColumn(txtTglAkhir.getValue()));
+			}
+		});
 	}
 
 	// DATAKEMBALIAN DARI DATA ENTRY
@@ -263,18 +371,45 @@ public class BrowseSemuaDataController implements Initializable {
 		settingListboksBrowseSemuaData(DateUtil.convertToDatabaseColumn(txtTglMulai.getValue()),
 				DateUtil.convertToDatabaseColumn(txtTglAkhir.getValue()));
 	}
+	public static Double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    long factor = (long) Math.pow(10, places);
+	    value = value * factor;
+	    long tmp = Math.round(value);
+	    return (double) tmp / factor;
+	}
 	// TABLE VIEW
 	// SETTING------------------------------------------------------------------------
 	public void settingListboksBrowseSemuaData(java.sql.Date dateAwal, java.sql.Date dateAkhir) {
+//	public void settingListboksBrowseSemuaData(DatePicker dpAwal, DatePicker dpAkhir) {
 
-		List<BrowseSemuaDataVO> tt = BrowseSemuaDataService.getBrowseSemuaData(dateAwal, dateAkhir, true);
+//		List<BrowseSemuaDataVO> tt = BrowseSemuaDataService.getBrowseSemuaData(dateAwal, dateAkhir, true);
+		List<BrowseSemuaDataVO> tt = BrowseSemuaDataService.getBrowseSemuaData2(
+				radioAWB.isSelected(),
+				txtAWB.getText(),				
+				dateAwal, 
+				dateAkhir, 
+				(String) cmbPelanggan.getValue(),
+				(String) cmbPerwakilan.getValue(),
+				(String) cmbAsal.getValue(),
+				txtPenerima.getText());
+		Integer row = 0;
+		Double berat = 0.0;
+		Integer harga = 0;
 		for (BrowseSemuaDataVO t : tt) {
 			masterData.add(new BrowseSemuaDataVO(t.getAwbData(), t.getCreated(), t.getLayanan(), t.getPengirim(),
 					t.getTelp(), t.getAsalPaket(), t.getKodePerwakilan(), t.getTujuan(), t.getZona(), t.getPenerima(),
 					t.getBFinal(), t.getBpFinal(), t.getBVolume(), t.getHarga(), t.getTotalBiaya(), t.getResiJNE(),
-					t.getReseller(), t.getIdKardus()));
+					t.getReseller(), t.getIdKardus(), t.getKecamatan()));
+			row++;
+			berat += Double.parseDouble(t.getBFinal());
+			harga += Integer.parseInt(t.getHarga());
 		}
 		
+		txtTotRow.setText(row.toString());
+		txtTotBerat.setText(round(berat,2).toString());
+		txtTotBiaya.setText(formatRupiah.formatIndonesia(harga));
 		colResiJNE.setCellFactory(TextFieldTableCell.forTableColumn());
 		colResiJNE.setOnEditCommit(new EventHandler<CellEditEvent<BrowseSemuaDataVO, String>>() {
 			public void handle(CellEditEvent<BrowseSemuaDataVO, String> t) {
@@ -295,31 +430,6 @@ public class BrowseSemuaDataController implements Initializable {
 		colAsalPaket.setCellValueFactory(cellData -> cellData.getValue().asalPaketProperty());
 		
 		colKdPerwakilan.setCellValueFactory(cellData -> cellData.getValue().kdPerwakilanProperty());
-//		colKdPerwakilan.setCellFactory(TextFieldTableCell.forTableColumn());
-//		colKdPerwakilan.setOnEditCommit(new EventHandler<CellEditEvent<BrowseSemuaDataVO, String>>() {
-//			public void handle(CellEditEvent<BrowseSemuaDataVO, String> t) {
-////				BrowseSemuaDataVO bro = (t.getTableView().getItems().get(t.getTablePosition().getRow()));
-////				BrowseSemuaDataService.updateResiJne(bro.getAwbData(), t.getNewValue());
-//				
-//				Stage modalWindow = new Stage();
-//				Parent rootPilihPelanggan;
-//				try {
-//					rootPilihPelanggan = FXMLLoader
-//							.load(PilihPelangganSubController.class.getResource("dialogpilihpelanggan.fxml"));
-//					modalWindow.setScene(new Scene(rootPilihPelanggan));
-//					modalWindow.setTitle("Pilih Pelanggan");
-//					modalWindow.initModality(Modality.WINDOW_MODAL);
-//					modalWindow.initOwner(WindowsHelper.primaryStage);
-//					modalWindow.initStyle(StageStyle.UTILITY);
-//					modalWindow.show();
-//
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				
-//			}
-//		});
 		
 		colTujuan.setCellValueFactory(cellData -> cellData.getValue().tujuanProperty());
 		colZona.setCellValueFactory(cellData -> cellData.getValue().zonaProperty());
@@ -332,6 +442,7 @@ public class BrowseSemuaDataController implements Initializable {
 		colResiJNE.setCellValueFactory(cellData -> cellData.getValue().resiJNEProperty());
 		colReseller.setCellValueFactory(cellData -> cellData.getValue().resellerProperty());
 		colIdKardus.setCellValueFactory(cellData -> cellData.getValue().idKardusProperty());
+		colKecamatan.setCellValueFactory(cellData -> cellData.getValue().kecamatanProperty());
 		
 		addButton();
 		FilteredList<BrowseSemuaDataVO> filteredData = new FilteredList<>(masterData, p -> true);

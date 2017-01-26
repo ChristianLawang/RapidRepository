@@ -131,7 +131,7 @@
 										<Label layoutX="44.0" layoutY="120.0" text="Master Pickup" textFill="BLACK" />
 									</children>
 								</AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="137.0" prefWidth="145.0">
                            <children>
                               <AnchorPane fx:id="mnNewsLetter" layoutY="-13.0" prefHeight="149.0" prefWidth="137.0">
                                  <children>
@@ -141,6 +141,16 @@
                               <Label layoutX="37.0" layoutY="118.0" prefHeight="9.0" prefWidth="75.0" text="News Letter" textFill="BLACK" />
                            </children>
                         </AnchorPane>
+                        <AnchorPane layoutX="1093.0" layoutY="20.0" prefHeight="137.0" prefWidth="145.0">
+                           <children>
+                              <AnchorPane fx:id="mnShortCut" layoutX="-16.0" layoutY="-13.0" prefHeight="149.0" prefWidth="137.0">
+                                 <children>
+                                    <Button id="btnShortCut" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onMnShortCut" prefHeight="115.0" prefWidth="115.0" styleClass="button-menu" />
+                                 </children>
+                              </AnchorPane>
+                              <Label layoutX="34.0" layoutY="118.0" prefHeight="9.0" prefWidth="75.0" text="Shortcut" textFill="BLACK" />
+                           </children>
+                        </AnchorPane>
 
 							</children>
 							<padding>
@@ -148,7 +158,7 @@
 							</padding>
 						</HBox>
 						<Label prefHeight="17.0" prefWidth="1343.0" styleClass="menu-label" text="TRANSAKSI" />
-						<HBox prefHeight="295.0" prefWidth="1372.0">
+						<HBox prefHeight="150.0" prefWidth="1477.0">
 							<children>
 								<AnchorPane fx:id="mnFotoTimbang" prefHeight="150.0" prefWidth="115.0">
 									<children>
@@ -156,21 +166,25 @@
 											<font>
 												<Font name="System Bold" size="12.0" />
 											</font>
-										</Button>
-										<Label layoutX="24.0" layoutY="121.0" text="Foto Timbang" textFill="BLACK" />
-                             <Button id="btnJadwalPickup" layoutY="152.0" mnemonicParsing="false" onAction="#onJadwalPickup" prefHeight="115.0" prefWidth="115.0" styleClass="button-menu">
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Button>
-                              <Label layoutX="21.0" layoutY="269.0" text="Jadwal Pickup" textFill="BLACK" />
+										</Button>	
+										<Label layoutX="17.0" layoutY="119.0" text="Foto Timbang" textFill="BLACK" />
 									</children>
 									<HBox.margin>
 										<Insets left="20.0" />
 									</HBox.margin>
 								</AnchorPane>
+								<AnchorPane fx:id="mnJadwalPickup" prefHeight="150.0" prefWidth="115.0">
+									<children>
+			                             <Button id="btnJadwalPickup" layoutX="19.0" mnemonicParsing="false" onAction="#onJadwalPickup" prefHeight="115.0" prefWidth="115.0" styleClass="button-menu">
+			                                 <font>
+			                                    <Font name="System Bold" size="12.0" />
+			                                 </font>
+			                              </Button>
+			                              <Label layoutX="38.0" layoutY="119.0" text="Jadwal Pickup" textFill="BLACK" />
+									</children>
+								</AnchorPane>
 
-      								<AnchorPane fx:id="mnBrowseDataEntry" prefHeight="150.0" prefWidth="115.0">
+      							<AnchorPane fx:id="mnBrowseDataEntry" prefHeight="150.0" prefWidth="115.0">
 									<children>
 										<Button id="btnBrowseDataEntry" layoutX="1.0" mnemonicParsing="false" onAction="#onBrowseDataEntry" prefHeight="115.0" prefWidth="115.0" styleClass="button-menu">
 											<font>
@@ -178,16 +192,20 @@
 											</font>
 										</Button>
 										<Label layoutX="32.0" layoutY="120.0" text="Data Entry" textFill="BLACK" />
-										<Button id="btnTerimaDiPerwakilan" layoutY="152.0" mnemonicParsing="false" onAction="#onTerimaDiPerwakilan" prefHeight="115.0" prefWidth="115.0" styleClass="button-menu">
-											<font>
-												<Font name="System Bold" size="12.0" />
-											</font>
-										</Button>
-										<Label layoutY="269.0" text="Terima Di Perwakilan" textFill="BLACK" />
 									</children>
 									<HBox.margin>
 										<Insets left="20.0" />
 									</HBox.margin>
+								</AnchorPane>
+								<AnchorPane fx:id="mnTerimaDiperwakilan" prefHeight="143.0" prefWidth="127.0">
+									<children>	
+										<Button id="btnTerimaDiPerwakilan" layoutX="12.0" mnemonicParsing="false" onAction="#onTerimaDiPerwakilan" prefHeight="115.0" prefWidth="115.0" styleClass="button-menu">
+											<font>
+												<Font name="System Bold" size="12.0" />
+											</font>
+										</Button>
+										<Label layoutX="14.0" layoutY="121.0" text="Terima Di Perwakilan" textFill="BLACK" />
+									</children>
 								</AnchorPane>
 
       
@@ -415,6 +433,29 @@
 									</children>
 								</AnchorPane>
 
+								<!-- hendry -->
+								<!-- tambah menu laporan komisi -->
+								<AnchorPane fx:id="mnLaporanKomisi" prefHeight="150.0" prefWidth="115.0">
+									<children>
+										<Button id="btnLaporanKomisi" layoutX="19.0" layoutY="9.0" mnemonicParsing="false" onAction="#onLaporanKomisi" prefHeight="115.0" prefWidth="115.0" styleClass="button-menu">
+											<font>
+												<Font name="System Bold" size="12.0" />
+											</font>
+										</Button>
+										<Label layoutX="43.0" layoutY="127.0" text="Laporan Komisi" textFill="BLACK" />
+									</children>
+								</AnchorPane>
+								<!-- end hendry -->
+								<AnchorPane fx:id="mnLaporanDiskon" prefHeight="150.0" prefWidth="115.0">
+									<children>
+										<Button id="btnLaporanKomisi" layoutX="19.0" layoutY="9.0" mnemonicParsing="false" onAction="#onLaporanDiskon" prefHeight="115.0" prefWidth="115.0" styleClass="button-menu">
+											<font>
+												<Font name="System Bold" size="12.0" />
+											</font>
+										</Button>
+										<Label layoutX="43.0" layoutY="127.0" text="Laporan Diskon" textFill="BLACK" />
+									</children>
+								</AnchorPane>
 							</children>
 							<padding>
 								<Insets bottom="10.0" top="10.0" />

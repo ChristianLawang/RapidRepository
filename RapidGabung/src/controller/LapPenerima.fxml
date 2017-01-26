@@ -54,7 +54,7 @@
             <ComboBox fx:id="cbPengirim" layoutX="167.0" layoutY="101.0" prefHeight="25.0" prefWidth="303.0" />
             <Label layoutX="86.0" layoutY="105.0" text="Pengirim :" />
             <!-- <Button layoutX="870.0" layoutY="110.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Print PDF" /> -->
-            <TextField fx:id="txtPerwakilan" layoutX="166.0" layoutY="130.0" prefHeight="25.0" prefWidth="135.0" />
+            <ComboBox fx:id="cbPerwakilan" layoutX="166.0" layoutY="130.0" prefHeight="25.0" prefWidth="135.0" />
             <Label layoutX="85.0" layoutY="134.0" text="Perwakilan :" />
             <!--  <CheckBox fx:id="chkAll" layoutX="313.0" layoutY="134.0" mnemonicParsing="false" text="All" /> -->
             <CheckBox fx:id="chkDetail" layoutX="367.0" layoutY="133.0" mnemonicParsing="false" text="Detail" />

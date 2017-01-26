@@ -88,7 +88,7 @@ public class PenandaLunasController2 implements Initializable {
 	@FXML
 	private DatePicker dpAwal, dpAkhir;
 	@FXML
-	private ComboBox cbPelanggan;
+	private ComboBox cbPelanggan, cmbStatus;
 	@FXML
 	private CheckBox chkAllPelanggan;
 
@@ -164,6 +164,12 @@ public class PenandaLunasController2 implements Initializable {
 
 		tvPenandaLunas.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
+		cmbStatus.getItems().add("Tampil Semua");
+		cmbStatus.getItems().add("Sudah Lunas");
+		cmbStatus.getItems().add("Piutang");
+		
+		cmbStatus.setValue("Tampil Semua");
+		
 		// memanggil untuk combo referensi
 		ObservableList<TrPelanggan> listReferensi = FXCollections
 				.observableArrayList(PelangganService.getDataReferensi());
@@ -348,15 +354,45 @@ public class PenandaLunasController2 implements Initializable {
 		Integer biaya = 0;
 		Integer piutang = 0;
 		for (EntryDataShowVO t : listEntry) {
-			DataPickup.add(new PenandaLunasVO2(chkAll,
-					t.getTglCreated() != null ? String.valueOf(DateUtil.dateToStdDateLiteral(t.getTglCreated())) : "",
-					t.getKdPelanggan(), t.getKdPickup(), t.gettBiaya().intValue(),
-					t.getTglBayar() != null ? String.valueOf(DateUtil.dateToStdDateLiteral(t.getTglBayar())) : "",
-					t.getBank()));
-			namaPelanggan = t.getKdPelanggan();
-			piutang += t.gettBiaya().intValue();
-			if(t.getBank().isEmpty()){
-				biaya += t.gettBiaya().intValue();
+			if(!cmbStatus.getValue().equals("Tampil Semua")){
+				if(cmbStatus.getValue().equals("Piutang")){
+					if(t.getBank().isEmpty()){
+						DataPickup.add(new PenandaLunasVO2(chkAll,
+								t.getTglCreated() != null ? String.valueOf(DateUtil.dateToStdDateLiteral(t.getTglCreated())) : "",
+								t.getKdPelanggan(), t.getKdPickup(), t.gettBiaya().intValue(),
+								t.getTglBayar() != null ? String.valueOf(DateUtil.dateToStdDateLiteral(t.getTglBayar())) : "",
+								t.getBank()));
+						namaPelanggan = t.getKdPelanggan();
+						piutang += t.gettBiaya().intValue();
+						if(t.getBank().isEmpty()){
+							biaya += t.gettBiaya().intValue();
+						}
+					}
+				}else{
+					if(!t.getBank().isEmpty()){
+						DataPickup.add(new PenandaLunasVO2(chkAll,
+								t.getTglCreated() != null ? String.valueOf(DateUtil.dateToStdDateLiteral(t.getTglCreated())) : "",
+								t.getKdPelanggan(), t.getKdPickup(), t.gettBiaya().intValue(),
+								t.getTglBayar() != null ? String.valueOf(DateUtil.dateToStdDateLiteral(t.getTglBayar())) : "",
+								t.getBank()));
+						namaPelanggan = t.getKdPelanggan();
+						piutang += t.gettBiaya().intValue();
+						if(t.getBank().isEmpty()){
+							biaya += t.gettBiaya().intValue();
+						}
+					}
+				}				
+			}else{
+				DataPickup.add(new PenandaLunasVO2(chkAll,
+						t.getTglCreated() != null ? String.valueOf(DateUtil.dateToStdDateLiteral(t.getTglCreated())) : "",
+						t.getKdPelanggan(), t.getKdPickup(), t.gettBiaya().intValue(),
+						t.getTglBayar() != null ? String.valueOf(DateUtil.dateToStdDateLiteral(t.getTglBayar())) : "",
+						t.getBank()));
+				namaPelanggan = t.getKdPelanggan();
+				piutang += t.gettBiaya().intValue();
+				if(t.getBank().isEmpty()){
+					biaya += t.gettBiaya().intValue();
+				}
 			}
 		}
 		

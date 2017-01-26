@@ -4,10 +4,18 @@
 <!-- Generated Jun 22, 2016 9:21:28 PM by Hibernate Tools 5.1.0.Alpha1 -->
 <hibernate-mapping package="entity">
     <class name="TrPerwakilan" table="tr_perwakilan">
-        <id name="kodeZona" type="string">
+        <composite-id name="pk" class="TrPerwakilanPK">
+		    <key-property name="kodeZona">
+		    	<column name="KODE_ZONA"/>
+		    </key-property>
+		    <key-property name="kodeAsal">
+		    	<column name="KODE_ASAL"/>
+		    </key-property>
+		</composite-id>
+        <!-- <id name="kodeZona" type="string">
             <column name="KODE_ZONA" length="10" />
             <generator class="assigned" />
-        </id>
+        </id> -->
         <property name="propinsi" type="string">
             <column name="PROPINSI" />
         </property>

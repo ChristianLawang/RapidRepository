@@ -48,6 +48,7 @@ public class TimbangVO {
 			this.net = new BigDecimal(netIncome.trim());
 			
 		} catch (IOException e) {
+			System.out.println("--> error : " + e.getMessage());
 			this.gross = new BigDecimal("0.00");
 			this.tare = new BigDecimal("0.00");
 			this.net = new BigDecimal("0.00");
